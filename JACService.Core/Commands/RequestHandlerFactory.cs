@@ -1,6 +1,6 @@
-﻿using MultiprotocolService.Service.Lib.Commands;
+﻿
 
-namespace MultiprotocolService.Service.Lib.RequestHandlers;
+namespace JACService.Core.Commands;
 
 public class RequestHandlerFactory
 {

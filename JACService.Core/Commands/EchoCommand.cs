@@ -1,4 +1,4 @@
-﻿namespace MultiprotocolService.Service.Lib.Commands;
+﻿namespace JACService.Core.Commands;
 
 public class EchoCommand : TextCommand
 {

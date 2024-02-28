@@ -1,9 +1,8 @@
 ﻿using System.Net.Sockets;
-using MultiprotocolService.Service.Lib.Commands;
-using MultiprotocolService.Service.Lib.RequestHandlers;
-using MultiprotocolService.Shared.Lib;
+using JAC.Shared;
+using JACService.Core.Commands;
 
-namespace MultiprotocolService.Service.Lib;
+namespace JACService.Core;
 
 public class Session
 {

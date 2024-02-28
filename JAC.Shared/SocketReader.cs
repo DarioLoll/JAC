@@ -1,7 +1,7 @@
 ﻿using System.Net.Sockets;
 using System.Text;
 
-namespace MultiprotocolService.Shared.Lib;
+namespace JAC.Shared;
 
 public class SocketReader
 {

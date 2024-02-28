@@ -1,6 +1,6 @@
 ﻿using System.Net.Sockets;
 
-namespace MultiprotocolService.Service.Lib;
+namespace JACService.Core;
 
 public class ClientManager
 {

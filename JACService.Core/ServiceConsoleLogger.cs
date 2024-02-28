@@ -1,4 +1,5 @@
-﻿namespace MultiprotocolService.Service.Lib;
+﻿
+namespace JACService.Core;
 
 public class ServiceConsoleLogger : IServiceLogger
 {
