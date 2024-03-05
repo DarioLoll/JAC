@@ -6,14 +6,14 @@ namespace JACService.Core;
 public class Server
 {
     private Socket? _socket;
-
     private ClientManager? _clientManager;
-    
     public IServiceLogger Logger { get; private set; }
+    public const ushort DefaultPort = 8080;
+    public static IPAddress DefaultIpAddress => IPAddress.Loopback;
 
-    public ushort Port { get; private set; }
+    public ushort Port { get; set; } = DefaultPort;
 
-    public IPAddress IpAddress { get; private set; } = IPAddress.Any;
+    public IPAddress IpAddress { get; set; } = DefaultIpAddress;
 
     public bool IsOnline { get; private set; }
     
@@ -24,15 +24,8 @@ public class Server
         Logger = logger;
     }
 
-    public bool Start(IPAddress ip, ushort port)
+    public bool Start()
     {
-        if(port < 1024)
-        {
-            Logger.LogServiceError("Port number must be greater than 1024");
-            return false;
-        }
-        IpAddress = ip;
-        Port = port;
         try
         {
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -75,7 +68,7 @@ public class Server
     public bool Restart()
     {
         Stop();
-        return Start(IpAddress, Port);
+        return Start();
     }
     
 }

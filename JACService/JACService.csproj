@@ -9,7 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="Models\" />
         <AvaloniaResource Include="Assets\**" />
     </ItemGroup>
 
@@ -23,6 +22,11 @@
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.6" />
         <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.6" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-        <PackageReference Include="Semi.Avalonia" Version="11.0.7" />
+        <PackageReference Include="Irihi.Ursa.Themes.Semi" Version="0.3.0-beta20240226" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <ProjectReference Include="..\JACService.Core\JACService.Core.csproj" />
     </ItemGroup>
 </Project>
