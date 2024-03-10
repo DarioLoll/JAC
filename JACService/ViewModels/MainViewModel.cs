@@ -13,6 +13,8 @@ public partial class MainViewModel : ViewModelBase
     {
         _server = server;
         _logger = logger;
+        IsServerRunning = _server.IsOnline;
+        ServerStatus = _server.IsOnline ? "Online" : "Offline";
     }
 
     private bool _isServerRunning;
@@ -23,6 +25,7 @@ public partial class MainViewModel : ViewModelBase
         get => _isServerRunning;
         set => SetProperty(ref _isServerRunning, value);
     }
+
     public string ServerStatus
     {
         get => _serverStatus;
