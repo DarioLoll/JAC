@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using System.Text.Json;
+using JACService.Core.Contracts;
 
 namespace JACService.Core;
 

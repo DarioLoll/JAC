@@ -1,6 +1,7 @@
 ﻿using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using JACService.Core;
+using JACService.Core.Contracts;
 using JACService.ViewModels;
 
 namespace JACService;

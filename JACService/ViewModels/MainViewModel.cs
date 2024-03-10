@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using JACService.Core;
+using JACService.Core.Contracts;
 
 namespace JACService.ViewModels;
 

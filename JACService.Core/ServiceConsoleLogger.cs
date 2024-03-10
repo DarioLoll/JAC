@@ -1,4 +1,6 @@
 ﻿
+using JACService.Core.Contracts;
+
 namespace JACService.Core;
 
 public class ServiceConsoleLogger : IServiceLogger

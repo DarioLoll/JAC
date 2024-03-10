@@ -1,7 +1,10 @@
-﻿using ReactiveUI;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using ReactiveUI;
 
 namespace JAC.ViewModels;
 
-public class ViewModelBase : ReactiveObject
+public abstract class ViewModelBase : ObservableObject
 {
+    public virtual void OnActivated() {}
+    public virtual void OnDeactivated() {}
 }

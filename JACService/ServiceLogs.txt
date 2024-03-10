@@ -1,19 +1,10 @@
-07/03/2024 12:03:02: Service started on 127.0.0.1:9090
-07/03/2024 12:03:03: Service stopped on 127.0.0.1:9090
-07/03/2024 12:03:03: Disconnecting all 0 clients...
-07/03/2024 12:03:08: Service started on 127.0.0.1:9090
-07/03/2024 12:03:10: Service stopped on 127.0.0.1:9090
-07/03/2024 12:03:10: Disconnecting all 0 clients...
-07/03/2024 12:03:13: Service started on 127.0.0.1:9090
-07/03/2024 12:03:15: Service stopped on 127.0.0.1:9090
-07/03/2024 12:03:15: Disconnecting all 0 clients...
-07/03/2024 12:03:21: Service started on 127.0.0.1:9090
-07/03/2024 12:03:24: Service stopped on 127.0.0.1:9090
-07/03/2024 12:03:24: Disconnecting all 0 clients...
-07/03/2024 12:03:25: Service started on 127.0.0.1:9090
-07/03/2024 12:03:25: Service stopped on 127.0.0.1:9090
-07/03/2024 12:03:25: Disconnecting all 0 clients...
-07/03/2024 12:03:26: Service started on 127.0.0.1:9090
-07/03/2024 12:03:29: Service stopped on 127.0.0.1:9090
-07/03/2024 12:03:29: Disconnecting all 0 clients...
-07/03/2024 12:03:30: Service started on 127.0.0.1:9090
+10/03/2024 21:20:05: Service started on 127.0.0.1:8080
+10/03/2024 21:20:14: Client connected from 127.0.0.1:26237
+10/03/2024 21:20:17: Received a login request from 127.0.0.1:26237
+10/03/2024 21:20:40: Client connected from 127.0.0.1:26238
+10/03/2024 21:20:44: Received a login request from 127.0.0.1:26238
+10/03/2024 21:20:47: Received a login request from 127.0.0.1:26238
+10/03/2024 21:20:48: Received a login request from 127.0.0.1:26238
+10/03/2024 21:20:54: Received a login request from 127.0.0.1:26238
+10/03/2024 21:20:59: Client connected from 127.0.0.1:26239
+10/03/2024 21:21:01: Received a login request from 127.0.0.1:26239

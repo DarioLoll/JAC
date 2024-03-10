@@ -18,4 +18,11 @@ public class SocketReader
         await _socket.ReceiveAsync(buffer);
         return Encoding.ASCII.GetString(buffer).Trim('\0');
     }
+    
+    public static async Task<string> Read(Socket socket)
+    {
+        var buffer = new byte[1024];
+        await socket.ReceiveAsync(buffer);
+        return Encoding.ASCII.GetString(buffer).Trim('\0');
+    }
 }

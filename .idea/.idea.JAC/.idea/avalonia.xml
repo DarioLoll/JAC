@@ -4,7 +4,9 @@
     <option name="projectPerEditor">
       <map>
         <entry key="JAC/JAC/App.axaml" value="JAC/JAC.Browser/JAC.Browser.csproj" />
+        <entry key="JAC/JAC/Views/LoginView.axaml" value="JAC/JAC.Desktop/JAC.Desktop.csproj" />
         <entry key="JAC/JAC/Views/MainView.axaml" value="JAC/JAC.Browser/JAC.Browser.csproj" />
+        <entry key="JAC/JAC/Views/MainWindow.axaml" value="JAC/JAC.Browser/JAC.Browser.csproj" />
         <entry key="JACService/App.axaml" value="JACService/JACService.csproj" />
         <entry key="JACService/Views/MainView.axaml" value="JACService/JACService.csproj" />
         <entry key="JACService/Views/MainWindow.axaml" value="JACService/JACService.csproj" />

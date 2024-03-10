@@ -3,7 +3,6 @@ using System.Text.Json;
 
 namespace JAC.Shared;
 
-[DataContract]
 public abstract class PacketBase
 {
     public static string GetPrefix(Type packetType)
@@ -18,9 +17,11 @@ public abstract class PacketBase
     
     public static string GetPrefix<T>() where T : PacketBase => GetPrefix(typeof(T));
     
-    public string ToJson() => JsonSerializer.Serialize(this);
+    public abstract string ToJson();
     
-    public static T? FromJson<T>(string json) => JsonSerializer.Deserialize<T>(json);
+    public static TPacket? FromJson<TPacket>(string json) where TPacket : PacketBase => JsonSerializer.Deserialize<TPacket>(json);
     
     public static PacketBase? FromJson(string json) => JsonSerializer.Deserialize<PacketBase>(json);
+    
+    public static string CutPrefix(string request) => request.Split(' ', 2)[1];
 }
