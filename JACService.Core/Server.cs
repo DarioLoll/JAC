@@ -7,7 +7,9 @@ public class Server
 {
     private Socket? _socket;
     private ClientManager? _clientManager;
-    public IServiceLogger Logger { get; private set; }
+
+    public static Server Instance { get; } = new Server();
+    public IServiceLogger? Logger { get; set; }
     public const ushort DefaultPort = 8080;
     public static IPAddress DefaultIpAddress => IPAddress.Loopback;
 
@@ -19,9 +21,8 @@ public class Server
     
     public int ClientCount => _clientManager?.Sessions.Count() ?? 0;
 
-    public Server(IServiceLogger logger)
+    private Server()
     {
-        Logger = logger;
     }
 
     public bool Start()

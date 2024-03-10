@@ -30,7 +30,8 @@ public partial class App : Application
         {
             _logger.LoadConfig();
             string[]? args = desktop.Args;
-            Server server = new(_logger);
+            Server server = Server.Instance;
+            server.Logger = _logger;
             GetIpAndPortFromArgs(args, server);
             desktop.MainWindow = new MainWindow
             {

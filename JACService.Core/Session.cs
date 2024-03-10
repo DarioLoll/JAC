@@ -10,8 +10,7 @@ public class Session
     private readonly Socket _socket;
     private readonly SocketReader _socketReader;
     private readonly SocketWriter _socketWriter;
-    private readonly RequestHandlerFactory _requestHandlerFactory;
-
+    private readonly PacketHandler _packetHandler;
     public event EventHandler<Session>? SessionClosed;
     public IServiceLogger Logger { get; private set; }
 
@@ -21,11 +20,7 @@ public class Session
         Logger = logger;
         _socketReader = new SocketReader(_socket);
         _socketWriter = new SocketWriter(_socket);
-        _requestHandlerFactory = new RequestHandlerFactory(new List<ITextCommand>()
-        {
-            new EchoCommand(), new ExitCommand(this)
-        });
-        _requestHandlerFactory.AddHelpCommand();
+        _packetHandler = new PacketHandler();
     }
     
     public async void HandleCommunication()
@@ -35,18 +30,22 @@ public class Session
             while (true)
             {
                 var request = await _socketReader.Read();
-                _isInSendingState = true;
-                Logger.LogRequestInfo($"Received request from {_socket.RemoteEndPoint}: {request}");
-                ITextCommand? command = _requestHandlerFactory.GetTextCommand(request);
-                TextCommand.TryGetResponse(command, out var response);
-                await _socketWriter.Send(response);
-                _isInSendingState = false;
+                string requestType = request.Split(' ', 2)[0].Substring(1);
+                Logger.LogRequestInfo($"Received a {requestType} request from {_socket.RemoteEndPoint}");
+                _packetHandler.Handle(request);
             }
         }
         catch (Exception)
         {
             await Close();
         }
+    }
+    
+    public async Task Send(PacketBase packet)
+    {
+        _isInSendingState = true;
+        await _socketWriter.Send(packet);
+        _isInSendingState = false;
     }
     
     public async Task Close()
