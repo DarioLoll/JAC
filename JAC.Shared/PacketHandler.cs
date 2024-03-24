@@ -2,7 +2,7 @@
 
 public class PacketHandler
 {
-    public Dictionary<string, Action<string>> PacketHandlers { get; } = new();
+    public Dictionary<string, Action<string>> PacketHandlers { get; protected init; } = new();
 
     public void Handle(string line)
     {

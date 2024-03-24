@@ -1,5 +1,7 @@
 ﻿using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
+using JAC.Shared.Packets;
 
 namespace JAC.Shared;
 
@@ -22,7 +24,7 @@ public class SocketWriter
     public async Task Send(PacketBase packet)
     {
         Type packetType = packet.GetType();
-        string message = PacketBase.GetPrefix(packetType) + " " + packet.ToJson();
+        string message = PacketBase.GetPrefix(packetType) + " " + JsonSerializer.Serialize(packet, packetType);
         await Send(message);
     }
     
@@ -36,7 +38,7 @@ public class SocketWriter
     public static async Task Send(Socket socket, PacketBase packet)
     {
         Type packetType = packet.GetType();
-        string message = PacketBase.GetPrefix(packetType) + " " + packet.ToJson();
+        string message = PacketBase.GetPrefix(packetType) + " " + JsonSerializer.Serialize(packet, packetType);
         await Send(socket, message);
     }
 }

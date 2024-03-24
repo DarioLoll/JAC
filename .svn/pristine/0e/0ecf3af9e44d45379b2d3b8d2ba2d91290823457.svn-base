@@ -1,0 +1,60 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:JACService.ViewModels"
+             xmlns:models="clr-namespace:JACService.Models"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="600"
+             x:Class="JACService.Views.MainView"
+             x:DataType="viewModels:MainViewModel">
+
+
+    <UserControl.Resources>
+        <models:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+    </UserControl.Resources>
+    
+    <Grid RowDefinitions="Auto,Auto,*,*">
+        
+        <TextBlock
+                   Text="Server"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontSize="50"
+                   Margin="40"/>
+        
+        <TextBlock Grid.Row="1"
+                   Text="{Binding ServerStatus}"
+                   HorizontalAlignment="Center"
+                   FontSize="40"
+                   Margin="20 20 20 50"/>
+        
+        <Button Grid.Row="2"
+                IsEnabled="{Binding IsServerRunning, 
+                Converter={StaticResource InverseBooleanConverter}}"
+                Command="{Binding StartServerCommand}"
+                Content="Start"
+                Width="400"
+                Height="100"
+                FontSize="40"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                CornerRadius="20"/>
+        
+        <Button Grid.Row="3"
+                IsEnabled="{Binding IsServerRunning}"
+                Command="{Binding StopServerCommand}"
+                Content="Stop"
+                Width="400"
+                Height="100"
+                FontSize="40"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                CornerRadius="20"/>
+        
+    </Grid>
+    
+</UserControl>

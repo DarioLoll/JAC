@@ -1,4 +1,6 @@
-﻿using JACService.Core.Contracts;
+﻿using JAC.Shared;
+using JAC.Shared.Channels;
+using JACService.Core.Contracts;
 
 namespace JACService.Core;
 
@@ -10,6 +12,18 @@ public class ChatServiceDirectory
     private readonly List<IUser> _users = new();
 
     private readonly Dictionary<IUser, Session> _sessions = new();
+    
+    List<IChannel> Channels { get; } = new();
+    
+    public void CreateGroup(IUser asUser, string name)
+    {
+        
+    }
+    
+    public bool OpenPrivateChannel(IUser asUser, string otherUsername)
+    {
+        return true;
+    }
 
     public void AddUser(IUser user) => _users.Add(user);
 

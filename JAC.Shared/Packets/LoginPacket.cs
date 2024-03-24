@@ -7,5 +7,4 @@ public class LoginPacket : PacketBase
 {
     public required string Username { get; init; }
     
-    public override string ToJson() => JsonSerializer.Serialize(this);
 }

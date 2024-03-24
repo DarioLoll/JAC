@@ -1,25 +1,20 @@
-﻿using JACService.Core.Contracts;
+﻿using JAC.Shared;
+using JACService.Core.Contracts;
 
 namespace JACService.Core;
 
 public class ChatUser : IUser
 {
     public string Nickname { get; }
-
-    public bool LoggedIn { get; private set; }
+    public List<ulong> Channels { get; }
     
-    public ChatUser(string nickname)
+    public bool IsOnline { get; set; }
+
+
+    public ChatUser(string nickname, List<ulong>? channels = null)
     {
         Nickname = nickname;
+        Channels = channels ?? new List<ulong>();
     }
     
-    public void LogOut()
-    {
-        LoggedIn = false;
-    }
-    
-    public void LogIn()
-    {
-        LoggedIn = true;
-    }
 }

@@ -1,0 +1,5 @@
+0000000000000000000000000000000000000000 be601f524ed4d3d877802961a91a378c9c0b6b89 DarioLoll <115354821+DarioLoll@users.noreply.github.com> 1708807400 +0100	commit (initial): Initial Commit
+be601f524ed4d3d877802961a91a378c9c0b6b89 75c303bbede0f197a6619fef8c683fa64b351270 DarioLoll <115354821+DarioLoll@users.noreply.github.com> 1708838811 +0100	pull --ff --recurse-submodules --progress origin: Fast-forward
+75c303bbede0f197a6619fef8c683fa64b351270 86258be55fea46a4bcb9ea672748b7c57ce008f9 DarioLoll <115354821+DarioLoll@users.noreply.github.com> 1709037880 +0100	commit: Created the server project
+86258be55fea46a4bcb9ea672748b7c57ce008f9 cd67c82da797a88c92f643d48693a3c1e4931b73 DarioLoll <115354821+DarioLoll@users.noreply.github.com> 1709141662 +0100	commit: Upgraded to Avaloni 11.0.9
+cd67c82da797a88c92f643d48693a3c1e4931b73 4223087abfa8a10cb24fcb815b55ba081334b9b1 DarioLoll <115354821+DarioLoll@users.noreply.github.com> 1709644552 +0100	commit: Implemented Basic Server GUI

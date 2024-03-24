@@ -15,7 +15,7 @@ public class Session
     public event EventHandler<Session>? SessionClosed;
     public IServiceLogger Logger { get; private set; }
 
-    public IUser? User { get; private set; }
+    public IUser? User { get; set; }
 
     public Session(Socket socket, IServiceLogger logger)
     {
@@ -23,13 +23,7 @@ public class Session
         Logger = logger;
         _socketReader = new SocketReader(_socket);
         _socketWriter = new SocketWriter(_socket);
-        _packetHandler = new PacketHandler()
-        {
-            PacketHandlers =
-            {
-                { PacketBase.GetPrefix<LoginPacket>(), HandleLogin }
-            }
-        };
+        _packetHandler = new ServerPacketHandler(this);
     }
     
     public async void HandleCommunication()
@@ -79,32 +73,5 @@ public class Session
         SessionClosed?.Invoke(this, e);
     }
 
-    #region Packet Handlers
-
-        public async void HandleLogin(string json)
-        {
-            LoginPacket? packet = PacketBase.FromJson<LoginPacket>(json);
-            if (packet == null)
-            {
-                await SendError(ErrorType.InvalidPacket);
-                return;
-            }
-            if (User != null)
-            {
-                await SendError(ErrorType.AlreadyLoggedIn);
-                return;
-            }
-            if(ChatServiceDirectory.Instance.FindUser(packet.Username) != null)
-            {
-                await SendError(ErrorType.UsernameTaken);
-                return;
-            }
-            User = new ChatUser(packet.Username);
-            User.LogIn();
-            ChatServiceDirectory.Instance.AddUser(User);
-            ChatServiceDirectory.Instance.AddSession(User, this);
-            await Send(new LoginSuccessPacket{ Request = packet });
-        }
     
-    #endregion
 }

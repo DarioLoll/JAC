@@ -26,5 +26,4 @@ public class ErrorPacket : PacketBase
         };
     }
 
-    public override string ToJson() => JsonSerializer.Serialize(this);
 }

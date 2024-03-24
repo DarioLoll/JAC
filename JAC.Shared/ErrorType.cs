@@ -5,5 +5,8 @@ public enum ErrorType
     Unknown,
     InvalidPacket,
     UsernameTaken,
-    AlreadyLoggedIn
+    AlreadyLoggedIn,
+    NotLoggedIn,
+    UserNotFound,
+    CannotAddSelf
 }

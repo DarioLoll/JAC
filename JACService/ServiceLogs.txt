@@ -1,10 +1,5 @@
-10/03/2024 21:20:05: Service started on 127.0.0.1:8080
-10/03/2024 21:20:14: Client connected from 127.0.0.1:26237
-10/03/2024 21:20:17: Received a login request from 127.0.0.1:26237
-10/03/2024 21:20:40: Client connected from 127.0.0.1:26238
-10/03/2024 21:20:44: Received a login request from 127.0.0.1:26238
-10/03/2024 21:20:47: Received a login request from 127.0.0.1:26238
-10/03/2024 21:20:48: Received a login request from 127.0.0.1:26238
-10/03/2024 21:20:54: Received a login request from 127.0.0.1:26238
-10/03/2024 21:20:59: Client connected from 127.0.0.1:26239
-10/03/2024 21:21:01: Received a login request from 127.0.0.1:26239
+14/03/2024 10:47:59: Service started on 127.0.0.1:8080
+14/03/2024 10:51:39: Client connected from 127.0.0.1:54007
+14/03/2024 10:51:42: Received a login request from 127.0.0.1:54007
+14/03/2024 10:52:07: Service stopped on 127.0.0.1:8080
+14/03/2024 10:52:07: Disconnecting all 1 clients...
