@@ -11,7 +11,7 @@ namespace JACService;
 public partial class App : Application
 {
     public const string DefaultLogPath = "../../../";
-    private FileLogger _logger = new(DefaultLogPath);
+    private FileLogger _logger;
 
     /// <summary>
     /// Changes the path where the log files are stored
@@ -28,7 +28,7 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            _logger.LoadConfig();
+            _logger = FileLogger.LoadFromConfig(DefaultLogPath);
             string[]? args = desktop.Args;
             Server server = Server.Instance;
             server.Logger = _logger;

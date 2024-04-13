@@ -2,7 +2,14 @@
 
 namespace JAC.Shared.Packets;
 
+/// <summary>
+/// Packet to respond to a client's request for a list of channels.
+/// <seealso cref="JAC.Shared.ParameterlessPacket"/>
+/// </summary>
 public class GetChannelsResponsePacket : PacketBase
 {
-    public required List<IChannel> Channels { get; init; }
+    /// <summary>
+    /// Contains the list of channels that the client's user is a member of.
+    /// </summary>
+    public required IEnumerable<IChannel> Channels { get; init; }
 }

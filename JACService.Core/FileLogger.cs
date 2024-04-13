@@ -4,12 +4,16 @@ using JACService.Core.Contracts;
 
 namespace JACService.Core;
 
-[DataContract]
+/// <summary>
+/// Logs service information, errors, and requests to a file.
+/// </summary>
 public class FileLogger : IServiceLogger
 {
-    [DataMember]
     private bool _overwriteOnRestart;
 
+    /// <summary>
+    /// Whether to start with a clean log file on service restart.
+    /// </summary>
     public bool OverwriteOnRestart
     {
         get => _overwriteOnRestart;
@@ -20,9 +24,11 @@ public class FileLogger : IServiceLogger
         }
     }
 
-    [DataMember] 
     private FileLoggerOption _option = FileLoggerOption.AllToOneFile;
 
+    /// <summary>
+    /// Which log information to write to which file.
+    /// </summary>
     public FileLoggerOption Option
     {
         get => _option;
@@ -43,6 +49,8 @@ public class FileLogger : IServiceLogger
     /// </summary>
     public string PathToLogFile { get; set; }
 
+
+    /// <param name="pathToLogFile">Path to the log file excluding the file name</param>
     public FileLogger(string pathToLogFile)
     {
         PathToLogFile = pathToLogFile;
@@ -99,6 +107,19 @@ public class FileLogger : IServiceLogger
         Option = savedLogger.Option;
         if (OverwriteOnRestart) 
             ClearLogs();
+    }
+    
+    /// <summary>
+    /// Attempts to load a FileLogger from a config file. If the file does not exist, a new FileLogger is created.
+    /// </summary>
+    /// <param name="pathToLogFile">The path to the directory where the config file is stored, excluding the file name</param>
+    /// <returns>A FileLogger configured as saved in the config file, or a new, default FileLogger if the config file was not found</returns>
+    public static FileLogger LoadFromConfig(string pathToLogFile)
+    {
+        string configPath = Path.Combine(pathToLogFile, ConfigFileName);
+        if (!File.Exists(configPath)) return new FileLogger(pathToLogFile);
+        string json = File.ReadAllText(configPath);
+        return JsonSerializer.Deserialize<FileLogger>(json) ?? new FileLogger(pathToLogFile);
     }
 }
 

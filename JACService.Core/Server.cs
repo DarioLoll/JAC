@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using JAC.Shared;
 using JACService.Core.Contracts;
 
 namespace JACService.Core;
@@ -20,7 +21,10 @@ public class Server
 
     public bool IsOnline { get; private set; }
     
-    public int ClientCount => _clientManager?.Sessions.Count() ?? 0;
+    public int ClientCount => ClientManager?.Sessions.Count() ?? 0;
+    
+    public ClientManager? ClientManager => _clientManager;
+    
 
     private Server()
     {

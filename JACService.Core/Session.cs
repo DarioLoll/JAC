@@ -7,15 +7,26 @@ namespace JACService.Core;
 
 public class Session
 {
-    private bool _isInSendingState;
     private readonly Socket _socket;
     private readonly SocketReader _socketReader;
     private readonly SocketWriter _socketWriter;
     private readonly PacketHandler _packetHandler;
-    public event EventHandler<Session>? SessionClosed;
+    public event Action<Session>? SessionClosed;
+    public event Action<Session, IUser>? UserLoggedIn;
     public IServiceLogger Logger { get; private set; }
 
-    public IUser? User { get; set; }
+    private IUser? _user;
+
+    public IUser? User
+    {
+        get => _user;
+        set
+        {
+            _user = value;
+            if(value == null) return;
+            OnUserLoggedIn(value);
+        }
+    }
 
     public Session(Socket socket, IServiceLogger logger)
     {
@@ -40,38 +51,30 @@ public class Session
         }
         catch (Exception)
         {
-            await Close();
+            Close();
         }
     }
-    public async Task Send(PacketBase packet)
-    {
-        _isInSendingState = true;
-        await _socketWriter.Send(packet);
-        _isInSendingState = false;
-    }
-    
-    public async Task SendError(ErrorType errorType) => await Send(new ErrorPacket(errorType));
+    public async void Send(PacketBase packet) => await _socketWriter.Send(packet);
 
-    public async Task Close()
+    public void SendError(ErrorType errorType) => Send(new ErrorPacket{ErrorType = errorType});
+
+    public void Close()
     {
         if(!_socket.Connected) return;
-        //Wait until the socket is done sending data
-        await Task.Run(() =>
-        {
-            while (_isInSendingState) { }
-        });
         Logger.LogServiceInfo($"Client disconnected from {_socket.RemoteEndPoint}");
-        if (User != null)
-            ChatServiceDirectory.Instance.RemoveSession(User);
         _socket.Shutdown(SocketShutdown.Both);
         _socket.Close();
-        OnSessionClosed(this);
+        OnSessionClosed();
     }
 
-    protected virtual void OnSessionClosed(Session e)
+    protected virtual void OnSessionClosed()
     {
-        SessionClosed?.Invoke(this, e);
+        SessionClosed?.Invoke(this);
     }
 
-    
+
+    protected virtual void OnUserLoggedIn(IUser user)
+    {
+        UserLoggedIn?.Invoke(this, user);
+    }
 }

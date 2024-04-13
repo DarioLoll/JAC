@@ -1,5 +1,8 @@
 ﻿namespace JAC.Shared;
 
+/// <summary>
+/// The type of error that occurred on the server that is being sent to the client.
+/// </summary>
 public enum ErrorType
 {
     Unknown,
@@ -8,5 +11,10 @@ public enum ErrorType
     AlreadyLoggedIn,
     NotLoggedIn,
     UserNotFound,
-    CannotAddSelf
+    CannotAddSelf,
+    ChannelNotFound,
+    UserAlreadyInChannel,
+    InsufficientPermissions,
+    UserNotInChannel,
+    ChannelAlreadyExists
 }

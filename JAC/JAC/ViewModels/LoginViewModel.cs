@@ -39,7 +39,7 @@ public partial class LoginViewModel : ViewModelBase
     
     private void OnError(ErrorPacket packet)
     {
-        ErrorField = packet.ErrorMessage;
+        ErrorField = packet.ErrorType.ToString();
     }
 
     public override void OnDeactivated()

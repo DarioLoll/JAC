@@ -11,37 +11,20 @@ public class ChatServiceDirectory
 
     private readonly List<IUser> _users = new();
 
-    private readonly Dictionary<IUser, Session> _sessions = new();
-    
-    List<IChannel> Channels { get; } = new();
-    
-    public void CreateGroup(IUser asUser, string name)
-    {
-        
-    }
-    
-    public bool OpenPrivateChannel(IUser asUser, string otherUsername)
-    {
-        return true;
-    }
+
+    private Random _random = new();
+    public Random Random => _random;
+
+    internal List<IChannel> Channels { get; } = new();
+
 
     public void AddUser(IUser user) => _users.Add(user);
 
     public void RemoveUser(IUser user) => _users.Remove(user);
 
-    public void AddSession(IUser user, Session session) => _sessions.Add(user, session);
-
-    public void RemoveSession(IUser user) => _sessions.Remove(user);
-
     public IUser? FindUser(string nickname) => _users.Find(user => user.Nickname == nickname);
     
-    public Session? FindSession(IUser user) => _sessions.GetValueOrDefault(user);
+    public IChannel? GetChannel(ulong id) => Channels.Find(channel => channel.Id == id);
 
-    public Session? FindSession(string nickname)
-    {
-        IUser? user = FindUser(nickname);
-        if (user == null) return null;
-        return FindSession(user);
-    }
-    
+    public static IEnumerable<IChannel> GetChannels(IUser user) => Instance.Channels.Where(channel => user.Channels.Contains(channel.Id));
 }
