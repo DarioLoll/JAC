@@ -13,11 +13,7 @@ public class EventNotifier
 
     private EventNotifier()
     {
-        ChannelHandler.ChannelCreated += OnChannelCreated;
-    }
-
-    private void OnChannelCreated(IChannel createdChannel)
-    {
         
     }
+    
 }

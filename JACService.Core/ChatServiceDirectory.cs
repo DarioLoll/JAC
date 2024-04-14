@@ -1,6 +1,5 @@
 ﻿using JAC.Shared;
 using JAC.Shared.Channels;
-using JACService.Core.Contracts;
 
 namespace JACService.Core;
 
@@ -15,7 +14,7 @@ public class ChatServiceDirectory
     private Random _random = new();
     public Random Random => _random;
 
-    internal List<IChannel> Channels { get; } = new();
+    internal List<BaseChannel> Channels { get; } = new();
 
 
     public void AddUser(IUser user) => _users.Add(user);
@@ -24,7 +23,23 @@ public class ChatServiceDirectory
 
     public IUser? FindUser(string nickname) => _users.Find(user => user.Nickname == nickname);
     
-    public IChannel? GetChannel(ulong id) => Channels.Find(channel => channel.Id == id);
+    public BaseChannel? GetChannel(ulong id) => Channels.Find(channel => channel.Id == id);
 
     public static IEnumerable<IChannel> GetChannels(IUser user) => Instance.Channels.Where(channel => user.Channels.Contains(channel.Id));
+    
+    /// <summary>
+    /// Generates a new unique channel id. Channels are identified by their unique id.
+    /// </summary>
+    /// <returns>A random ulong that isn't already taken by a channel in the <see cref="JACService.Core.ChatServiceDirectory"/></returns>
+    public ulong GetNextChannelId()
+    {
+        ulong id = (ulong)Random.Next() * (ulong)Random.Next();
+        bool channelWithIdExists = Channels.Exists(channel => channel.Id == id);
+        while (channelWithIdExists)
+        {
+            id = (ulong)Random.Next() * (ulong)Random.Next();
+            channelWithIdExists = Channels.Exists(channel => channel.Id == id);
+        }
+        return id;
+    }
 }

@@ -20,6 +20,7 @@ public class ChatUser : IUser
     /// <inheritdoc cref="IUser.IsOnline"/>
     /// </summary>
     public bool IsOnline { get; set; }
+    
 
     public ChatUser(string nickname, List<ulong>? channels = null)
     {

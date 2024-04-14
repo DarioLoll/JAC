@@ -7,8 +7,9 @@ public class GroupSettings
 {
     /// <summary>
     /// If only admins can send messages to the group.
+    /// <remarks>Default is false</remarks>
     /// </summary>
-    public bool ReadOnlyForMembers { get; set; }
+    public bool ReadOnlyForMembers { get; set; } = false;
     
     /// <summary>
     /// If everyone, including non-admins, can add new members to the group.
@@ -17,8 +18,14 @@ public class GroupSettings
     public bool AllowMembersToAdd { get; set; } = true;
     
     /// <summary>
-    /// If everyone, including non-admins, can change the name and description of the group.
+    /// If everyone, including non-admins, can change the name of the group.
+    /// <remarks>Default is false</remarks>
+    /// </summary>
+    public bool AllowMembersToChangeName { get; set; } = false;
+    
+    /// <summary>
+    /// If everyone, including non-admins, can change the description of the group.
     /// <remarks>Default is true</remarks>
     /// </summary>
-    public bool AllowMembersToEdit { get; set; } = true;
+    public bool AllowMembersToChangeDescription { get; set; } = true;
 }

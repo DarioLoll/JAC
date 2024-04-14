@@ -35,6 +35,12 @@ public class ServerPacketHandler : PacketHandler
             { PacketBase.GetPrefix<LeaveGroupPacket>(), LeaveGroup },
         };
     }
+    
+    private void ProcessActionResult(ActionReport report)
+    {
+        if(!report.Success)
+            Session.SendError(report.Error!.Value);
+    }
 
     #region Methods for handling packets
     
@@ -43,9 +49,13 @@ public class ServerPacketHandler : PacketHandler
             SendMessagePacket? packet = PacketBase.FromJson<SendMessagePacket>(json);
             if (!CheckPacket(packet)) return;
             var channel = ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
-            var result = channel.SendMessage(Session.User, packet.Message);
-            if(!result.Success)
-                Session.SendError(result.Error!.Value);
+            if(channel == null)
+            {
+                Session.SendError(ErrorType.ChannelNotFound);
+                return;
+            }
+            var result = channel.SendMessage(Session.User!, packet.Message);
+            ProcessActionResult(result);
         }
 
         private void OpenPrivateChannel(string json)
@@ -53,33 +63,50 @@ public class ServerPacketHandler : PacketHandler
             OpenPrivateChannelPacket? packet = PacketBase.FromJson<OpenPrivateChannelPacket>(json);
             if (!CheckPacket(packet)) return;
             var otherUser = ChatServiceDirectory.Instance.FindUser(packet!.Username);
-            var result = ChannelHandler.OpenPrivateChannel(Session.User, otherUser);
-            if(!result.Success)
-                Session.SendError(result.Error!.Value);
+            if(otherUser == null)
+            {
+                Session.SendError(ErrorType.UserNotFound);
+                return;
+            }
+            var result = BaseChannel.OpenPrivateChannel(ChatServiceDirectory.Instance.GetNextChannelId(), Session.User!, otherUser);
+            ProcessActionResult(result);
         }
 
         private void LeaveGroup(string json)
         {
             LeaveGroupPacket? packet = PacketBase.FromJson<LeaveGroupPacket>(json);
             if (!CheckPacket(packet)) return;
-            var channel = (GroupChannel?)ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
-            var result = ((ChatUser?)Session.User)?.LeaveGroup(channel) ?? ActionResult.UserNotFound;
-            if(!result.Success)
-                Session.SendError(result.Error!.Value);
+            var channel = ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
+            if (channel == null)
+            {
+                Session.SendError(ErrorType.ChannelNotFound);
+                return;
+            }
+            var result = channel.RemoveUser(Session.User!, Session.User!);
+            ProcessActionResult(result);
         }
 
         private void KickUser(string json)
         {
             KickUserPacket? packet = PacketBase.FromJson<KickUserPacket>(json);
             if (!CheckPacket(packet)) return;
-            var channel = (GroupChannel?)ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
+            var channel = ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
+            if (channel == null)
+            {
+                Session.SendError(ErrorType.ChannelNotFound);
+                return;
+            }
             var user = ChatServiceDirectory.Instance.FindUser(packet.Username);
-            var result = channel.KickUser(user, Session.User!);
-            if(!result.Success)
-                Session.SendError(result.Error!.Value);
+            if(user == null)
+            {
+                Session.SendError(ErrorType.UserNotFound);
+                return;
+            }
+            var result = channel.RemoveUser(user, Session.User!);
+            ProcessActionResult(result);
         }
 
-        private void GetChannels(string? parameters = null)
+        private void GetChannels(string _)
         {
             if (Session.User == null)
             {
@@ -96,7 +123,9 @@ public class ServerPacketHandler : PacketHandler
         {
             CreateGroupPacket? packet = PacketBase.FromJson<CreateGroupPacket>(json);
             if (!CheckPacket(packet)) return;
-            ChannelHandler.CreateGroup(Session.User!, packet!.Name, packet.Description);
+            ulong channelId = ChatServiceDirectory.Instance.GetNextChannelId();
+            var result = GroupChannel.CreateGroupChannel(channelId, Session.User!, packet!.Name, packet.Description);
+            ProcessActionResult(result);
         }
 
         private bool CheckPacket(PacketBase? packet)
@@ -130,7 +159,7 @@ public class ServerPacketHandler : PacketHandler
             IUser? user = ChatServiceDirectory.Instance.FindUser(packet.Username);
             if(user != null && user.IsOnline)
             {
-                Session.SendError(ErrorType.AlreadyLoggedIn);
+                Session.SendError(ErrorType.UsernameTaken);
                 return;
             }
             if (user == null)
@@ -146,9 +175,18 @@ public class ServerPacketHandler : PacketHandler
             if (!CheckPacket(packet)) return;
             IUser? user = ChatServiceDirectory.Instance.FindUser(packet!.Username);
             var channel = (GroupChannel?)ChatServiceDirectory.Instance.GetChannel(packet.ChannelId);
+            if(channel == null)
+            {
+                Session.SendError(ErrorType.ChannelNotFound);
+                return;
+            }
+            if(user == null)
+            {
+                Session.SendError(ErrorType.UserNotFound);
+                return;
+            }
             var result = channel.AddUser(user, Session.User!);
-            if(!result.Success)
-                Session.SendError(result.Error!.Value);
+            ProcessActionResult(result);
         }
         
         private void ChangeGroupName(string json)
@@ -156,9 +194,13 @@ public class ServerPacketHandler : PacketHandler
             ChangeGroupNamePacket? packet = PacketBase.FromJson<ChangeGroupNamePacket>(json);
             if (!CheckPacket(packet)) return;
             var channel = (GroupChannel?)ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
-            var result = channel.SetGroupName(packet.NewName, Session.User);
-            if(!result.Success)
-                Session.SendError(result.Error!.Value);
+            if(channel == null)
+            {
+                Session.SendError(ErrorType.ChannelNotFound);
+                return;
+            }
+            var result = channel.ChangeName(Session.User!, packet.NewName);
+            ProcessActionResult(result);
         }
         
         private void ChangeGroupDescription(string json)
@@ -166,9 +208,13 @@ public class ServerPacketHandler : PacketHandler
             ChangeGroupDescriptionPacket? packet = PacketBase.FromJson<ChangeGroupDescriptionPacket>(json);
             if (!CheckPacket(packet)) return;
             var channel = (GroupChannel?)ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
-            var result = channel.SetDescription(packet.Description, Session.User);
-            if(!result.Success)
-                Session.SendError(result.Error!.Value);
+            if(channel == null)
+            {
+                Session.SendError(ErrorType.ChannelNotFound);
+                return;
+            }
+            var result = channel.ChangeDescription(Session.User!, packet.Description);
+            ProcessActionResult(result);
         }
         
         private void ChangeUserRank(string json)
@@ -176,10 +222,19 @@ public class ServerPacketHandler : PacketHandler
             ChangeUserRankPacket? packet = PacketBase.FromJson<ChangeUserRankPacket>(json);
             if (!CheckPacket(packet)) return;
             var channel = (GroupChannel?)ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
+            if(channel == null)
+            {
+                Session.SendError(ErrorType.ChannelNotFound);
+                return;
+            }
             var user = ChatServiceDirectory.Instance.FindUser(packet.Username);
+            if(user == null)
+            {
+                Session.SendError(ErrorType.UserNotFound);
+                return;
+            }
             var result = channel.ChangeUserRank(user, Session.User!);
-            if(!result.Success)
-                Session.SendError(result.Error!.Value);
+            ProcessActionResult(result);
         }
     
     #endregion
