@@ -19,12 +19,12 @@ public interface IChannel
     /// <summary>
     /// A list of all users in the channel.
     /// </summary>
-    List<IUser> Users { get; }
+    IEnumerable<IUser> Users { get; }
     
     /// <summary>
     /// A list of all messages sent in the channel.
     /// </summary>
-    List<Message> Messages { get; }
+    IEnumerable<Message> Messages { get; }
     
     /// <summary>
     /// When the channel was created.

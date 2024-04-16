@@ -20,10 +20,10 @@ public class Message
     /// </summary>
     public DateTime TimeSent { get; }
     
-    public Message(IUser sender, string content)
+    public Message(IUser sender, string content, DateTime timeSent = default)
     {
         Sender = sender;
         Content = content;
-        TimeSent = DateTime.Now;
+        TimeSent = timeSent == default ? DateTime.Now : timeSent;
     }
 }

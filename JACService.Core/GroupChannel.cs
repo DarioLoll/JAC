@@ -7,18 +7,23 @@ public class GroupChannel : BaseChannel, IGroupChannel
 {
     public string Name { get; set; }
     public string Description { get; set; }
-    public List<IUser> Admins { get; }
+
+    private List<IUser> _admins;
+    public IEnumerable<IUser> Admins => _admins;
     public GroupSettings Settings { get; }
     
+    public event Action<string>? NameChanged;
+    public event Action<string>? DescriptionChanged;
+    public event Action<BaseUser>? RankChanged; 
     public GroupChannel(ulong id, IUser creator, string name, string description = "") : base(id)
     {
         Name = name;
         Description = description;
-        Admins = new List<IUser> { creator };
+        _admins = new List<IUser> { creator };
         Settings = new GroupSettings();
     }
     
-    public ActionReport AddUser(IUser user, IUser adder)
+    public ActionReport AddUser(BaseUser user, BaseUser adder)
     {
         if(Users.Contains(user))
             return ActionReport.Failed(ErrorType.UserAlreadyInChannel);
@@ -31,7 +36,7 @@ public class GroupChannel : BaseChannel, IGroupChannel
         return ActionReport.SuccessReport;
     }
 
-    public override ActionReport RemoveUser(IUser user, IUser remover)
+    public override ActionReport RemoveUser(BaseUser user, BaseUser remover)
     {
         if(!Users.Contains(user))
             return ActionReport.Failed(ErrorType.UserNotInChannel);
@@ -44,7 +49,7 @@ public class GroupChannel : BaseChannel, IGroupChannel
         return ActionReport.SuccessReport;
     }
 
-    public override ActionReport SendMessage(IUser sender, string content)
+    public override ActionReport SendMessage(BaseUser sender, string content)
     {
         bool isSenderAdmin = Admins.Contains(sender);
         if(Settings.ReadOnlyForMembers && !isSenderAdmin)
@@ -52,7 +57,7 @@ public class GroupChannel : BaseChannel, IGroupChannel
         return base.SendMessage(sender, content);
     }
     
-    public ActionReport ChangeName(IUser changer, string newName)
+    public ActionReport ChangeName(BaseUser changer, string newName)
     {
         bool isChangerAdmin = Admins.Contains(changer);
         bool isChangerInChannel = Users.Contains(changer);
@@ -60,10 +65,11 @@ public class GroupChannel : BaseChannel, IGroupChannel
         if(!isChangerInChannel || (!isChangerAdmin && !areMembersAllowedToChangeName))
             return ActionReport.Failed(ErrorType.InsufficientPermissions);
         Name = newName;
+        OnNameChanged(newName);
         return ActionReport.SuccessReport;
     }
     
-    public ActionReport ChangeDescription(IUser changer, string newDescription)
+    public ActionReport ChangeDescription(BaseUser changer, string newDescription)
     {
         bool isChangerAdmin = Admins.Contains(changer);
         bool isChangerInChannel = Users.Contains(changer);
@@ -71,27 +77,44 @@ public class GroupChannel : BaseChannel, IGroupChannel
         if(!isChangerInChannel || (!isChangerAdmin && !areMembersAllowedToChangeDescription))
             return ActionReport.Failed(ErrorType.InsufficientPermissions);
         Description = newDescription;
+        OnDescriptionChanged(newDescription);
         return ActionReport.SuccessReport;
     }
     
-    public ActionReport ChangeUserRank(IUser user, IUser changer)
+    public ActionReport ChangeUserRank(BaseUser user, BaseUser changer)
     {
         if(!Users.Contains(user))
             return ActionReport.Failed(ErrorType.UserNotInChannel);
         if(!Admins.Contains(changer))
             return ActionReport.Failed(ErrorType.InsufficientPermissions);
         if(Admins.Contains(user))
-            Admins.Remove(user);
-        else Admins.Add(user);
+            _admins.Remove(user);
+        else _admins.Add(user);
+        OnRankChanged(user);
         return ActionReport.SuccessReport;
     }
     
-    public static ActionResult<GroupChannel> CreateGroupChannel(ulong id, IUser creator, string name, string description = "")
+    public static ActionResult<GroupChannel> CreateGroupChannel(ulong id, BaseUser creator, string name, string description = "")
     {
         var channel = new GroupChannel(id, creator, name, description);
         channel.AddUser(creator);
-        channel.Admins.Add(creator);
+        channel._admins.Add(creator);
         OnChannelCreated(channel);
         return ActionResult<GroupChannel>.Succeeded(channel);
+    }
+
+    protected virtual void OnNameChanged(string newName)
+    {
+        NameChanged?.Invoke(newName);
+    }
+
+    protected virtual void OnDescriptionChanged(string obj)
+    {
+        DescriptionChanged?.Invoke(obj);
+    }
+
+    protected virtual void OnRankChanged(BaseUser user)
+    {
+        RankChanged?.Invoke(user);
     }
 }

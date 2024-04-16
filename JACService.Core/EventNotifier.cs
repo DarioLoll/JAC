@@ -1,4 +1,7 @@
-﻿using JAC.Shared.Channels;
+﻿using JAC.Shared;
+using JAC.Shared.Channels;
+using JAC.Shared.Packets;
+using JACService.Core.Contracts;
 
 namespace JACService.Core;
 
@@ -11,9 +14,103 @@ public class EventNotifier
 {
     public static EventNotifier Instance { get; } = new();
 
+    private IServiceLogger? _logger;
+
     private EventNotifier()
     {
-        
+        if(ChatServiceDirectory.Loaded)
+            Initialize();
+        else
+            ChatServiceDirectory.DataLoaded += Initialize;
     }
     
+    private void Initialize()
+    {
+        _logger = Server.Instance.Logger;
+        ChatServiceDirectory.Instance.UserJoinedChannel += OnUserJoinedChannel;
+        ChatServiceDirectory.Instance.UserLeftChannel += OnUserLeftChannel;
+        ChatServiceDirectory.Instance.UserRankChanged += OnUserRankChanged;
+        ChatServiceDirectory.Instance.MessageSent += OnMessageSent;
+        ChatServiceDirectory.Instance.GroupNameChanged += OnGroupNameChanged;
+        ChatServiceDirectory.Instance.GroupDescriptionChanged += OnGroupDescriptionChanged;
+    }
+
+
+    private void OnGroupDescriptionChanged(GroupChannel group)
+    {
+        _logger?.LogServiceInfo($"Group {group.Id} description changed to \"{group.Description}\".");
+        var updatePacket = new ChannelDescriptionChangedPacket
+        {
+            ChannelId = group.Id,
+            NewDescription = group.Description
+        };
+        Server.Instance.ClientManager?.BroadCast(group.OnlineUsers, updatePacket);
+    }
+
+    private void OnGroupNameChanged(GroupChannel group)
+    {
+        _logger?.LogServiceInfo($"Group {group.Id} name changed to \"{group.Name}\".");
+        var updatePacket = new ChannelNameChangedPacket()
+        {
+            ChannelId = group.Id,
+            NewName = group.Name
+        };
+        Server.Instance.ClientManager?.BroadCast(group.OnlineUsers, updatePacket);
+    }
+
+    private void OnMessageSent(BaseChannel channel, Message message)
+    {
+        var updatePacket = new MessageReceivedPacket
+        {
+            ChannelId = channel.Id,
+            Message = message
+        };
+        Server.Instance.ClientManager?.BroadCast(channel.OnlineUsers, updatePacket);
+    }
+
+    private void OnUserRankChanged(BaseUser user, BaseChannel channel)
+    {
+        var updatePacket = new ChannelMembersChangedPacket
+        {
+            ChangeType = ChannelMemberChangeType.RankChanged,
+            ChannelId = channel.Id,
+            User = user
+        };
+        Server.Instance.ClientManager?.BroadCast(channel.OnlineUsers, updatePacket);
+    }
+
+    private void OnUserLeftChannel(BaseUser user, BaseChannel channel)
+    {
+        var updatePacket = new ChannelMembersChangedPacket
+        {
+            ChangeType = ChannelMemberChangeType.Left,
+            ChannelId = channel.Id,
+            User = user
+        };
+        Server.Instance.ClientManager?.BroadCast(channel.OnlineUsers, updatePacket);
+        
+        var userUpdatePacket = new ChannelRemovedPacket
+        {
+            RemovedChannelId = channel.Id
+        };
+        Server.Instance.ClientManager?.SendToUser(user, userUpdatePacket);
+    }
+
+    private void OnUserJoinedChannel(BaseUser user, BaseChannel channel)
+    {
+        var groupUpdatePacket = new ChannelMembersChangedPacket
+        {
+            ChangeType = ChannelMemberChangeType.Joined,
+            ChannelId = channel.Id,
+            User = user
+        };
+        var usersToUpdate = channel.OnlineUsers.Where(u => u != user);
+        Server.Instance.ClientManager?.BroadCast(usersToUpdate, groupUpdatePacket);
+
+        var userUpdatePacket = new ChannelAddedPacket
+        {
+            NewChannel = channel
+        };
+        Server.Instance.ClientManager?.SendToUser(user, userUpdatePacket);
+    }
 }

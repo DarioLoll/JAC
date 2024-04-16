@@ -13,7 +13,7 @@ public interface IUser
     /// <summary>
     /// List of channel ids that the user is a member of.
     /// </summary>
-    List<ulong> Channels { get; }
+    IEnumerable<ulong> Channels { get; }
     
     /// <summary>
     /// If the user is currently online.

@@ -21,6 +21,18 @@ public class ClientManager
         if (user == null) return null;
         return FindSession(user);
     }
+
+    public void BroadCast(IEnumerable<IUser> users, PacketBase packet)
+    {
+        foreach (var user in users) 
+            SendToUser(user, packet);
+    }
+    
+    public void SendToUser(IUser user, PacketBase packet)
+    {
+        var session = FindSession(user);
+        session?.Send(packet);
+    }
     
     public IServiceLogger Logger { get; private set; }
     

@@ -15,9 +15,9 @@ public class Session
     public event Action<Session, IUser>? UserLoggedIn;
     public IServiceLogger Logger { get; private set; }
 
-    private IUser? _user;
+    private BaseUser? _user;
 
-    public IUser? User
+    public BaseUser? User
     {
         get => _user;
         set

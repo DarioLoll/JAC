@@ -1,4 +1,5 @@
-﻿using JAC.Shared;
+﻿using System.Text.Json.Serialization;
+using JAC.Shared;
 using JAC.Shared.Channels;
 
 namespace JACService.Core;
@@ -6,33 +7,39 @@ namespace JACService.Core;
 public class BaseChannel : IChannel
 {
     public ulong Id { get; }
-    public List<IUser> Users { get; }
-    public List<Message> Messages { get; }
-    public DateTime Created { get; }
+
+    [JsonInclude] private List<IUser> _users = new();
+    public IEnumerable<IUser> Users => _users;
     
-    public BaseChannel(ulong id)
+    [JsonInclude] private List<Message> _messages = new();
+    public IEnumerable<Message> Messages => _messages;
+    
+    public IEnumerable<IUser> OnlineUsers => Users.Where(u => u.IsOnline);
+    public DateTime Created { get; }
+
+    
+    public BaseChannel(ulong id, DateTime created = default)
     {
         Id = id;
-        Users = new List<IUser>();
-        Messages = new List<Message>();
-        Created = DateTime.Now;
+        Created = created == default ? DateTime.Now : created;
         OnChannelCreated(this);
     }
     
     public event Action<Message>? MessageSent;
+
     public static event Action<BaseChannel>? ChannelCreated;
     
-    public virtual ActionReport SendMessage(IUser sender, string content)
+    public virtual ActionReport SendMessage(BaseUser sender, string content)
     {
         if(!Users.Contains(sender))
             return new ActionReport{Error = ErrorType.UserNotInChannel};
         var message = new Message(sender, content);
-        Messages.Add(message);
+        _messages.Add(message);
         OnMessageSent(message);
         return ActionReport.SuccessReport;
     }
     
-    public static ActionResult<BaseChannel> OpenPrivateChannel(ulong id, IUser user1, IUser user2)
+    public static ActionResult<BaseChannel> OpenPrivateChannel(ulong id, BaseUser user1, BaseUser user2)
     {
         var channel = new BaseChannel(id);
         channel.AddUser(user1);
@@ -40,19 +47,19 @@ public class BaseChannel : IChannel
         return ActionResult<BaseChannel>.Succeeded(channel);
     }
     
-    protected void AddUser(IUser user)
+    protected void AddUser(BaseUser user)
     {
-        Users.Add(user);
-        user.Channels.Add(Id);
+        _users.Add(user);
+        user.JoinChannel(Id);
     }
     
-    protected void RemoveUser(IUser user)
+    protected void RemoveUser(BaseUser user)
     {
-        Users.Remove(user);
-        user.Channels.Remove(Id);
+        _users.Remove(user);
+        user.LeaveChannel(Id);
     }
     
-    public virtual ActionReport RemoveUser(IUser user, IUser remover)
+    public virtual ActionReport RemoveUser(BaseUser user, BaseUser remover)
     {
         if(!Users.Contains(user))
             return ActionReport.Failed(ErrorType.UserNotInChannel);
@@ -71,4 +78,5 @@ public class BaseChannel : IChannel
     {
         ChannelCreated?.Invoke(channel);
     }
+    
 }

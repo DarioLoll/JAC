@@ -156,14 +156,14 @@ public class ServerPacketHandler : PacketHandler
                 Session.SendError(ErrorType.AlreadyLoggedIn);
                 return;
             }
-            IUser? user = ChatServiceDirectory.Instance.FindUser(packet.Username);
+            BaseUser? user = ChatServiceDirectory.Instance.FindUser(packet.Username);
             if(user != null && user.IsOnline)
             {
                 Session.SendError(ErrorType.UsernameTaken);
                 return;
             }
             if (user == null)
-                Session.User = new ChatUser(packet.Username);
+                Session.User = new BaseUser(packet.Username);
             else
                 Session.User = user;
             Session.Send(new LoginSuccessPacket{ User = Session.User });
@@ -173,7 +173,7 @@ public class ServerPacketHandler : PacketHandler
         {
             AddUserToGroupPacket? packet = PacketBase.FromJson<AddUserToGroupPacket>(json);
             if (!CheckPacket(packet)) return;
-            IUser? user = ChatServiceDirectory.Instance.FindUser(packet!.Username);
+            BaseUser? user = ChatServiceDirectory.Instance.FindUser(packet!.Username);
             var channel = (GroupChannel?)ChatServiceDirectory.Instance.GetChannel(packet.ChannelId);
             if(channel == null)
             {
