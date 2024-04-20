@@ -38,6 +38,7 @@ public class Server
             _socket.Bind(new IPEndPoint(IpAddress, Port));
             _socket.Listen(10);
             _clientManager = new ClientManager(_socket, Logger);
+            ChatServiceDirectory.Instance.Load();
             _clientManager.AcceptClients();
             IsOnline = true;
             Logger.LogServiceInfo($"Service started on {IpAddress}:{Port}");
@@ -45,7 +46,7 @@ public class Server
         }
         catch (Exception e)
         {
-            Logger.LogServiceError(e.Message);
+            Logger?.LogServiceError(e.Message);
             return false;
         }
     }
@@ -54,19 +55,20 @@ public class Server
     {
         if (!IsOnline || _socket == null)
         {
-            Logger.LogServiceError("Service is not running");
+            Logger?.LogServiceError("Service is not running");
             return false;
         }
         try
         {
+            ChatServiceDirectory.Instance.Save();
             _socket?.Close();
             IsOnline = false;
-            Logger.LogServiceInfo($"Service stopped on {IpAddress}:{Port}");
+            Logger?.LogServiceInfo($"Service stopped on {IpAddress}:{Port}");
             return true;
         }
         catch (Exception e)
         {
-            Logger.LogServiceError(e.Message);
+            Logger?.LogServiceError(e.Message);
             return false;
         }
     }

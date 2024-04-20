@@ -12,12 +12,18 @@ public class ChatServiceDirectory
     [JsonConstructor]
     private ChatServiceDirectory() { }
     
+    [JsonInclude] private List<BaseUser> _users = new();
+    [JsonInclude] private List<BaseChannel> _channels = new();
+    
+    [JsonIgnore] public IEnumerable<BaseUser> Users => _users;
+    [JsonIgnore] public IEnumerable<BaseChannel> Channels => _channels;
+    
     public string SavePath { get; set; } = "chatdata.json";
     public static bool Loaded { get; private set; }
     public event Action<BaseUser, BaseChannel>? UserJoinedChannel;
     public event Action<BaseUser, BaseChannel>? UserLeftChannel;
     
-    public event Action<BaseUser, BaseChannel>? UserRankChanged;
+    public event Action<BaseUser, GroupChannel>? UserRankChanged;
     
     public event Action<BaseChannel, Message>? MessageSent;
     
@@ -31,11 +37,18 @@ public class ChatServiceDirectory
         if (File.Exists(SavePath))
         {
             string json = File.ReadAllText(SavePath);
-            ChatServiceDirectory? loaded = JsonSerializer.Deserialize<ChatServiceDirectory>(json);
-            if (loaded != null)
+            try
             {
-                _users = loaded._users;
-                _channels = loaded._channels;
+                ChatServiceDirectory? loaded = JsonSerializer.Deserialize<ChatServiceDirectory>(json);
+                if (loaded != null)
+                {
+                    _users = loaded._users;
+                    _channels = loaded._channels;
+                }
+            }
+            catch (Exception e)
+            {
+                Server.Instance.Logger?.LogServiceError($"Chat Directory failed to load: {e.Message}");
             }
         }
         BaseChannel.ChannelCreated += OnChannelCreated;
@@ -64,14 +77,6 @@ public class ChatServiceDirectory
         string json = JsonSerializer.Serialize(this, options);
         File.WriteAllText(SavePath, json);
     }
-
-    [JsonInclude]
-    private List<BaseUser> _users = new();
-    [JsonInclude]
-    private List<BaseChannel> _channels = new();
-
-    public IEnumerable<BaseUser> Users => _users;
-    public IEnumerable<BaseChannel> Channels => _channels;
     
     private Random _random = new();
 
@@ -125,27 +130,27 @@ public class ChatServiceDirectory
         return id;
     }
 
-    protected virtual void OnUserLeftChannel(BaseUser arg1, BaseChannel arg2)
+    protected virtual void OnUserLeftChannel(BaseUser user, BaseChannel channel)
     {
-        UserLeftChannel?.Invoke(arg1, arg2);
+        UserLeftChannel?.Invoke(user, channel);
     }
 
-    protected virtual void OnUserJoinedChannel(BaseUser arg1, BaseChannel arg2)
+    protected virtual void OnUserJoinedChannel(BaseUser user, BaseChannel channel)
     {
-        UserJoinedChannel?.Invoke(arg1, arg2);
+        UserJoinedChannel?.Invoke(user, channel);
     }
 
-    protected virtual void OnGroupNameChanged(GroupChannel obj)
+    protected virtual void OnGroupNameChanged(GroupChannel group)
     {
-        GroupNameChanged?.Invoke(obj);
+        GroupNameChanged?.Invoke(group);
     }
 
-    protected virtual void OnGroupDescriptionChanged(GroupChannel obj)
+    protected virtual void OnGroupDescriptionChanged(GroupChannel group)
     {
-        GroupDescriptionChanged?.Invoke(obj);
+        GroupDescriptionChanged?.Invoke(group);
     }
 
-    protected virtual void OnUserRankChanged(BaseUser user, BaseChannel channel)
+    protected virtual void OnUserRankChanged(BaseUser user, GroupChannel channel)
     {
         UserRankChanged?.Invoke(user, channel);
     }

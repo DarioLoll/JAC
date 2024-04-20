@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using JAC.Shared;
 using JAC.Shared.Packets;
 
@@ -56,12 +57,13 @@ public class ChatClient
             while (IsConnected)
             {
                 var request = await SocketReader.Read(_socket!);
-                _packetHandler.Handle(request);
+                Dispatcher.UIThread.Invoke(() => _packetHandler.Handle(request));
             }
             Close();
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Console.WriteLine($"Exception occured: {e.Message}");
             Close();
         }
     }
@@ -78,8 +80,8 @@ public class ChatClient
     {
         if (IsConnected)
         {
-            _socket?.Close();
             _socket?.Shutdown(SocketShutdown.Both);
+            _socket?.Close();
         }
         OnDisconnected();
     }

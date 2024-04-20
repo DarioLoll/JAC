@@ -44,12 +44,13 @@ public class Session
             while (true)
             {
                 var request = await _socketReader.Read();
+                if (string.IsNullOrEmpty(request)) continue;
                 string requestType = request.Split(' ', 2)[0].Substring(1);
                 Logger.LogRequestInfo($"Received a {requestType} request from {_socket.RemoteEndPoint}");
                 _packetHandler.Handle(request);
             }
         }
-        catch (Exception)
+        catch (Exception e)
         {
             Close();
         }
