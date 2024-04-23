@@ -1,43 +1,44 @@
-﻿using System.Text.Json.Serialization;
-using JAC.Shared;
+﻿using JAC.Shared;
 
 namespace JACService.Core;
 
 public class BaseUser : IUser
 {
-    /// <summary>
-    /// <inheritdoc cref="IUser.Nickname"/>
-    /// </summary>
-    public string Nickname { get; }
-
-    [JsonInclude] private List<ulong> _channels = new();
-    /// <summary>
-    /// <inheritdoc cref="IUser.Channels"/>
-    /// </summary>
-    public IEnumerable<ulong> Channels => _channels;
     
+    public required string Nickname { get; init; }  = string.Empty;
+    public IList<ulong> Channels { get; init; } = new List<ulong>();
+
     /// <summary>
-    /// <inheritdoc cref="IUser.IsOnline"/>
+    /// If the user is currently online.
     /// </summary>
-    [JsonIgnore] public bool IsOnline { get; set; }
+    public bool IsOnline { get; set; }
     
     public event Action<ulong>? JoinedChannel;
     public event Action<ulong>? LeftChannel;
-
-    public BaseUser(string nickname)
+    
+    public static BaseUser CreateFromModel(IUser userModel)
     {
-        Nickname = nickname;
+        return new BaseUser
+        {
+            Nickname = userModel.Nickname,
+            Channels = userModel.Channels.ToList()
+        };
+    }
+
+    public static List<IUser> CreateFromModels(IEnumerable<IUser> userModels)
+    {
+        return userModels.Select(user => CreateFromModel(user)).Cast<IUser>().ToList();
     }
 
     public void JoinChannel(ulong channelId)
     {
-        _channels.Add(channelId);
+        Channels.Add(channelId);
         OnJoinedChannel(channelId);
     }
     
     public void LeaveChannel(ulong channelId)
     {
-        _channels.Remove(channelId);
+        Channels.Remove(channelId);
         OnLeftChannel(channelId);
     }
 

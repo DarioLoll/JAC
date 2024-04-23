@@ -18,6 +18,8 @@ public class ChatServiceDirectory
     [JsonIgnore] public IEnumerable<BaseUser> Users => _users;
     [JsonIgnore] public IEnumerable<BaseChannel> Channels => _channels;
     
+    [JsonIgnore] public BaseChannel? GlobalChannel => _channels.Find(c => c.Id == 0);
+    
     public string SavePath { get; set; } = "chatdata.json";
     public static bool Loaded { get; private set; }
     public event Action<BaseUser, BaseChannel>? UserJoinedChannel;
@@ -50,6 +52,15 @@ public class ChatServiceDirectory
             {
                 Server.Instance.Logger?.LogServiceError($"Chat Directory failed to load: {e.Message}");
             }
+        }
+        if(GlobalChannel == null)
+        {
+            var globalChannel = new BaseChannel
+            {
+                Id = 0,
+                Created = DateTime.Now
+            };
+            OnChannelCreated(globalChannel);
         }
         BaseChannel.ChannelCreated += OnChannelCreated;
         Loaded = true;
@@ -100,6 +111,8 @@ public class ChatServiceDirectory
                 OnUserLeftChannel(user, channel);
             }
         };
+        GlobalChannel!.Users.Add(user);
+        user.JoinChannel(GlobalChannel.Id);
     }
 
     public void RemoveUser(BaseUser user)
@@ -112,7 +125,7 @@ public class ChatServiceDirectory
     
     public BaseChannel? GetChannel(ulong id) => _channels.Find(channel => channel.Id == id);
 
-    public static IEnumerable<IChannel> GetChannels(IUser user) => Instance.Channels.Where(channel => user.Channels.Contains(channel.Id));
+    public static IEnumerable<BaseChannel> GetChannels(IUser user) => Instance.Channels.Where(channel => user.Channels.Contains(channel.Id));
     
     /// <summary>
     /// Generates a new unique channel id. Channels are identified by their unique id.

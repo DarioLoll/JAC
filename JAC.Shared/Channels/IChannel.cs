@@ -14,21 +14,21 @@ public interface IChannel
     /// <summary>
     /// Each channel has a unique identifier, since it is possible to have multiple channels with the same name.
     /// </summary>
-    ulong Id { get; }
+    ulong Id { get; init; }
     
     /// <summary>
     /// A list of all users in the channel.
     /// </summary>
-    IEnumerable<IUser> Users { get; }
+    IList<IUser> Users { get; init; }
     
     /// <summary>
     /// A list of all messages sent in the channel.
     /// </summary>
-    IEnumerable<Message> Messages { get; }
+    IList<Message> Messages { get; init; }
     
     /// <summary>
     /// When the channel was created.
     /// </summary>
-    DateTime Created { get; }
+    DateTime Created { get; init; }
 
 }

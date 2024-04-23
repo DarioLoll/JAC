@@ -9,26 +9,26 @@ public class ClientManager
     private readonly Socket _serverSocket;
 
     private readonly List<Session> _connections = new();
-    private readonly Dictionary<IUser, Session> _sessions = new();
+    private readonly Dictionary<BaseUser, Session> _sessions = new();
     
-    public IDictionary<IUser, Session> Sessions => _sessions;
+    public IDictionary<BaseUser, Session> Sessions => _sessions;
     public IEnumerable<Session> Connections => _connections;
-    public Session? FindSession(IUser user) => _sessions.GetValueOrDefault(user);
+    public Session? FindSession(BaseUser user) => _sessions.GetValueOrDefault(user);
     
     public Session? FindSession(string nickname)
     {
-        IUser? user = ChatServiceDirectory.Instance.FindUser(nickname);
+        var user = ChatServiceDirectory.Instance.FindUser(nickname);
         if (user == null) return null;
         return FindSession(user);
     }
 
-    public void BroadCast(IEnumerable<IUser> users, PacketBase packet)
+    public void BroadCast(IEnumerable<BaseUser> users, PacketBase packet)
     {
         foreach (var user in users) 
             SendToUser(user, packet);
     }
     
-    public void SendToUser(IUser user, PacketBase packet)
+    public void SendToUser(BaseUser user, PacketBase packet)
     {
         var session = FindSession(user);
         session?.Send(packet);

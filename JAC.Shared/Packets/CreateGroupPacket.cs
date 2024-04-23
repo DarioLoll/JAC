@@ -2,7 +2,6 @@
 
 /// <summary>
 /// Packet for creating a new group.
-/// <seealso cref="JAC.Shared.Channels.GroupChannel"/>
 /// </summary>
 public class CreateGroupPacket : PacketBase
 {

@@ -5,7 +5,6 @@
 /// </summary>
 public interface IGroupChannel : IChannel
 {
-    
     /// <summary>
     /// The name of the group. Not necessarily unique. Able to be changed by members
     /// <remarks>Settings can be adjusted so that only admins can edit the description</remarks>
@@ -21,12 +20,12 @@ public interface IGroupChannel : IChannel
     /// <summary>
     /// List of users who possess admin privileges in the group.
     /// </summary>
-    public IEnumerable<IUser> Admins { get; }
+    public IList<IUser> Admins { get; init; }
     
     /// <summary>
     /// <inheritdoc cref="GroupSettings"/>
     /// </summary>
-    public GroupSettings Settings { get; }
+    public GroupSettings Settings { get; init; }
 
     
 }

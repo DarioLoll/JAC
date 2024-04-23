@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using JAC.Models;
+using JAC.Shared;
 using JAC.Shared.Packets;
 
 namespace JAC.ViewModels;
@@ -16,8 +17,18 @@ public partial class LoginViewModel : ViewModelBase
     public override void OnActivated()
     {
         ChatClient client = ChatClient.Instance;
-        client.LoginSuccess += OnLoginSuccess;
-        client.Error += OnError;
+        client.PacketHandler.ChannelsReceived += OnChannelsReceived;
+    }
+
+    private void OnChannelsReceived(GetChannelsResponsePacket packet)
+    {
+        Navigator.Instance.SwitchToViewModel(new MainViewModel());
+    }
+
+    public override void OnDeactivated()
+    {
+        ChatClient client = ChatClient.Instance;
+        client.PacketHandler.ChannelsReceived -= OnChannelsReceived;
     }
 
     [RelayCommand]
@@ -32,20 +43,8 @@ public partial class LoginViewModel : ViewModelBase
         else ErrorField = NotConnectedToServer;
     }
 
-    private void OnLoginSuccess(LoginSuccessPacket packet)
+    public override void DisplayError(ErrorType error)
     {
-        Navigator.Instance.SwitchToViewModel(new MainViewModel());
-    }
-    
-    private void OnError(ErrorPacket packet)
-    {
-        ErrorField = packet.ErrorType.ToString();
-    }
-
-    public override void OnDeactivated()
-    {
-        base.OnDeactivated();
-        ChatClient.Instance.LoginSuccess -= OnLoginSuccess;
-        ChatClient.Instance.Error -= OnError;
+        ErrorField = error.ToString();
     }
 }

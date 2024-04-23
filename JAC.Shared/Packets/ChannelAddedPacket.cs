@@ -10,5 +10,5 @@ public class ChannelAddedPacket : PacketBase
     /// <summary>
     /// The channel that the user was added to.
     /// </summary>
-    public required IChannel NewChannel { get; init; }
+    public required ChannelModelBase NewChannel { get; init; }
 }

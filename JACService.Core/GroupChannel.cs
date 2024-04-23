@@ -5,23 +5,14 @@ namespace JACService.Core;
 
 public class GroupChannel : BaseChannel, IGroupChannel
 {
-    public string Name { get; set; }
-    public string Description { get; set; }
-
-    private List<IUser> _admins;
-    public IEnumerable<IUser> Admins => _admins;
-    public GroupSettings Settings { get; }
+    public required string Name { get; set; }
+    public string Description { get; set; } = string.Empty;
+    public IList<IUser> Admins { get; init; } = new List<IUser>();
+    public GroupSettings Settings { get; init; } = new();
     
     public event Action<string>? NameChanged;
     public event Action<string>? DescriptionChanged;
-    public event Action<BaseUser>? RankChanged; 
-    public GroupChannel(ulong id, IUser creator, string name, string description = "") : base(id)
-    {
-        Name = name;
-        Description = description;
-        _admins = new List<IUser> { creator };
-        Settings = new GroupSettings();
-    }
+    public event Action<BaseUser>? RankChanged;
     
     public ActionReport AddUser(BaseUser user, BaseUser adder)
     {
@@ -88,17 +79,24 @@ public class GroupChannel : BaseChannel, IGroupChannel
         if(!Admins.Contains(changer))
             return ActionReport.Failed(ErrorType.InsufficientPermissions);
         if(Admins.Contains(user))
-            _admins.Remove(user);
-        else _admins.Add(user);
+            Admins.Remove(user);
+        else Admins.Add(user);
         OnRankChanged(user);
         return ActionReport.SuccessReport;
     }
     
-    public static ActionResult<GroupChannel> CreateGroupChannel(ulong id, BaseUser creator, string name, string description = "")
+    public static ActionResult<GroupChannel> CreateGroupChannel(ulong id, BaseUser creator, string name, 
+        string description, DateTime created = default)
     {
-        var channel = new GroupChannel(id, creator, name, description);
+        var channel = new GroupChannel
+        {
+            Id = id,
+            Name = name,
+            Description = description,
+            Created = created == default ? DateTime.Now : created
+        };
         channel.AddUser(creator);
-        channel._admins.Add(creator);
+        channel.Admins.Add(creator);
         OnChannelCreated(channel);
         return ActionResult<GroupChannel>.Succeeded(channel);
     }

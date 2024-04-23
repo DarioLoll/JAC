@@ -1,4 +1,6 @@
-﻿namespace JAC.Shared;
+﻿using System.Text.Json;
+
+namespace JAC.Shared;
 
 /// <summary>
 /// Handles incoming packets by mapping packet prefixes to a method that handles that type of packet.
@@ -9,6 +11,8 @@ public class PacketHandler
     /// The mappings of packet prefixes to methods that handle those.
     /// </summary>
     public Dictionary<string, Action<string>> PacketHandlers { get; protected init; } = new();
+
+    public JsonSerializerOptions JsonSerializerOptions { get; init; } = new();
 
     /// <summary>
     /// Handles an incoming packet by calling the appropriate method based on the packet prefix.

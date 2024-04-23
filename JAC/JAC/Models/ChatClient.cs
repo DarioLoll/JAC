@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using JAC.Shared;
+using JAC.Shared.Channels;
 using JAC.Shared.Packets;
 
 namespace JAC.Models;
@@ -15,23 +18,39 @@ public class ChatClient
     public static ChatClient Instance { get; } = new ChatClient();
     public static IPAddress DefaultIpAddress => IPAddress.Loopback;
     public const ushort DefaultPort = 8080;
-    private PacketHandler _packetHandler;
-
-    public event Action<LoginSuccessPacket>? LoginSuccess;
-    public event Action<ErrorPacket>? Error;
+    public ClientPacketHandler PacketHandler { get; }
+    
+    public ClientDirectory? Directory { get; set; }
     public event Action? Disconnected;
 
     private ChatClient()
     {
-        _packetHandler = new PacketHandler()
-        {
-            PacketHandlers =
-            {
-                { PacketBase.GetPrefix<LoginSuccessPacket>(), HandleLoginSuccess },
-                { PacketBase.GetPrefix<ErrorPacket>(), HandleError }
-            }
-        };
+        PacketHandler = new ClientPacketHandler();
+        PacketHandler.LoginSucceeded += OnLoggedIn;
     }
+
+    private async void OnLoggedIn(LoginSuccessPacket packet)
+    {
+        Directory = new ClientDirectory {User = new User(packet.User)};
+        PacketHandler.ChannelsReceived += OnChannelsReceived;
+        await Send(new PacketBase(ParameterlessPacket.GetChannels));
+    }
+
+    private void OnChannelsReceived(GetChannelsResponsePacket packet)
+    {
+        foreach (var channelModel in packet.Channels)
+        {
+            if (channelModel is IGroupChannel groupChannel)
+            {
+                Directory!.AddChannel(new GroupChannel(groupChannel));
+            }
+            else
+            {
+                Directory!.AddChannel(new BaseChannel(channelModel));
+            }
+        }
+    }
+
 
     public async Task<bool> Connect(IPEndPoint? endPoint = default)
     {
@@ -57,7 +76,7 @@ public class ChatClient
             while (IsConnected)
             {
                 var request = await SocketReader.Read(_socket!);
-                Dispatcher.UIThread.Invoke(() => _packetHandler.Handle(request));
+                Dispatcher.UIThread.Invoke(() => PacketHandler.Handle(request));
             }
             Close();
         }
@@ -74,6 +93,7 @@ public class ChatClient
         {
             await SocketWriter.Send(_socket!, packet);
         }
+        OnDisconnected();
     }
 
     private void Close()
@@ -86,34 +106,8 @@ public class ChatClient
         OnDisconnected();
     }
 
-    #region Packet Handlers
-
-        private void HandleLoginSuccess(string json)
-        {
-            LoginSuccessPacket? packet = PacketBase.FromJson<LoginSuccessPacket>(json);
-            if (packet != null) OnLoginSuccess(packet);
-        }
-        
-        private void HandleError(string json)
-        {
-            ErrorPacket? packet = PacketBase.FromJson<ErrorPacket>(json);
-            if (packet != null) OnError(packet);
-        }
-
-    #endregion
-
-    protected virtual void OnLoginSuccess(LoginSuccessPacket packet)
-    {
-        LoginSuccess?.Invoke(packet);
-    }
-
     protected virtual void OnDisconnected()
     {
         Disconnected?.Invoke();
-    }
-
-    protected virtual void OnError(ErrorPacket packet)
-    {
-        Error?.Invoke(packet);
     }
 }

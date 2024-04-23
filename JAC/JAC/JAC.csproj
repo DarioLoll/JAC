@@ -23,4 +23,8 @@
     <ItemGroup>
       <ProjectReference Include="..\..\JAC.Shared\JAC.Shared.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Services\" />
+    </ItemGroup>
 </Project>

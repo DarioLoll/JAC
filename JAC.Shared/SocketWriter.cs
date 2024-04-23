@@ -23,9 +23,7 @@ public class SocketWriter
     
     public async Task Send(PacketBase packet)
     {
-        Type packetType = packet.GetType();
-        string message = PacketBase.GetPrefix(packetType) + " " + JsonSerializer.Serialize(packet, packetType);
-        await Send(message);
+        await Send(_socket, packet);
     }
     
     public static async Task Send(Socket socket, string? message)
@@ -38,7 +36,10 @@ public class SocketWriter
     public static async Task Send(Socket socket, PacketBase packet)
     {
         Type packetType = packet.GetType();
-        string message = PacketBase.GetPrefix(packetType) + " " + JsonSerializer.Serialize(packet, packetType);
+        var prefix = packet.ParameterlessPacketType == null 
+            ? PacketBase.GetPrefix(packetType) 
+            : PacketBase.GetPrefix(packet.ParameterlessPacketType.Value);
+        string message = $"{prefix} {JsonSerializer.Serialize(packet, packetType)}";
         await Send(socket, message);
     }
 }

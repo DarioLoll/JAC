@@ -1,23 +1,14 @@
 ﻿namespace JAC.Shared;
 
-/// <summary>
-/// Represents a user of the chat system (a logged in client).
-/// </summary>
 public interface IUser
 {
     /// <summary>
     /// The unique identifier of the user.
     /// </summary>
-    string Nickname { get; }
+    string Nickname { get; init; }
     
     /// <summary>
     /// List of channel ids that the user is a member of.
     /// </summary>
-    IEnumerable<ulong> Channels { get; }
-    
-    /// <summary>
-    /// If the user is currently online.
-    /// </summary>
-    bool IsOnline { get; set; }
-    
+    IList<ulong> Channels { get; init; }
 }

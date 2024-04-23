@@ -1,4 +1,6 @@
-﻿using JAC.Shared;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
+using JAC.Shared;
 using JAC.Shared.Channels;
 using JAC.Shared.Packets;
 
@@ -34,6 +36,7 @@ public class ServerPacketHandler : PacketHandler
             { PacketBase.GetPrefix<KickUserPacket>(), KickUser },
             { PacketBase.GetPrefix<LeaveGroupPacket>(), LeaveGroup },
         };
+        JsonSerializerOptions = JsonSerializerOptions.Default;
     }
     
     private void ProcessActionResult(ActionReport report)
@@ -46,7 +49,7 @@ public class ServerPacketHandler : PacketHandler
     
         private void SendMessage(string json)
         {
-            SendMessagePacket? packet = PacketBase.FromJson<SendMessagePacket>(json);
+            SendMessagePacket? packet = PacketBase.FromJson<SendMessagePacket>(json, JsonSerializerOptions);
             if (!CheckPacket(packet)) return;
             var channel = ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
             if(channel == null)
@@ -60,7 +63,7 @@ public class ServerPacketHandler : PacketHandler
 
         private void OpenPrivateChannel(string json)
         {
-            OpenPrivateChannelPacket? packet = PacketBase.FromJson<OpenPrivateChannelPacket>(json);
+            OpenPrivateChannelPacket? packet = PacketBase.FromJson<OpenPrivateChannelPacket>(json, JsonSerializerOptions);
             if (!CheckPacket(packet)) return;
             var otherUser = ChatServiceDirectory.Instance.FindUser(packet!.Username);
             if(otherUser == null)
@@ -74,7 +77,7 @@ public class ServerPacketHandler : PacketHandler
 
         private void LeaveGroup(string json)
         {
-            LeaveGroupPacket? packet = PacketBase.FromJson<LeaveGroupPacket>(json);
+            LeaveGroupPacket? packet = PacketBase.FromJson<LeaveGroupPacket>(json, JsonSerializerOptions);
             if (!CheckPacket(packet)) return;
             var channel = ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
             if (channel == null)
@@ -88,7 +91,7 @@ public class ServerPacketHandler : PacketHandler
 
         private void KickUser(string json)
         {
-            KickUserPacket? packet = PacketBase.FromJson<KickUserPacket>(json);
+            KickUserPacket? packet = PacketBase.FromJson<KickUserPacket>(json, JsonSerializerOptions);
             if (!CheckPacket(packet)) return;
             var channel = ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
             if (channel == null)
@@ -115,13 +118,13 @@ public class ServerPacketHandler : PacketHandler
             }
             Session.Send(new GetChannelsResponsePacket
             {
-                Channels = ChatServiceDirectory.GetChannels(Session.User)
+                Channels = ChatServiceDirectory.GetChannels(Session.User).ToCorrespondingChannelModels()
             });
         }
 
         private void CreateGroup(string json)
         {
-            CreateGroupPacket? packet = PacketBase.FromJson<CreateGroupPacket>(json);
+            CreateGroupPacket? packet = PacketBase.FromJson<CreateGroupPacket>(json, JsonSerializerOptions);
             if (!CheckPacket(packet)) return;
             ulong channelId = ChatServiceDirectory.Instance.GetNextChannelId();
             var result = GroupChannel.CreateGroupChannel(channelId, Session.User!, packet!.Name, packet.Description);
@@ -145,7 +148,7 @@ public class ServerPacketHandler : PacketHandler
 
         private void HandleLogin(string json)
         {
-            LoginPacket? packet = PacketBase.FromJson<LoginPacket>(json);
+            LoginPacket? packet = PacketBase.FromJson<LoginPacket>(json, JsonSerializerOptions);
             if (packet == null)
             {
                 Session.SendError(ErrorType.InvalidPacket);
@@ -163,15 +166,21 @@ public class ServerPacketHandler : PacketHandler
                 return;
             }
             if (user == null)
-                Session.User = new BaseUser(packet.Username);
+            {
+                Session.User = new BaseUser()
+                {
+                    Nickname = packet.Username
+                };
+                ChatServiceDirectory.Instance.AddUser(Session.User);
+            }
             else
                 Session.User = user;
-            Session.Send(new LoginSuccessPacket{ User = Session.User });
+            Session.Send(new LoginSuccessPacket{ User = Session.User.ToUserModel() });
         }
         
         private void AddUserToGroup(string json)
         {
-            AddUserToGroupPacket? packet = PacketBase.FromJson<AddUserToGroupPacket>(json);
+            AddUserToGroupPacket? packet = PacketBase.FromJson<AddUserToGroupPacket>(json, JsonSerializerOptions);
             if (!CheckPacket(packet)) return;
             BaseUser? user = ChatServiceDirectory.Instance.FindUser(packet!.Username);
             var channel = (GroupChannel?)ChatServiceDirectory.Instance.GetChannel(packet.ChannelId);
@@ -191,7 +200,7 @@ public class ServerPacketHandler : PacketHandler
         
         private void ChangeGroupName(string json)
         {
-            ChangeGroupNamePacket? packet = PacketBase.FromJson<ChangeGroupNamePacket>(json);
+            ChangeGroupNamePacket? packet = PacketBase.FromJson<ChangeGroupNamePacket>(json, JsonSerializerOptions);
             if (!CheckPacket(packet)) return;
             var channel = (GroupChannel?)ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
             if(channel == null)
@@ -205,7 +214,7 @@ public class ServerPacketHandler : PacketHandler
         
         private void ChangeGroupDescription(string json)
         {
-            ChangeGroupDescriptionPacket? packet = PacketBase.FromJson<ChangeGroupDescriptionPacket>(json);
+            ChangeGroupDescriptionPacket? packet = PacketBase.FromJson<ChangeGroupDescriptionPacket>(json, JsonSerializerOptions);
             if (!CheckPacket(packet)) return;
             var channel = (GroupChannel?)ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
             if(channel == null)
@@ -219,7 +228,7 @@ public class ServerPacketHandler : PacketHandler
         
         private void ChangeUserRank(string json)
         {
-            ChangeUserRankPacket? packet = PacketBase.FromJson<ChangeUserRankPacket>(json);
+            ChangeUserRankPacket? packet = PacketBase.FromJson<ChangeUserRankPacket>(json, JsonSerializerOptions);
             if (!CheckPacket(packet)) return;
             var channel = (GroupChannel?)ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
             if(channel == null)

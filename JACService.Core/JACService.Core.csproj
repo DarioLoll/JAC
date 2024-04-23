@@ -9,6 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\JAC.Shared\JAC.Shared.csproj" />
       <ProjectReference Include="..\JACService.Core.Contracts\JACService.Core.Contracts.csproj" />
+      <ProjectReference Include="..\JAC\JAC\JAC.csproj" />
     </ItemGroup>
 
     <ItemGroup>

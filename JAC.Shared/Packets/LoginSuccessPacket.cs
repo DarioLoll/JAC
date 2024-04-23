@@ -8,5 +8,5 @@ namespace JAC.Shared.Packets;
 /// </summary>
 public class LoginSuccessPacket : PacketBase
 {
-    public required IUser User { get; init; }
+    public required UserModel User { get; init; }
 }

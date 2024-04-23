@@ -11,5 +11,5 @@ public class GetChannelsResponsePacket : PacketBase
     /// <summary>
     /// Contains the list of channels that the client's user is a member of.
     /// </summary>
-    public required IEnumerable<IChannel> Channels { get; init; }
+    public required IEnumerable<ChannelModelBase> Channels { get; init; }
 }

@@ -1,9 +1,12 @@
-﻿namespace JAC.Shared;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+
+namespace JAC.Shared;
 
 /// <summary>
 /// Represents a message sent in a channel.
 /// </summary>
-public class Message
+public readonly struct Message
 {
     /// <summary>
     /// The user that sent this message.

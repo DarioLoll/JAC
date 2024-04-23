@@ -50,7 +50,7 @@ public class EventNotifier
     private void OnGroupNameChanged(GroupChannel group)
     {
         _logger?.LogServiceInfo($"Group {group.Id} name changed to \"{group.Name}\".");
-        var updatePacket = new ChannelNameChangedPacket()
+        var updatePacket = new ChannelNameChangedPacket
         {
             ChannelId = group.Id,
             NewName = group.Name
@@ -74,7 +74,7 @@ public class EventNotifier
         {
             ChangeType = ChannelMemberChangeType.RankChanged,
             ChannelId = channel.Id,
-            User = user
+            User = user.ToUserModel()
         };
         Server.Instance.ClientManager?.BroadCast(channel.OnlineUsers, updatePacket);
     }
@@ -85,7 +85,7 @@ public class EventNotifier
         {
             ChangeType = ChannelMemberChangeType.Left,
             ChannelId = channel.Id,
-            User = user
+            User = user.ToUserModel()
         };
         Server.Instance.ClientManager?.BroadCast(channel.OnlineUsers, updatePacket);
         
@@ -102,14 +102,14 @@ public class EventNotifier
         {
             ChangeType = ChannelMemberChangeType.Joined,
             ChannelId = channel.Id,
-            User = user
+            User = user.ToUserModel()
         };
         var usersToUpdate = channel.OnlineUsers.Where(u => u != user);
         Server.Instance.ClientManager?.BroadCast(usersToUpdate, groupUpdatePacket);
 
         var userUpdatePacket = new ChannelAddedPacket
         {
-            NewChannel = channel
+            NewChannel = channel.ToCorrespondingChannelModel()
         };
         Server.Instance.ClientManager?.SendToUser(user, userUpdatePacket);
     }

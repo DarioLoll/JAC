@@ -3,8 +3,12 @@
 /// <summary>
 /// Represents the settings for a <see cref="GroupChannel"/>
 /// </summary>
-public class GroupSettings
+public struct GroupSettings
 {
+    public GroupSettings()
+    {
+    }
+
     /// <summary>
     /// If only admins can send messages to the group.
     /// <remarks>Default is false</remarks>

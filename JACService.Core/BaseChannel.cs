@@ -1,29 +1,16 @@
-﻿using System.Text.Json.Serialization;
-using JAC.Shared;
+﻿using JAC.Shared;
 using JAC.Shared.Channels;
 
 namespace JACService.Core;
 
 public class BaseChannel : IChannel
 {
-    public ulong Id { get; }
-
-    [JsonInclude] private List<IUser> _users = new();
-    public IEnumerable<IUser> Users => _users;
+    public required ulong Id { get; init; }
+    public IList<IUser> Users { get; init; } = new List<IUser>();
+    public IList<Message> Messages { get; init; } = new List<Message>();
+    public required DateTime Created { get; init; }
     
-    [JsonInclude] private List<Message> _messages = new();
-    public IEnumerable<Message> Messages => _messages;
-    
-    public IEnumerable<IUser> OnlineUsers => Users.Where(u => u.IsOnline);
-    public DateTime Created { get; }
-
-    
-    public BaseChannel(ulong id, DateTime created = default)
-    {
-        Id = id;
-        Created = created == default ? DateTime.Now : created;
-        OnChannelCreated(this);
-    }
+    public IEnumerable<BaseUser> OnlineUsers => Users.Cast<BaseUser>().Where(user => user.IsOnline);
     
     public event Action<Message>? MessageSent;
 
@@ -34,28 +21,44 @@ public class BaseChannel : IChannel
         if(!Users.Contains(sender))
             return new ActionReport{Error = ErrorType.UserNotInChannel};
         var message = new Message(sender, content);
-        _messages.Add(message);
+        Messages.Add(message);
         OnMessageSent(message);
         return ActionReport.SuccessReport;
     }
     
     public static ActionResult<BaseChannel> OpenPrivateChannel(ulong id, BaseUser user1, BaseUser user2)
     {
-        var channel = new BaseChannel(id);
+        var channel = new BaseChannel
+        {
+            Id = id,
+            Created = DateTime.Now
+        };
         channel.AddUser(user1);
         channel.AddUser(user2);
+        OnChannelCreated(channel);
         return ActionResult<BaseChannel>.Succeeded(channel);
+    }
+    
+    public static BaseChannel CreateFromModel(IChannel channelModel)
+    {
+        return new BaseChannel
+        {
+            Id = channelModel.Id,
+            Users = BaseUser.CreateFromModels(channelModel.Users),
+            Messages = channelModel.Messages.ToList(),
+            Created = channelModel.Created
+        };
     }
     
     protected void AddUser(BaseUser user)
     {
-        _users.Add(user);
+        Users.Add(user);
         user.JoinChannel(Id);
     }
     
     protected void RemoveUser(BaseUser user)
     {
-        _users.Remove(user);
+        Users.Remove(user);
         user.LeaveChannel(Id);
     }
     
@@ -78,5 +81,4 @@ public class BaseChannel : IChannel
     {
         ChannelCreated?.Invoke(channel);
     }
-    
 }
