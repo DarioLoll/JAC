@@ -3,7 +3,7 @@
 namespace JACService.Core;
 
 /// <summary>
-/// The report of an action that was performed on the server (if it succeeded or not).
+/// The report of an action that was performed on the server (if it succeeded or not and what the error was).
 /// </summary>
 public class ActionReport
 {
@@ -17,10 +17,11 @@ public class ActionReport
     /// </summary>
     public ErrorType? Error { get; init; }
     
+    /// <summary>
+    /// A report indicating that the action was successful.
+    /// </summary>
     public static ActionReport SuccessReport => new ActionReport { Success = true };
     
+    /// <returns>An ActionReport indicating a failure and containing the given error as the error of the action</returns>
     public static ActionReport Failed(ErrorType error) => new() { Success = false, Error = error };
-    public static ActionReport UnknownError => new ActionReport { Success = false, Error = ErrorType.Unknown };
-    public static ActionReport UserNotFound => new ActionReport { Success = false, Error = ErrorType.UserNotFound };
-    public static ActionReport ChannelNotFound => new ActionReport { Success = false, Error = ErrorType.ChannelNotFound };
 }

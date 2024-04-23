@@ -21,8 +21,6 @@ public class Server
 
     public bool IsOnline { get; private set; }
     
-    public int ClientCount => ClientManager?.Sessions.Count() ?? 0;
-    
     public ClientManager? ClientManager => _clientManager;
     
 
@@ -38,7 +36,7 @@ public class Server
             _socket.Bind(new IPEndPoint(IpAddress, Port));
             _socket.Listen(10);
             _clientManager = new ClientManager(_socket, Logger);
-            ChatServiceDirectory.Instance.Load();
+            ChatServiceDirectory.Instance.Load(); 
             _clientManager.AcceptClients();
             IsOnline = true;
             Logger.LogServiceInfo($"Service started on {IpAddress}:{Port}");

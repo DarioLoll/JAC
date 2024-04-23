@@ -4,22 +4,42 @@ using JAC.Shared.Packets;
 
 namespace JAC.Models;
 
+/// <summary>
+/// <inheritdoc cref="PacketHandler"/> - from a client's perspective
+/// </summary>
 public class ClientPacketHandler : PacketHandler
 {
+    /// <summary>
+    /// Occurs when the user this client is logged in as is added to a channel
+    /// </summary>
     public event Action<ChannelAddedPacket>? ChannelAdded;
-    
+    /// <summary>
+    /// Occurs when the description of a channel this client is in is changed
+    /// </summary>
     public event Action<ChannelDescriptionChangedPacket>? ChannelDescriptionChanged;
-    
+    /// <summary>
+    /// Occurs when a member of a channel this client is in have changed
+    /// </summary>
     public event Action<ChannelMembersChangedPacket>? ChannelMembersChanged;
-    
+    /// <summary>
+    /// Occurs when the name of a channel this client is in is changed
+    /// </summary>
     public event Action<ChannelNameChangedPacket>? ChannelNameChanged;
-    
+    /// <summary>
+    /// Occurs when the user this client is logged in as is removed from a channel
+    /// </summary>
     public event Action<ChannelRemovedPacket>? ChannelRemoved;
-    
+    /// <summary>
+    /// Occurs when the server responds to the client's request for channels
+    /// </summary>
     public event Action<GetChannelsResponsePacket>? ChannelsReceived;
-    
+    /// <summary>
+    /// Occurs when this client logs in successfully
+    /// </summary>
     public event Action<LoginSuccessPacket>? LoginSucceeded;
-    
+    /// <summary>
+    /// Occurs when there has been a message sent to a channel this client is in
+    /// </summary>
     public event Action<MessageReceivedPacket>? MessageReceived;
     
     public ClientPacketHandler()

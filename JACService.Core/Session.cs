@@ -12,12 +12,12 @@ public class Session
     private readonly SocketWriter _socketWriter;
     private readonly PacketHandler _packetHandler;
     public event Action<Session>? SessionClosed;
-    public event Action<Session, BaseUser>? UserLoggedIn;
+    public event Action<Session, ChatUser>? UserLoggedIn;
     public IServiceLogger Logger { get; private set; }
 
-    private BaseUser? _user;
+    private ChatUser? _user;
 
-    public BaseUser? User
+    public ChatUser? User
     {
         get => _user;
         set
@@ -74,7 +74,7 @@ public class Session
     }
 
 
-    protected virtual void OnUserLoggedIn(BaseUser user)
+    protected virtual void OnUserLoggedIn(ChatUser user)
     {
         UserLoggedIn?.Invoke(this, user);
     }

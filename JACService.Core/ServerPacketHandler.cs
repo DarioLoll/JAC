@@ -39,18 +39,36 @@ public class ServerPacketHandler : PacketHandler
         JsonSerializerOptions = JsonSerializerOptions.Default;
     }
     
+    private bool CheckPacket(PacketBase? packet)
+    {
+        if (packet == null)
+        {
+            Session.SendError(ErrorType.InvalidPacket);
+            return false;
+        }
+        if (Session.User == null)
+        {
+            Session.SendError(ErrorType.NotLoggedIn);
+            return false;
+        }
+        return true;
+    }
+    
     private void ProcessActionResult(ActionReport report)
     {
         if(!report.Success)
             Session.SendError(report.Error!.Value);
     }
 
+    //Below are the methods that handle the packets. First, the packet is deserialized,
+    //then the packet is checked for validity, and then the appropriate action is taken.
     #region Methods for handling packets
     
         private void SendMessage(string json)
         {
             SendMessagePacket? packet = PacketBase.FromJson<SendMessagePacket>(json, JsonSerializerOptions);
             if (!CheckPacket(packet)) return;
+            //The channel to which the message is sent is found by its id.
             var channel = ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
             if(channel == null)
             {
@@ -65,6 +83,7 @@ public class ServerPacketHandler : PacketHandler
         {
             OpenPrivateChannelPacket? packet = PacketBase.FromJson<OpenPrivateChannelPacket>(json, JsonSerializerOptions);
             if (!CheckPacket(packet)) return;
+            //The user who this user wants to open a private channel with is found by their username.
             var otherUser = ChatServiceDirectory.Instance.FindUser(packet!.Username);
             if(otherUser == null)
             {
@@ -79,6 +98,7 @@ public class ServerPacketHandler : PacketHandler
         {
             LeaveGroupPacket? packet = PacketBase.FromJson<LeaveGroupPacket>(json, JsonSerializerOptions);
             if (!CheckPacket(packet)) return;
+            //The channel from which the user wants to leave is found by its id.
             var channel = ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
             if (channel == null)
             {
@@ -93,6 +113,8 @@ public class ServerPacketHandler : PacketHandler
         {
             KickUserPacket? packet = PacketBase.FromJson<KickUserPacket>(json, JsonSerializerOptions);
             if (!CheckPacket(packet)) return;
+            //The packet contains the username of the user to be kicked and
+            //the id of the channel from which they are to be kicked.
             var channel = ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
             if (channel == null)
             {
@@ -111,11 +133,13 @@ public class ServerPacketHandler : PacketHandler
 
         private void GetChannels(string _)
         {
+            //The get channels packet does not contain any data, it is just a string "/getchannels".
             if (Session.User == null)
             {
                 Session.SendError(ErrorType.NotLoggedIn);
                 return;
             }
+            //The user's channels are sent to the client via a get channels response packet.
             Session.Send(new GetChannelsResponsePacket
             {
                 Channels = ChatServiceDirectory.GetChannels(Session.User).ToCorrespondingChannelModels()
@@ -130,21 +154,7 @@ public class ServerPacketHandler : PacketHandler
             var result = GroupChannel.CreateGroupChannel(channelId, Session.User!, packet!.Name, packet.Description);
             ProcessActionResult(result);
         }
-
-        private bool CheckPacket(PacketBase? packet)
-        {
-            if (packet == null)
-            {
-                Session.SendError(ErrorType.InvalidPacket);
-                return false;
-            }
-            if (Session.User == null)
-            {
-                Session.SendError(ErrorType.NotLoggedIn);
-                return false;
-            }
-            return true;
-        }
+        
 
         private void HandleLogin(string json)
         {
@@ -159,7 +169,7 @@ public class ServerPacketHandler : PacketHandler
                 Session.SendError(ErrorType.AlreadyLoggedIn);
                 return;
             }
-            BaseUser? user = ChatServiceDirectory.Instance.FindUser(packet.Username);
+            ChatUser? user = ChatServiceDirectory.Instance.FindUser(packet.Username);
             if(user != null && user.IsOnline)
             {
                 Session.SendError(ErrorType.UsernameTaken);
@@ -167,14 +177,19 @@ public class ServerPacketHandler : PacketHandler
             }
             if (user == null)
             {
-                Session.User = new BaseUser()
+                Session.User = new ChatUser
                 {
-                    Nickname = packet.Username
+                    Nickname = packet.Username,
+                    IsOnline = true
                 };
                 ChatServiceDirectory.Instance.AddUser(Session.User);
             }
+            //The user is logged back in.
             else
+            {
                 Session.User = user;
+                user.IsOnline = true;
+            }
             Session.Send(new LoginSuccessPacket{ User = Session.User.ToUserModel() });
         }
         
@@ -182,7 +197,9 @@ public class ServerPacketHandler : PacketHandler
         {
             AddUserToGroupPacket? packet = PacketBase.FromJson<AddUserToGroupPacket>(json, JsonSerializerOptions);
             if (!CheckPacket(packet)) return;
-            BaseUser? user = ChatServiceDirectory.Instance.FindUser(packet!.Username);
+            //The user to be added to the group is found by their username.
+            //The group is found by its id.
+            ChatUser? user = ChatServiceDirectory.Instance.FindUser(packet!.Username);
             var channel = (GroupChannel?)ChatServiceDirectory.Instance.GetChannel(packet.ChannelId);
             if(channel == null)
             {

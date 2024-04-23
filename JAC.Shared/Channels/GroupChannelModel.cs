@@ -1,5 +1,8 @@
 ﻿namespace JAC.Shared.Channels;
 
+/// <summary>
+/// Represents a model of a group channel that is used to send group channels between the server and the client
+/// </summary>
 public class GroupChannelModel : ChannelModelBase, IGroupChannel
 {
     /// <summary>

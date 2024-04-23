@@ -77,12 +77,10 @@ public class PacketBase
     {
         return JsonSerializer.Deserialize<PacketBase>(json, options);
     }
-
-    private static string CutPrefix(string request) => request.Split(' ', 2)[1];
 }
 
 /// <summary>
-/// List of packets that do not require any parameters.
+/// Packet types that do not require any parameters.
 /// </summary>
 public enum ParameterlessPacket
 {

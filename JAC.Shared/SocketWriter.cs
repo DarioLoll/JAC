@@ -14,13 +14,6 @@ public class SocketWriter
         _socket = socket;
     }
     
-    public async Task Send(string? message)
-    {
-        if (string.IsNullOrEmpty(message)) return;
-        var buffer = Encoding.ASCII.GetBytes(message);
-        await _socket.SendAsync(buffer);
-    }
-    
     public async Task Send(PacketBase packet)
     {
         await Send(_socket, packet);

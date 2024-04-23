@@ -1,7 +1,7 @@
 ﻿namespace JAC.Shared.Channels;
 
 /// <summary>
-/// Represents the settings for a <see cref="GroupChannel"/>
+/// Represents the settings for a <see cref="IGroupChannel"/>
 /// </summary>
 public struct GroupSettings
 {

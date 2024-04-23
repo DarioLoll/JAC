@@ -68,8 +68,9 @@ public class EventNotifier
         Server.Instance.ClientManager?.BroadCast(channel.OnlineUsers, updatePacket);
     }
 
-    private void OnUserRankChanged(BaseUser user, BaseChannel channel)
+    private void OnUserRankChanged(ChatUser user, BaseChannel channel)
     {
+        _logger?.LogServiceInfo($"User {user.Nickname} rank in channel {channel.Id} changed.");
         var updatePacket = new ChannelMembersChangedPacket
         {
             ChangeType = ChannelMemberChangeType.RankChanged,
@@ -79,8 +80,9 @@ public class EventNotifier
         Server.Instance.ClientManager?.BroadCast(channel.OnlineUsers, updatePacket);
     }
 
-    private void OnUserLeftChannel(BaseUser user, BaseChannel channel)
+    private void OnUserLeftChannel(ChatUser user, BaseChannel channel)
     {
+        _logger?.LogServiceInfo($"User {user.Nickname} left channel {channel.Id}.");
         var updatePacket = new ChannelMembersChangedPacket
         {
             ChangeType = ChannelMemberChangeType.Left,
@@ -96,8 +98,9 @@ public class EventNotifier
         Server.Instance.ClientManager?.SendToUser(user, userUpdatePacket);
     }
 
-    private void OnUserJoinedChannel(BaseUser user, BaseChannel channel)
+    private void OnUserJoinedChannel(ChatUser user, BaseChannel channel)
     {
+        _logger?.LogServiceInfo($"User {user.Nickname} joined channel {channel.Id}.");
         var groupUpdatePacket = new ChannelMembersChangedPacket
         {
             ChangeType = ChannelMemberChangeType.Joined,

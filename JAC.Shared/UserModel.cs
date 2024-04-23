@@ -1,5 +1,8 @@
 ﻿namespace JAC.Shared;
 
+/// <summary>
+/// Represents a model of a user that is used to send users between the server and the client
+/// </summary>
 public class UserModel : IUser
 {
     /// <summary>

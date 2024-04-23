@@ -1,5 +1,8 @@
 ﻿namespace JAC.Shared.Channels;
 
+/// <summary>
+/// Represents a model of a channel that is used to send channels between the server and the client
+/// </summary>
 public class ChannelModelBase : IChannel
 {
     /// <summary>

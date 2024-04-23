@@ -1,5 +1,8 @@
 ﻿namespace JAC.Shared;
 
+/// <summary>
+/// Represents a user of the chat service.
+/// </summary>
 public interface IUser
 {
     /// <summary>

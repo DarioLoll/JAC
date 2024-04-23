@@ -5,37 +5,74 @@ using JAC.Shared.Channels;
 
 namespace JACService.Core;
 
+/// <summary>
+/// Manages and persists the chat users and channels in the chat service.
+/// </summary>
 public class ChatServiceDirectory
 {
     public static ChatServiceDirectory Instance { get; } = new();
     
-    [JsonConstructor]
-    private ChatServiceDirectory() { }
+    [JsonConstructor] private ChatServiceDirectory() { }
     
-    [JsonInclude] private List<BaseUser> _users = new();
-    [JsonInclude] private List<BaseChannel> _channels = new();
+    private Random _random = new();
+    private List<ChatUser> _users = new();
+    private List<BaseChannel> _channels = new();
     
-    [JsonIgnore] public IEnumerable<BaseUser> Users => _users;
-    [JsonIgnore] public IEnumerable<BaseChannel> Channels => _channels;
-    
+    /// <summary>
+    /// All users stored in the chat service.
+    /// </summary>
+    public IEnumerable<ChatUser> Users => _users;
+    /// <summary>
+    /// All channels stored in the chat service.
+    /// </summary>
+    public IEnumerable<BaseChannel> Channels => _channels;
+    /// <summary>
+    /// The single global channel that all users are a member of.
+    /// </summary>
     [JsonIgnore] public BaseChannel? GlobalChannel => _channels.Find(c => c.Id == 0);
-    
-    public string SavePath { get; set; } = "chatdata.json";
+    /// <summary>
+    /// The path to the file where the chat data is saved.
+    /// </summary>
+    public string SavePath { get; } = "chatdata.json";
+    /// <summary>
+    /// Indicates whether the chat data has been loaded from the file yet.
+    /// </summary>
     public static bool Loaded { get; private set; }
-    public event Action<BaseUser, BaseChannel>? UserJoinedChannel;
-    public event Action<BaseUser, BaseChannel>? UserLeftChannel;
     
-    public event Action<BaseUser, GroupChannel>? UserRankChanged;
-    
+    /// <summary>
+    /// Occurs when a user joins a channel.
+    /// </summary>
+    public event Action<ChatUser, BaseChannel>? UserJoinedChannel;
+    /// <summary>
+    /// Occurs when a user leaves a channel.
+    /// </summary>
+    public event Action<ChatUser, BaseChannel>? UserLeftChannel;
+    /// <summary>
+    /// Occurs when a user's rank in a group channel is changed.
+    /// </summary>
+    public event Action<ChatUser, GroupChannel>? UserRankChanged;
+    /// <summary>
+    /// Occurs when a message is sent in a channel.
+    /// </summary>
     public event Action<BaseChannel, Message>? MessageSent;
-    
+    /// <summary>
+    /// Occurs when a group channel's name is changed.
+    /// </summary>
     public event Action<GroupChannel>? GroupNameChanged;
+    /// <summary>
+    /// Occurs when a group channel's description is changed.
+    /// </summary>
     public event Action<GroupChannel>? GroupDescriptionChanged;
+    /// <summary>
+    /// Occurs when the chat data is loaded from the file.
+    /// </summary>
     public static event Action? DataLoaded;
     
+    /// <summary>
+    /// Loads the chat data from the file at <see cref="SavePath"/>.
+    /// </summary>
     public void Load()
     {
-        // Load channels from database
         if (File.Exists(SavePath))
         {
             string json = File.ReadAllText(SavePath);
@@ -53,6 +90,7 @@ public class ChatServiceDirectory
                 Server.Instance.Logger?.LogServiceError($"Chat Directory failed to load: {e.Message}");
             }
         }
+        // Create the global channel if it doesn't exist after loading from the file
         if(GlobalChannel == null)
         {
             var globalChannel = new BaseChannel
@@ -79,6 +117,9 @@ public class ChatServiceDirectory
         }
     }
 
+    /// <summary>
+    /// Saves the chat data to the file at <see cref="SavePath"/>.
+    /// </summary>
     public void Save()
     {
         JsonSerializerOptions options = new()
@@ -88,11 +129,11 @@ public class ChatServiceDirectory
         string json = JsonSerializer.Serialize(this, options);
         File.WriteAllText(SavePath, json);
     }
-    
-    private Random _random = new();
 
-
-    public void AddUser(BaseUser user)
+    /// <summary>
+    /// Registers a new user in the chat service.
+    /// </summary>
+    public void AddUser(ChatUser user)
     {
         _users.Add(user);
         user.JoinedChannel += (channelId) =>
@@ -115,16 +156,29 @@ public class ChatServiceDirectory
         user.JoinChannel(GlobalChannel.Id);
     }
 
-    public void RemoveUser(BaseUser user)
+    //Not used in the current implementation. Will be used when deleting accounts is implemented.
+    public void RemoveUser(ChatUser user)
     {
         _users.Remove(user);
-        // Send a log out package to the client
+        // Send a log out package to the client etc.
     }
 
-    public BaseUser? FindUser(string nickname) => _users.Find(user => user.Nickname == nickname);
+    /// <summary>
+    /// Finds a user by their nickname.
+    /// </summary>
+    /// <returns>The user with the given nickname or null if none were found</returns>
+    public ChatUser? FindUser(string nickname) => _users.Find(user => user.Nickname == nickname);
     
+    /// <summary>
+    /// Finds a channel by its unique id.
+    /// </summary>
+    /// <returns>The channel with the given id or null if none were found</returns>
     public BaseChannel? GetChannel(ulong id) => _channels.Find(channel => channel.Id == id);
 
+    /// <summary>
+    /// Gets all channels that a user is a member of.
+    /// </summary>
+    /// <returns>A list of all channels that the given user is a member of</returns>
     public static IEnumerable<BaseChannel> GetChannels(IUser user) => Instance.Channels.Where(channel => user.Channels.Contains(channel.Id));
     
     /// <summary>
@@ -143,12 +197,12 @@ public class ChatServiceDirectory
         return id;
     }
 
-    protected virtual void OnUserLeftChannel(BaseUser user, BaseChannel channel)
+    protected virtual void OnUserLeftChannel(ChatUser user, BaseChannel channel)
     {
         UserLeftChannel?.Invoke(user, channel);
     }
 
-    protected virtual void OnUserJoinedChannel(BaseUser user, BaseChannel channel)
+    protected virtual void OnUserJoinedChannel(ChatUser user, BaseChannel channel)
     {
         UserJoinedChannel?.Invoke(user, channel);
     }
@@ -163,7 +217,7 @@ public class ChatServiceDirectory
         GroupDescriptionChanged?.Invoke(group);
     }
 
-    protected virtual void OnUserRankChanged(BaseUser user, GroupChannel channel)
+    protected virtual void OnUserRankChanged(ChatUser user, GroupChannel channel)
     {
         UserRankChanged?.Invoke(user, channel);
     }
