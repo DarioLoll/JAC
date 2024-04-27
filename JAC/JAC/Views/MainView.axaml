@@ -2,9 +2,50 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
              mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
              x:Class="JAC.Views.MainView">
     
-    
+    <!-- Main Grid -->
+    <!-- 1. Column - Profile, Channels -->
+    <!-- 2. Column - Chat, Chat Input -->
+    <Grid ColumnDefinitions="*,3*">
+        
+        <!-- Left Grid -->
+        <!-- 1. Row - App Header -->
+        <!-- 2. Row - Profile, Settings -->
+        <!-- 3. Row - Channels -->
+        <Grid Column="0" 
+              Background="#050510"
+              RowDefinitions="Auto,Auto,*"
+              >
+            
+            <!-- App Header -->
+            <StackPanel Orientation="Horizontal"
+                        Margin="20"
+                        HorizontalAlignment="Center">
+                <i:Icon Value="mdi-chat-plus-outline"
+                        FontSize="50" 
+                        Margin="0 0 20 0"></i:Icon>
+                <TextBlock Text="JAC"
+                           FontFamily="/Assets/Fonts/Cakecafe.ttf#Cakecafe"
+                           FontSize="30" 
+                           TextAlignment="Center"
+                           Foreground="White" 
+                           Margin="10,0,0,0"
+                           VerticalAlignment="Center"></TextBlock>
+            </StackPanel>
+            
+        </Grid>
+        
+        <!-- Right Grid -->
+        <Grid Column="1"
+              Background="#11111A">
+            
+            
+            
+        </Grid>
+        
+    </Grid>
     
 </UserControl>

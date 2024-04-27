@@ -43,7 +43,7 @@ public class ServerPacketHandler : PacketHandler
     {
         if (packet == null)
         {
-            Session.SendError(ErrorType.InvalidPacket);
+            Session.SendError(ErrorType.UnknownError);
             return false;
         }
         if (Session.User == null)
@@ -161,7 +161,7 @@ public class ServerPacketHandler : PacketHandler
             LoginPacket? packet = PacketBase.FromJson<LoginPacket>(json, JsonSerializerOptions);
             if (packet == null)
             {
-                Session.SendError(ErrorType.InvalidPacket);
+                Session.SendError(ErrorType.UnknownError);
                 return;
             }
             if (Session.User != null)

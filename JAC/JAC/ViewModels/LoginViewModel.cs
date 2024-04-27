@@ -45,6 +45,6 @@ public partial class LoginViewModel : ViewModelBase
 
     public override void DisplayError(ErrorType error)
     {
-        ErrorField = error.ToString();
+        ErrorField = error.GetErrorMessage();
     }
 }

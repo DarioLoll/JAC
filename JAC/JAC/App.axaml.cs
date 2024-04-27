@@ -18,6 +18,7 @@ public partial class App : Application
 
     public override async void OnFrameworkInitializationCompleted()
     {
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow

@@ -5,16 +5,34 @@
 /// </summary>
 public enum ErrorType
 {
-    Unknown,
-    InvalidPacket,
+    UnknownError,
     UsernameTaken,
     AlreadyLoggedIn,
     NotLoggedIn,
     UserNotFound,
-    CannotAddSelf,
     ChannelNotFound,
     UserAlreadyInChannel,
     InsufficientPermissions,
     UserNotInChannel,
-    ChannelAlreadyExists
+}
+
+public static class ErrorEnumToStringConverter
+{
+    public static string GetErrorMessage(this ErrorType errorType)
+    {
+        string errorString = errorType.ToString();
+        List<string> words = new();
+        foreach (char character in errorString)
+        {
+            if (char.IsUpper(character))
+            {
+                words.Add(character.ToString());
+            }
+            else
+            {
+                words[^1] += character;
+            }
+        }
+        return string.Join(" ", words);
+    }
 }
