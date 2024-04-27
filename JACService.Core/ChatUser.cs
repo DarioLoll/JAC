@@ -1,4 +1,5 @@
-﻿using JAC.Shared;
+﻿using System.Text.Json.Serialization;
+using JAC.Shared;
 
 namespace JACService.Core;
 
@@ -19,7 +20,7 @@ public class ChatUser : IUser
     /// <summary>
     /// If the user is currently online.
     /// </summary>
-    public bool IsOnline { get; set; }
+    [JsonIgnore] public bool IsOnline { get; set; }
     
     /// <summary>
     /// Occurs when the user joins a channel.

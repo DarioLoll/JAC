@@ -38,7 +38,7 @@ public class GroupChannel : BaseChannel, IGroupChannel
     /// (a model for a group channel that is used to transfer data between the server and the client)
     /// by copying the properties of the model.
     /// </summary>
-    public GroupChannel(IGroupChannel model) : base(model)
+    public GroupChannel(GroupChannelModel model) : base(model)
     {
         Name = model.Name;
         Description = model.Description;

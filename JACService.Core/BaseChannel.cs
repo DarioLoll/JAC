@@ -48,7 +48,7 @@ public class BaseChannel : IChannel
     {
         if(!Users.Contains(sender))
             return new ActionReport{Error = ErrorType.UserNotInChannel};
-        var message = new Message(sender, content);
+        var message = new Message(sender.ToUserModel(), content);
         Messages.Add(message);
         OnMessageSent(message);
         return ActionReport.SuccessReport;

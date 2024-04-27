@@ -15,17 +15,17 @@ public class ChatServiceDirectory
     [JsonConstructor] private ChatServiceDirectory() { }
     
     private Random _random = new();
-    private List<ChatUser> _users = new();
-    private List<BaseChannel> _channels = new();
+    [JsonInclude] private List<ChatUser> _users = new();
+    [JsonInclude] private List<BaseChannel> _channels = new();
     
     /// <summary>
     /// All users stored in the chat service.
     /// </summary>
-    public IEnumerable<ChatUser> Users => _users;
+    [JsonIgnore] public IEnumerable<ChatUser> Users => _users;
     /// <summary>
     /// All channels stored in the chat service.
     /// </summary>
-    public IEnumerable<BaseChannel> Channels => _channels;
+    [JsonIgnore] public IEnumerable<BaseChannel> Channels => _channels;
     /// <summary>
     /// The single global channel that all users are a member of.
     /// </summary>
@@ -78,7 +78,10 @@ public class ChatServiceDirectory
             string json = File.ReadAllText(SavePath);
             try
             {
-                ChatServiceDirectory? loaded = JsonSerializer.Deserialize<ChatServiceDirectory>(json);
+                ChatServiceDirectory? loaded = JsonSerializer.Deserialize<ChatServiceDirectory>(json, new JsonSerializerOptions
+                {
+                    Converters = { new AbstractToConcreteConverter<IUser, ChatUser>() }
+                });
                 if (loaded != null)
                 {
                     _users = loaded._users;
@@ -93,10 +96,21 @@ public class ChatServiceDirectory
         // Create the global channel if it doesn't exist after loading from the file
         if(GlobalChannel == null)
         {
+            var demoUser = new ChatUser
+            {
+                Nickname = "DemoUser",
+                Channels = { 0 },
+                IsOnline = true
+            };
             var globalChannel = new BaseChannel
             {
                 Id = 0,
-                Created = DateTime.Now
+                Created = DateTime.Now,
+                Messages = new List<Message>()
+                {
+                    new(demoUser.ToUserModel(), "Welcome to the global chat!"),
+                    new(demoUser.ToUserModel(), "Testing!"),
+                },
             };
             OnChannelCreated(globalChannel);
         }

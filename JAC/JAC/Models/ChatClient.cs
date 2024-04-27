@@ -8,6 +8,7 @@ using Avalonia.Threading;
 using JAC.Shared;
 using JAC.Shared.Channels;
 using JAC.Shared.Packets;
+using JAC.ViewModels;
 
 namespace JAC.Models;
 
@@ -121,7 +122,7 @@ public class ChatClient
     {
         foreach (var channelModel in packet.Channels)
         {
-            if (channelModel is IGroupChannel groupChannel)
+            if (channelModel is GroupChannelModel groupChannel)
             {
                 Directory!.AddChannel(new GroupChannel(groupChannel));
             }
@@ -130,6 +131,7 @@ public class ChatClient
                 Directory!.AddChannel(new BaseChannel(channelModel));
             }
         }
+        Navigator.Instance.SwitchToViewModel(new MainViewModel(Directory!));
     }
 
     protected virtual void OnDisconnected()

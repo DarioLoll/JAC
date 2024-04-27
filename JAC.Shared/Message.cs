@@ -6,12 +6,12 @@ namespace JAC.Shared;
 /// <summary>
 /// Represents a message sent in a channel.
 /// </summary>
-public readonly struct Message
+public class Message
 {
     /// <summary>
     /// The user that sent this message.
     /// </summary>
-    public IUser Sender { get; }
+    public UserModel Sender { get; }
     
     /// <summary>
     /// The content of the message.
@@ -23,7 +23,7 @@ public readonly struct Message
     /// </summary>
     public DateTime TimeSent { get; }
     
-    public Message(IUser sender, string content, DateTime timeSent = default)
+    public Message(UserModel sender, string content, DateTime timeSent = default)
     {
         Sender = sender;
         Content = content;

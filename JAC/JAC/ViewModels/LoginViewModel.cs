@@ -14,23 +14,6 @@ public partial class LoginViewModel : ViewModelBase
     
     [ObservableProperty] private string _errorField = string.Empty;
 
-    public override void OnActivated()
-    {
-        ChatClient client = ChatClient.Instance;
-        client.PacketHandler.ChannelsReceived += OnChannelsReceived;
-    }
-
-    private void OnChannelsReceived(GetChannelsResponsePacket packet)
-    {
-        Navigator.Instance.SwitchToViewModel(new MainViewModel());
-    }
-
-    public override void OnDeactivated()
-    {
-        ChatClient client = ChatClient.Instance;
-        client.PacketHandler.ChannelsReceived -= OnChannelsReceived;
-    }
-
     [RelayCommand]
     private async Task Login()
     {

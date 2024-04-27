@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a model of a group channel that is used to send group channels between the server and the client
 /// </summary>
-public class GroupChannelModel : ChannelModelBase, IGroupChannel
+public class GroupChannelModel : ChannelModelBase
 {
     /// <summary>
     /// <inheritdoc cref="IGroupChannel.Name"/>
@@ -18,7 +18,7 @@ public class GroupChannelModel : ChannelModelBase, IGroupChannel
     /// <summary>
     /// <inheritdoc cref="IGroupChannel.Admins"/>
     /// </summary>
-    public IList<IUser> Admins { get; init; } = new List<IUser>();
+    public IList<UserModel> Admins { get; init; } = new List<UserModel>();
     
     /// <summary>
     /// <inheritdoc cref="IGroupChannel.Settings"/>

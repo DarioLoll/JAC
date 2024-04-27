@@ -58,10 +58,10 @@ public class Server
         }
         try
         {
-            ChatServiceDirectory.Instance.Save();
             _socket?.Close();
             IsOnline = false;
             Logger?.LogServiceInfo($"Service stopped on {IpAddress}:{Port}");
+            ChatServiceDirectory.Instance.Save();
             return true;
         }
         catch (Exception e)

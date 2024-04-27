@@ -63,9 +63,10 @@ public class ClientManager
                 };
                 session.SessionClosed += sender =>
                 {
+                    _connections.Remove(sender);
+                    if(sender.User == null) return;
                     _sessions.Remove(sender.User!);
                     sender.User!.IsOnline = false;
-                    _connections.Remove(sender);
                 };
 
                 Thread communicationThread = new(session.HandleCommunication)

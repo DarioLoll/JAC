@@ -39,11 +39,13 @@ public class BaseChannel : IChannel
    /// (a model for a channel that is used to transfer data between the server and the client)
    /// by copying the properties of the model.
    /// </summary>
-   public BaseChannel(IChannel model)
+   public BaseChannel(ChannelModelBase model)
    {
        Id = model.Id;
        Users = model.Users.Select(user => new User(user)).Cast<IUser>().ToList();
        Messages = model.Messages.ToList();
        Created = model.Created;
    }
+   
+   
 }

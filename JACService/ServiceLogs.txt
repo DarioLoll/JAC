@@ -61,3 +61,278 @@
 23/04/2024 16:43:37: Received a getchannels request from 127.0.0.1:5211
 23/04/2024 16:43:42: Service stopped on 127.0.0.1:8080
 23/04/2024 16:43:42: Disconnecting all 1 clients...
+27/04/2024 16:07:40: Service started on 127.0.0.1:8080
+27/04/2024 16:08:04: Client connected from 127.0.0.1:4290
+27/04/2024 16:08:04: Client connected from 127.0.0.1:4291
+27/04/2024 16:08:08: Client connected from 127.0.0.1:4297
+27/04/2024 16:08:11: Received a login request from 127.0.0.1:4297
+27/04/2024 16:08:11: Received a getchannels request from 127.0.0.1:4297
+27/04/2024 16:08:53: Client connected from 127.0.0.1:4311
+27/04/2024 16:08:53: Client connected from 127.0.0.1:4312
+27/04/2024 16:08:57: Client connected from 127.0.0.1:4318
+27/04/2024 16:09:13: Received a login request from 127.0.0.1:4318
+27/04/2024 16:09:13: Received a getchannels request from 127.0.0.1:4318
+27/04/2024 16:12:08: Service started on 127.0.0.1:8080
+27/04/2024 16:12:16: Client connected from 127.0.0.1:4350
+27/04/2024 16:12:24: Received a login request from 127.0.0.1:4350
+27/04/2024 16:12:24: Received a getchannels request from 127.0.0.1:4350
+27/04/2024 16:13:19: Client connected from 127.0.0.1:4363
+27/04/2024 16:13:25: Received a login request from 127.0.0.1:4363
+27/04/2024 16:13:29: Received a login request from 127.0.0.1:4363
+27/04/2024 16:13:29: Received a getchannels request from 127.0.0.1:4363
+27/04/2024 16:14:42: Client connected from 127.0.0.1:4381
+27/04/2024 16:14:51: Received a login request from 127.0.0.1:4381
+27/04/2024 16:14:51: Received a getchannels request from 127.0.0.1:4381
+27/04/2024 16:15:23: Client connected from 127.0.0.1:4387
+27/04/2024 16:16:48: Client connected from 127.0.0.1:4395
+27/04/2024 16:16:52: Client connected from 127.0.0.1:4401
+27/04/2024 16:16:55: Received a login request from 127.0.0.1:4401
+27/04/2024 16:16:55: Received a getchannels request from 127.0.0.1:4401
+27/04/2024 16:21:59: Client connected from 127.0.0.1:4449
+27/04/2024 16:24:38: Client connected from 127.0.0.1:4468
+27/04/2024 16:24:42: Client connected from 127.0.0.1:4474
+27/04/2024 16:24:45: Received a login request from 127.0.0.1:4474
+27/04/2024 16:24:45: Received a getchannels request from 127.0.0.1:4474
+27/04/2024 16:26:58: Client connected from 127.0.0.1:4509
+27/04/2024 16:27:02: Client connected from 127.0.0.1:4515
+27/04/2024 16:27:06: Received a login request from 127.0.0.1:4515
+27/04/2024 16:27:06: Received a getchannels request from 127.0.0.1:4515
+27/04/2024 16:27:44: Service stopped on 127.0.0.1:8080
+27/04/2024 16:27:44: Disconnecting all 6 clients...
+27/04/2024 16:27:44: Client disconnected from 127.0.0.1:4363
+27/04/2024 16:36:44: Service started on 127.0.0.1:8080
+27/04/2024 16:36:47: Client connected from 127.0.0.1:4576
+27/04/2024 16:36:50: Client connected from 127.0.0.1:4582
+27/04/2024 16:36:53: Received a login request from 127.0.0.1:4582
+27/04/2024 16:36:53: Received a getchannels request from 127.0.0.1:4582
+27/04/2024 16:36:57: Service stopped on 127.0.0.1:8080
+27/04/2024 16:36:57: Disconnecting all 1 clients...
+27/04/2024 16:36:57: Client disconnected from 127.0.0.1:4576
+27/04/2024 16:38:50: Service started on 127.0.0.1:8080
+27/04/2024 16:38:53: Client connected from 127.0.0.1:4602
+27/04/2024 16:38:57: Client connected from 127.0.0.1:4608
+27/04/2024 16:38:59: Received a login request from 127.0.0.1:4608
+27/04/2024 16:38:59: Received a getchannels request from 127.0.0.1:4608
+27/04/2024 16:39:01: Service stopped on 127.0.0.1:8080
+27/04/2024 16:39:02: Disconnecting all 1 clients...
+27/04/2024 16:39:02: Client disconnected from 127.0.0.1:4602
+27/04/2024 16:40:59: Service started on 127.0.0.1:8080
+27/04/2024 16:41:02: Client connected from 127.0.0.1:4629
+27/04/2024 16:41:06: Client connected from 127.0.0.1:4635
+27/04/2024 16:41:08: Received a login request from 127.0.0.1:4635
+27/04/2024 16:41:30: Received a getchannels request from 127.0.0.1:4635
+27/04/2024 16:41:34: Service stopped on 127.0.0.1:8080
+27/04/2024 16:41:34: Disconnecting all 1 clients...
+27/04/2024 16:41:34: Client disconnected from 127.0.0.1:4629
+27/04/2024 16:43:00: Service started on 127.0.0.1:8080
+27/04/2024 16:43:03: Client connected from 127.0.0.1:4659
+27/04/2024 16:44:42: Service started on 127.0.0.1:8080
+27/04/2024 16:44:45: Client connected from 127.0.0.1:4736
+27/04/2024 16:45:38: Service started on 127.0.0.1:8080
+27/04/2024 16:45:48: Client connected from 127.0.0.1:4762
+27/04/2024 16:45:52: Client connected from 127.0.0.1:4768
+27/04/2024 16:45:54: Received a login request from 127.0.0.1:4768
+27/04/2024 16:45:54: Received a getchannels request from 127.0.0.1:4768
+27/04/2024 16:45:57: Service stopped on 127.0.0.1:8080
+27/04/2024 16:49:19: Service started on 127.0.0.1:8080
+27/04/2024 16:49:22: Client connected from 127.0.0.1:4796
+27/04/2024 16:49:25: Client connected from 127.0.0.1:4802
+27/04/2024 16:49:28: Received a login request from 127.0.0.1:4802
+27/04/2024 16:49:28: Received a getchannels request from 127.0.0.1:4802
+27/04/2024 16:49:55: Client connected from 127.0.0.1:4884
+27/04/2024 16:49:56: Client connected from 127.0.0.1:4885
+27/04/2024 16:50:03: Received a login request from 127.0.0.1:4885
+27/04/2024 16:50:03: Received a getchannels request from 127.0.0.1:4885
+27/04/2024 16:50:11: Client connected from 127.0.0.1:4890
+27/04/2024 16:50:12: Client connected from 127.0.0.1:4891
+27/04/2024 16:50:15: Received a login request from 127.0.0.1:4891
+27/04/2024 16:50:16: Received a getchannels request from 127.0.0.1:4891
+27/04/2024 16:50:19: Service stopped on 127.0.0.1:8080
+27/04/2024 16:50:19: Disconnecting all 3 clients...
+27/04/2024 16:50:19: Client disconnected from 127.0.0.1:4802
+27/04/2024 16:50:19: Client disconnected from 127.0.0.1:4885
+27/04/2024 16:50:19: Client disconnected from 127.0.0.1:4890
+27/04/2024 16:50:19: Client disconnected from 127.0.0.1:4891
+27/04/2024 16:50:39: Service started on 127.0.0.1:8080
+27/04/2024 16:51:27: Client connected from 127.0.0.1:4908
+27/04/2024 16:51:28: Client connected from 127.0.0.1:4909
+27/04/2024 16:51:31: Received a login request from 127.0.0.1:4909
+27/04/2024 16:51:31: Received a getchannels request from 127.0.0.1:4909
+27/04/2024 16:51:43: Service stopped on 127.0.0.1:8080
+27/04/2024 16:51:43: Disconnecting all 1 clients...
+27/04/2024 16:51:43: Client disconnected from 127.0.0.1:4908
+27/04/2024 16:52:07: Service started on 127.0.0.1:8080
+27/04/2024 16:52:09: Client connected from 127.0.0.1:4914
+27/04/2024 16:52:11: Client connected from 127.0.0.1:4915
+27/04/2024 16:52:16: Received a login request from 127.0.0.1:4915
+27/04/2024 16:52:16: Received a getchannels request from 127.0.0.1:4915
+27/04/2024 16:52:19: Client connected from 127.0.0.1:4920
+27/04/2024 16:52:20: Client connected from 127.0.0.1:4921
+27/04/2024 16:52:23: Received a login request from 127.0.0.1:4921
+27/04/2024 16:52:23: Received a getchannels request from 127.0.0.1:4921
+27/04/2024 16:52:28: Service stopped on 127.0.0.1:8080
+27/04/2024 16:52:28: Disconnecting all 2 clients...
+27/04/2024 16:52:28: Client disconnected from 127.0.0.1:4915
+27/04/2024 16:52:28: Client disconnected from 127.0.0.1:4920
+27/04/2024 16:52:28: Client disconnected from 127.0.0.1:4921
+27/04/2024 16:53:22: Service started on 127.0.0.1:8080
+27/04/2024 16:53:32: Client connected from 127.0.0.1:4934
+27/04/2024 16:53:33: Client connected from 127.0.0.1:4935
+27/04/2024 16:53:36: Received a login request from 127.0.0.1:4935
+27/04/2024 16:53:36: Received a getchannels request from 127.0.0.1:4935
+27/04/2024 16:53:51: Client connected from 127.0.0.1:4945
+27/04/2024 16:53:53: Client connected from 127.0.0.1:4946
+27/04/2024 16:53:56: Received a login request from 127.0.0.1:4946
+27/04/2024 16:53:59: Received a login request from 127.0.0.1:4946
+27/04/2024 16:53:59: Received a getchannels request from 127.0.0.1:4946
+27/04/2024 16:54:20: Service stopped on 127.0.0.1:8080
+27/04/2024 16:54:20: Disconnecting all 2 clients...
+27/04/2024 16:54:20: Client disconnected from 127.0.0.1:4945
+27/04/2024 16:56:19: Service started on 127.0.0.1:8080
+27/04/2024 16:56:22: Client connected from 127.0.0.1:4991
+27/04/2024 16:56:26: Client connected from 127.0.0.1:4997
+27/04/2024 16:56:29: Received a login request from 127.0.0.1:4997
+27/04/2024 16:56:29: Received a getchannels request from 127.0.0.1:4997
+27/04/2024 16:56:32: Client connected from 127.0.0.1:5002
+27/04/2024 16:56:33: Client connected from 127.0.0.1:5003
+27/04/2024 16:56:36: Received a login request from 127.0.0.1:5003
+27/04/2024 16:56:38: Received a login request from 127.0.0.1:5003
+27/04/2024 16:56:38: Received a getchannels request from 127.0.0.1:5003
+27/04/2024 16:56:45: Service stopped on 127.0.0.1:8080
+27/04/2024 16:56:45: Disconnecting all 2 clients...
+27/04/2024 16:56:45: Client disconnected from 127.0.0.1:5002
+27/04/2024 16:56:50: Chat Directory failed to load: Deserialization of interface types is not supported. Type 'JAC.Shared.IUser'. Path: $._channels[0].Users[0] | LineNumber: 0 | BytePositionInLine: 149.
+27/04/2024 16:56:50: Service started on 127.0.0.1:8080
+27/04/2024 16:57:01: Service stopped on 127.0.0.1:8080
+27/04/2024 16:57:01: Disconnecting all 0 clients...
+27/04/2024 17:06:53: Service started on 127.0.0.1:8080
+27/04/2024 17:06:59: Client connected from 127.0.0.1:5063
+27/04/2024 17:07:04: Received a login request from 127.0.0.1:5063
+27/04/2024 17:07:09: Received a login request from 127.0.0.1:5063
+27/04/2024 17:07:09: Received a getchannels request from 127.0.0.1:5063
+27/04/2024 17:07:15: Service stopped on 127.0.0.1:8080
+27/04/2024 17:07:15: Disconnecting all 1 clients...
+27/04/2024 17:07:59: Service started on 127.0.0.1:8080
+27/04/2024 17:08:03: Client connected from 127.0.0.1:5073
+27/04/2024 18:43:56: Service started on 127.0.0.1:8080
+27/04/2024 18:44:02: Client connected from 127.0.0.1:6132
+27/04/2024 18:44:06: Client connected from 127.0.0.1:6138
+27/04/2024 18:44:09: Received a login request from 127.0.0.1:6138
+27/04/2024 18:44:09: Received a getchannels request from 127.0.0.1:6138
+27/04/2024 18:45:20: Client connected from 127.0.0.1:6147
+27/04/2024 18:45:22: Client connected from 127.0.0.1:6148
+27/04/2024 18:45:25: Received a login request from 127.0.0.1:6148
+27/04/2024 18:45:27: Received a login request from 127.0.0.1:6148
+27/04/2024 18:45:27: Received a getchannels request from 127.0.0.1:6148
+27/04/2024 18:46:10: Client connected from 127.0.0.1:6154
+27/04/2024 18:46:34: Client connected from 127.0.0.1:6160
+27/04/2024 18:46:36: Client connected from 127.0.0.1:6161
+27/04/2024 18:46:39: Received a login request from 127.0.0.1:6161
+27/04/2024 18:46:39: Received a getchannels request from 127.0.0.1:6161
+27/04/2024 18:47:47: Client connected from 127.0.0.1:6168
+27/04/2024 18:47:48: Client connected from 127.0.0.1:6169
+27/04/2024 18:47:51: Received a login request from 127.0.0.1:6169
+27/04/2024 18:47:51: Received a getchannels request from 127.0.0.1:6169
+27/04/2024 18:48:01: Client connected from 127.0.0.1:6174
+27/04/2024 18:48:03: Client connected from 127.0.0.1:6175
+27/04/2024 18:48:05: Received a login request from 127.0.0.1:6175
+27/04/2024 18:48:05: Received a getchannels request from 127.0.0.1:6175
+27/04/2024 18:49:03: Client connected from 127.0.0.1:6182
+27/04/2024 18:49:04: Client connected from 127.0.0.1:6183
+27/04/2024 18:49:07: Received a login request from 127.0.0.1:6183
+27/04/2024 18:49:07: Received a getchannels request from 127.0.0.1:6183
+27/04/2024 18:49:46: Client connected from 127.0.0.1:6189
+27/04/2024 18:49:48: Client connected from 127.0.0.1:6190
+27/04/2024 18:49:51: Received a login request from 127.0.0.1:6190
+27/04/2024 18:49:51: Received a getchannels request from 127.0.0.1:6190
+27/04/2024 18:50:10: Client connected from 127.0.0.1:6195
+27/04/2024 18:50:11: Client connected from 127.0.0.1:6197
+27/04/2024 18:50:14: Received a login request from 127.0.0.1:6197
+27/04/2024 18:50:14: Received a getchannels request from 127.0.0.1:6197
+27/04/2024 18:50:25: Client connected from 127.0.0.1:6202
+27/04/2024 18:50:27: Client connected from 127.0.0.1:6203
+27/04/2024 18:50:32: Received a login request from 127.0.0.1:6203
+27/04/2024 18:50:32: Received a getchannels request from 127.0.0.1:6203
+27/04/2024 18:51:53: Client connected from 127.0.0.1:6212
+27/04/2024 18:51:55: Client connected from 127.0.0.1:6213
+27/04/2024 18:51:57: Received a login request from 127.0.0.1:6213
+27/04/2024 18:51:57: Received a getchannels request from 127.0.0.1:6213
+27/04/2024 18:53:00: Client connected from 127.0.0.1:6222
+27/04/2024 18:53:01: Client connected from 127.0.0.1:6223
+27/04/2024 18:53:03: Received a login request from 127.0.0.1:6223
+27/04/2024 18:53:03: Received a getchannels request from 127.0.0.1:6223
+27/04/2024 18:53:53: Client connected from 127.0.0.1:6234
+27/04/2024 18:53:54: Client connected from 127.0.0.1:6235
+27/04/2024 18:53:56: Received a login request from 127.0.0.1:6235
+27/04/2024 18:53:56: Received a getchannels request from 127.0.0.1:6235
+27/04/2024 18:54:50: Client connected from 127.0.0.1:6246
+27/04/2024 18:54:51: Client connected from 127.0.0.1:6247
+27/04/2024 18:54:53: Received a login request from 127.0.0.1:6247
+27/04/2024 18:54:53: Received a getchannels request from 127.0.0.1:6247
+27/04/2024 20:12:10: Service started on 127.0.0.1:8080
+27/04/2024 20:12:14: Client connected from 127.0.0.1:6603
+27/04/2024 20:12:18: Client connected from 127.0.0.1:6609
+27/04/2024 20:12:22: Received a login request from 127.0.0.1:6609
+27/04/2024 20:12:22: Received a getchannels request from 127.0.0.1:6609
+27/04/2024 20:12:55: Service started on 127.0.0.1:8080
+27/04/2024 20:12:59: Client connected from 127.0.0.1:6644
+27/04/2024 20:13:02: Client connected from 127.0.0.1:6650
+27/04/2024 20:13:07: Received a login request from 127.0.0.1:6650
+27/04/2024 20:13:07: Received a getchannels request from 127.0.0.1:6650
+27/04/2024 20:16:30: Client connected from 127.0.0.1:6669
+27/04/2024 20:20:43: Client connected from 127.0.0.1:6686
+27/04/2024 20:23:30: Client connected from 127.0.0.1:6698
+27/04/2024 20:24:34: Client connected from 127.0.0.1:6713
+27/04/2024 20:24:35: Client connected from 127.0.0.1:6714
+27/04/2024 20:24:38: Received a login request from 127.0.0.1:6714
+27/04/2024 20:24:38: Received a getchannels request from 127.0.0.1:6714
+27/04/2024 20:26:12: Client connected from 127.0.0.1:6730
+27/04/2024 20:26:17: Client connected from 127.0.0.1:6736
+27/04/2024 20:26:19: Received a login request from 127.0.0.1:6736
+27/04/2024 20:26:19: Received a getchannels request from 127.0.0.1:6736
+27/04/2024 20:27:07: Client connected from 127.0.0.1:6747
+27/04/2024 20:27:11: Client connected from 127.0.0.1:6753
+27/04/2024 20:27:14: Received a login request from 127.0.0.1:6753
+27/04/2024 20:27:14: Received a getchannels request from 127.0.0.1:6753
+27/04/2024 20:28:26: Service started on 127.0.0.1:8080
+27/04/2024 20:28:30: Client connected from 127.0.0.1:6794
+27/04/2024 20:28:34: Client connected from 127.0.0.1:6800
+27/04/2024 20:28:36: Received a login request from 127.0.0.1:6800
+27/04/2024 20:28:36: Received a getchannels request from 127.0.0.1:6800
+27/04/2024 20:31:31: Service started on 127.0.0.1:8080
+27/04/2024 20:31:35: Client connected from 127.0.0.1:6847
+27/04/2024 20:31:39: Client connected from 127.0.0.1:6853
+27/04/2024 20:31:41: Received a login request from 127.0.0.1:6853
+27/04/2024 20:31:41: Received a getchannels request from 127.0.0.1:6853
+27/04/2024 20:45:00: Client connected from 127.0.0.1:6896
+27/04/2024 20:45:03: Client connected from 127.0.0.1:6897
+27/04/2024 20:45:06: Received a login request from 127.0.0.1:6897
+27/04/2024 20:45:06: Received a getchannels request from 127.0.0.1:6897
+27/04/2024 20:49:33: Client connected from 127.0.0.1:6911
+27/04/2024 20:49:35: Client connected from 127.0.0.1:6912
+27/04/2024 20:49:37: Received a login request from 127.0.0.1:6912
+27/04/2024 20:49:37: Received a getchannels request from 127.0.0.1:6912
+27/04/2024 20:51:53: Client connected from 127.0.0.1:6925
+27/04/2024 20:51:55: Client connected from 127.0.0.1:6926
+27/04/2024 20:51:58: Received a login request from 127.0.0.1:6926
+27/04/2024 20:51:58: Received a getchannels request from 127.0.0.1:6926
+27/04/2024 20:54:11: Client connected from 127.0.0.1:6941
+27/04/2024 20:54:13: Client connected from 127.0.0.1:6942
+27/04/2024 20:54:15: Received a login request from 127.0.0.1:6942
+27/04/2024 20:54:15: Received a getchannels request from 127.0.0.1:6942
+27/04/2024 20:57:02: Client connected from 127.0.0.1:6960
+27/04/2024 20:57:03: Client connected from 127.0.0.1:6961
+27/04/2024 20:57:05: Received a login request from 127.0.0.1:6961
+27/04/2024 20:57:05: Received a getchannels request from 127.0.0.1:6961
+27/04/2024 20:57:35: Client connected from 127.0.0.1:6969
+27/04/2024 20:57:37: Client connected from 127.0.0.1:6970
+27/04/2024 20:57:39: Received a login request from 127.0.0.1:6970
+27/04/2024 20:57:39: Received a getchannels request from 127.0.0.1:6970
+27/04/2024 20:58:26: Client connected from 127.0.0.1:7003
+27/04/2024 20:58:28: Client connected from 127.0.0.1:7004
+27/04/2024 20:58:32: Received a login request from 127.0.0.1:7004
+27/04/2024 20:58:32: Received a getchannels request from 127.0.0.1:7004
+27/04/2024 21:05:02: Client connected from 127.0.0.1:7069
+27/04/2024 21:05:04: Client connected from 127.0.0.1:7070
+27/04/2024 21:05:08: Received a login request from 127.0.0.1:7070
+27/04/2024 21:05:08: Received a getchannels request from 127.0.0.1:7070

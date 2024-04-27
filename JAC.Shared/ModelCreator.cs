@@ -75,8 +75,8 @@ public static class ModelCreator
     /// <summary>
     /// Converts the given users to UserModels by copying their properties
     /// </summary>
-    public static List<IUser> CreateUserModels(IEnumerable<IUser> users)
+    public static List<UserModel> CreateUserModels(IEnumerable<IUser> users)
     {
-        return users.Select(user => ToUserModel(user)).Cast<IUser>().ToList();
+        return users.Select(user => ToUserModel(user)).ToList();
     }
 }

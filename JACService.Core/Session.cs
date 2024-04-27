@@ -16,6 +16,8 @@ public class Session
     public IServiceLogger Logger { get; private set; }
 
     private ChatUser? _user;
+    
+    private bool _isShuttingDown = false;
 
     public ChatUser? User
     {
@@ -62,6 +64,8 @@ public class Session
     public void Close()
     {
         if(!_socket.Connected) return;
+        if(_isShuttingDown) return;
+        _isShuttingDown = true;
         Logger.LogServiceInfo($"Client disconnected from {_socket.RemoteEndPoint}");
         _socket.Shutdown(SocketShutdown.Both);
         _socket.Close();
