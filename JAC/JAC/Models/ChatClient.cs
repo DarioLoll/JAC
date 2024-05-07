@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text.Json;
@@ -95,16 +96,17 @@ public class ChatClient
         {
             await SocketWriter.Send(_socket!, packet);
         }
-        OnDisconnected();
+        else OnDisconnected();
     }
 
     /// <summary>
     /// Shuts down the client and closes the connection
     /// </summary>
-    private void Close()
+    public async void Close()
     {
         if (IsConnected)
         {
+            await Send(new PacketBase(ParameterlessPacket.Disconnect));
             _socket?.Shutdown(SocketShutdown.Both);
             _socket?.Close();
         }
@@ -113,29 +115,20 @@ public class ChatClient
 
     private async void OnLoggedIn(LoginSuccessPacket packet)
     {
-        Directory = new ClientDirectory {User = new User(packet.User)};
+        Directory = new ClientDirectory(new User(packet.User));
+        Directory.LoadData();
         PacketHandler.ChannelsReceived += OnChannelsReceived;
         await Send(new PacketBase(ParameterlessPacket.GetChannels));
     }
 
     private void OnChannelsReceived(GetChannelsResponsePacket packet)
     {
-        foreach (var channelModel in packet.Channels)
-        {
-            if (channelModel is GroupChannelModel groupChannel)
-            {
-                Directory!.AddChannel(new GroupChannel(groupChannel));
-            }
-            else
-            {
-                Directory!.AddChannel(new BaseChannel(channelModel));
-            }
-        }
         Navigator.Instance.SwitchToViewModel(new MainViewModel(Directory!));
     }
 
     protected virtual void OnDisconnected()
     {
+        Directory?.SaveData();
         Disconnected?.Invoke();
     }
 }

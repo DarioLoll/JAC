@@ -1,4 +1,5 @@
-﻿using JAC.Shared;
+﻿using System.Text.Json.Serialization;
+using JAC.Shared;
 using JAC.Shared.Channels;
 
 namespace JACService.Core;
@@ -11,7 +12,7 @@ public class GroupChannel : BaseChannel, IGroupChannel
     /// <summary>
     /// <inheritdoc cref="IGroupChannel.Name"/>
     /// </summary>
-    public required string Name { get; set; }
+    public string Name { get; set; }
     /// <summary>
     /// <inheritdoc cref="IGroupChannel.Description"/>
     /// </summary>
@@ -19,7 +20,7 @@ public class GroupChannel : BaseChannel, IGroupChannel
     /// <summary>
     /// <inheritdoc cref="IGroupChannel.Admins"/>
     /// </summary>
-    public IList<IUser> Admins { get; init; } = new List<IUser>();
+    public IList<string> Admins { get; init; } = new List<string>();
     /// <summary>
     /// <inheritdoc cref="IGroupChannel.Settings"/>
     /// </summary>
@@ -37,6 +38,21 @@ public class GroupChannel : BaseChannel, IGroupChannel
     /// Occurs when the rank of a user in the channel is changed.
     /// </summary>
     public event Action<ChatUser>? RankChanged;
+
+    public GroupChannel(ulong id, DateTime created, string name) : base(id, created)
+    {
+        Name = name;
+    }
+    
+    [JsonConstructor]
+    public GroupChannel(ulong id, DateTime created, string name, string description, IList<ChatUser> chatUsers, 
+        IList<Message> messages, IList<string> admins, GroupSettings settings) : base(id, created, chatUsers, messages)
+    {
+        Name = name;
+        Description = description;
+        Admins = admins.ToList();
+        Settings = settings;
+    }
     
     /// <summary>
     /// Adds a user to the channel as a member.
@@ -50,7 +66,7 @@ public class GroupChannel : BaseChannel, IGroupChannel
         if(Users.Contains(user))
             return ActionReport.Failed(ErrorType.UserAlreadyInChannel);
         bool isAdderInChannel = Users.Contains(adder);
-        bool isAdderAdmin = Admins.Contains(adder);
+        bool isAdderAdmin = Admins.Contains(adder.Nickname);
         bool areMembersAllowedToAdd = Settings.AllowMembersToAdd;
         if(!isAdderInChannel || (!isAdderAdmin && !areMembersAllowedToAdd))
             return ActionReport.Failed(ErrorType.InsufficientPermissions);
@@ -69,7 +85,7 @@ public class GroupChannel : BaseChannel, IGroupChannel
     {
         if(!Users.Contains(user))
             return ActionReport.Failed(ErrorType.UserNotInChannel);
-        bool isRemoverAdmin = Admins.Contains(remover);
+        bool isRemoverAdmin = Admins.Contains(remover.Nickname);
         bool isRemoverInChannel = Users.Contains(remover);
         bool isUserRemover = user == remover;
         if((!isRemoverAdmin || !isRemoverInChannel) && !isUserRemover)
@@ -87,7 +103,7 @@ public class GroupChannel : BaseChannel, IGroupChannel
     /// <returns>An <see cref="ActionReport"/> indicating whether the message was sent successfully, or what error occured</returns>
     public override ActionReport SendMessage(ChatUser sender, string content)
     {
-        bool isSenderAdmin = Admins.Contains(sender);
+        bool isSenderAdmin = Admins.Contains(sender.Nickname);
         if(Settings.ReadOnlyForMembers && !isSenderAdmin)
             return ActionReport.Failed(ErrorType.InsufficientPermissions);
         return base.SendMessage(sender, content);
@@ -102,7 +118,7 @@ public class GroupChannel : BaseChannel, IGroupChannel
     /// <returns>An <see cref="ActionReport"/> indicating whether the name was changed successfully, or what error occured</returns>
     public ActionReport ChangeName(ChatUser changer, string newName)
     {
-        bool isChangerAdmin = Admins.Contains(changer);
+        bool isChangerAdmin = Admins.Contains(changer.Nickname);
         bool isChangerInChannel = Users.Contains(changer);
         bool areMembersAllowedToChangeName = Settings.AllowMembersToChangeName;
         if(!isChangerInChannel || (!isChangerAdmin && !areMembersAllowedToChangeName))
@@ -121,7 +137,7 @@ public class GroupChannel : BaseChannel, IGroupChannel
     /// <returns>An <see cref="ActionReport"/> indicating whether the description was changed successfully, or what error occured</returns>
     public ActionReport ChangeDescription(ChatUser changer, string newDescription)
     {
-        bool isChangerAdmin = Admins.Contains(changer);
+        bool isChangerAdmin = Admins.Contains(changer.Nickname);
         bool isChangerInChannel = Users.Contains(changer);
         bool areMembersAllowedToChangeDescription = Settings.AllowMembersToChangeDescription;
         if(!isChangerInChannel || (!isChangerAdmin && !areMembersAllowedToChangeDescription))
@@ -142,11 +158,11 @@ public class GroupChannel : BaseChannel, IGroupChannel
     {
         if(!Users.Contains(user))
             return ActionReport.Failed(ErrorType.UserNotInChannel);
-        if(!Admins.Contains(changer))
+        if(!Admins.Contains(changer.Nickname))
             return ActionReport.Failed(ErrorType.InsufficientPermissions);
-        if(Admins.Contains(user))
-            Admins.Remove(user);
-        else Admins.Add(user);
+        if(Admins.Contains(user.Nickname))
+            Admins.Remove(user.Nickname);
+        else Admins.Add(user.Nickname);
         OnRankChanged(user);
         return ActionReport.SuccessReport;
     }
@@ -162,15 +178,12 @@ public class GroupChannel : BaseChannel, IGroupChannel
     public static ActionResult<GroupChannel> CreateGroupChannel(ulong id, ChatUser creator, string name, 
         string description)
     {
-        var channel = new GroupChannel
+        var channel = new GroupChannel(id, DateTime.Now, name)
         {
-            Id = id,
-            Name = name,
-            Description = description,
-            Created = DateTime.Now
+            Description = description
         };
         channel.AddUser(creator);
-        channel.Admins.Add(creator);
+        channel.Admins.Add(creator.Nickname);
         OnChannelCreated(channel);
         return ActionResult<GroupChannel>.Succeeded(channel);
     }

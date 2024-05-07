@@ -6,12 +6,12 @@ namespace JAC.Shared;
 /// <summary>
 /// Represents a message sent in a channel.
 /// </summary>
-public class Message
+public class Message : IComparable<Message>
 {
     /// <summary>
-    /// The user that sent this message.
+    /// The id of the user who sent this message.
     /// </summary>
-    public UserModel Sender { get; }
+    public string SenderName { get; }
     
     /// <summary>
     /// The content of the message.
@@ -23,10 +23,23 @@ public class Message
     /// </summary>
     public DateTime TimeSent { get; }
     
-    public Message(UserModel sender, string content, DateTime timeSent = default)
+    public Message(string senderName, string content, DateTime timeSent = default)
     {
-        Sender = sender;
+        SenderName = senderName;
         Content = content;
         TimeSent = timeSent == default ? DateTime.Now : timeSent;
+    }
+
+    /// <summary>
+    /// Compares the value of this instance to a specified <see cref="Message"/> value
+    /// and returns an integer that indicates whether this message was sent/created earlier than,
+    /// at the same as, or later than the specified <see cref="Message"/> value.
+    /// </summary>
+    /// <param name="other">The object to compare to the current instance.</param>
+    public int CompareTo(Message? other)
+    {
+        if (ReferenceEquals(this, other)) return 0;
+        if (ReferenceEquals(null, other)) return 1;
+        return TimeSent.CompareTo(other.TimeSent);
     }
 }

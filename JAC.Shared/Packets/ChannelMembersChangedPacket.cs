@@ -13,7 +13,7 @@ public class ChannelMembersChangedPacket : PacketBase
     /// <summary>
     /// The user that the change is about.
     /// </summary>
-    public required UserModel User { get; init; }
+    public required UserProfile User { get; init; }
     
     /// <summary>
     /// The type of change that occurred.

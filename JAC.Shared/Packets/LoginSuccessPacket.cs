@@ -11,5 +11,5 @@ public class LoginSuccessPacket : PacketBase
     /// <summary>
     /// The user that has logged in.
     /// </summary>
-    public required UserModel User { get; init; }
+    public required UserProfile User { get; init; }
 }

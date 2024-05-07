@@ -81,8 +81,14 @@ public class PacketBase
 
 /// <summary>
 /// Packet types that do not require any parameters.
+/// <list type="bullet">
+///  <item>GetChannels: Requests the list of channels from the server</item>
+///  <item>Disconnect: Informs the server that the client is disconnecting,
+///  or informs the clients that the server is stopping</item>
+/// </list>
 /// </summary>
 public enum ParameterlessPacket
 {
     GetChannels,
+    Disconnect, 
 }

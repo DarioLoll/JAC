@@ -1,4 +1,5 @@
-﻿using JAC.Shared;
+﻿using System.Text.Json.Serialization;
+using JAC.Shared;
 using JAC.Shared.Channels;
 
 namespace JACService.Core;
@@ -11,11 +12,14 @@ public class BaseChannel : IChannel
     /// <summary>
     /// <inheritdoc cref="IChannel.Id"/>
     /// </summary>
-    public required ulong Id { get; init; }
+    public ulong Id { get; init; }
     /// <summary>
     /// <inheritdoc cref="IChannel.Users"/>
     /// </summary>
-    public IList<IUser> Users { get; init; } = new List<IUser>();
+    [JsonIgnore] public IList<IUser> Users { get; init; } = new List<IUser>();
+    
+    [JsonInclude] public IList<ChatUser> ChatUsers => Users.Cast<ChatUser>().ToList();
+    
     /// <summary>
     /// <inheritdoc cref="IChannel.Messages"/>
     /// </summary>
@@ -23,11 +27,11 @@ public class BaseChannel : IChannel
     /// <summary>
     /// <inheritdoc cref="IChannel.Created"/>
     /// </summary>
-    public required DateTime Created { get; init; }
+    public DateTime Created { get; init; }
     /// <summary>
     /// Returns the users in the channel that are currently online.
     /// </summary>
-    public IEnumerable<ChatUser> OnlineUsers => Users.Cast<ChatUser>().Where(user => user.IsOnline);
+    [JsonIgnore] public IEnumerable<ChatUser> OnlineUsers => Users.Cast<ChatUser>().Where(user => user.IsOnline);
     
     /// <summary>
     /// Occurs when a message is sent in the channel.
@@ -37,6 +41,26 @@ public class BaseChannel : IChannel
     /// Occurs when a channel is created.
     /// </summary>
     public static event Action<BaseChannel>? ChannelCreated;
+
+    public BaseChannel(ulong id, DateTime created)
+    {
+        Id = id;
+        Created = created;
+    }
+    
+    [JsonConstructor]
+    public BaseChannel(ulong id, DateTime created, IList<ChatUser> chatUsers, IList<Message> messages)
+    {
+        Id = id;
+        Created = created;
+        Users = chatUsers.Cast<IUser>().ToList();
+        Messages = messages.ToList();
+    }
+    
+    public IEnumerable<Message> GetMessages(DateTime since)
+    {
+        return Messages.Where(message => message.TimeSent > since);
+    }
     
     /// <summary>
     /// Sends a message to the channel.
@@ -48,7 +72,7 @@ public class BaseChannel : IChannel
     {
         if(!Users.Contains(sender))
             return new ActionReport{Error = ErrorType.UserNotInChannel};
-        var message = new Message(sender.ToUserModel(), content);
+        var message = new Message(sender.Nickname, content);
         Messages.Add(message);
         OnMessageSent(message);
         return ActionReport.SuccessReport;
@@ -63,27 +87,11 @@ public class BaseChannel : IChannel
     /// <returns>An <see cref="ActionResult{T}"/> containing the created channel or the error that occured</returns>
     public static ActionResult<BaseChannel> OpenPrivateChannel(ulong id, ChatUser user1, ChatUser user2)
     {
-        var channel = new BaseChannel
-        {
-            Id = id,
-            Created = DateTime.Now
-        };
+        var channel = new BaseChannel(id, DateTime.Now);
         channel.AddUser(user1);
         channel.AddUser(user2);
         OnChannelCreated(channel);
         return ActionResult<BaseChannel>.Succeeded(channel);
-    }
-    
-    //Probably not going to be used since the client won't ever send whole channels to the server
-    public static BaseChannel CreateFromModel(IChannel channelModel)
-    {
-        return new BaseChannel
-        {
-            Id = channelModel.Id,
-            Users = ChatUser.CreateFromModels(channelModel.Users),
-            Messages = channelModel.Messages.ToList(),
-            Created = channelModel.Created
-        };
     }
     
     protected void AddUser(ChatUser user)

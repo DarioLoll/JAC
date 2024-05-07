@@ -54,18 +54,19 @@ public class Session
         }
         catch (Exception e)
         {
-            Close();
+            await Close();
         }
     }
-    public async void Send(PacketBase packet) => await _socketWriter.Send(packet);
+    public async Task Send(PacketBase packet) => await _socketWriter.Send(packet);
 
-    public void SendError(ErrorType errorType) => Send(new ErrorPacket{ErrorType = errorType});
+    public async Task SendError(ErrorType errorType) => await Send(new ErrorPacket{ErrorType = errorType});
 
-    public void Close()
+    public async Task Close()
     {
         if(!_socket.Connected) return;
         if(_isShuttingDown) return;
         _isShuttingDown = true;
+        await Send(new PacketBase(ParameterlessPacket.Disconnect));
         Logger.LogServiceInfo($"Client disconnected from {_socket.RemoteEndPoint}");
         _socket.Shutdown(SocketShutdown.Both);
         _socket.Close();

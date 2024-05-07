@@ -12,8 +12,4 @@
       <ProjectReference Include="..\JAC\JAC\JAC.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="PacketHandlers\" />
-    </ItemGroup>
-
 </Project>

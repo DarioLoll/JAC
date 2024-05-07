@@ -8,12 +8,19 @@ namespace JACService.Core;
 /// </summary>
 public class ChatUser : IUser
 {
+    
     /// <summary>
     /// <inheritdoc cref="IUser.Nickname"/>
     /// </summary>
     public required string Nickname { get; init; }  = string.Empty;
+    
     /// <summary>
-    /// <inheritdoc cref="IUser.Channels"/>
+    /// <inheritdoc cref="IUser.LastSeen"/>
+    /// </summary>
+    public DateTime LastSeen { get; set; } = DateTime.MinValue;
+
+    /// <summary>
+    /// List of ids of channels the user is a member of.
     /// </summary>
     public IList<ulong> Channels { get; init; } = new List<ulong>();
 
@@ -32,7 +39,7 @@ public class ChatUser : IUser
     public event Action<ulong>? LeftChannel;
     
     /// <summary>
-    /// Creates a ChatUser (server-side) from a <see cref="UserModel"/>
+    /// Creates a ChatUser (server-side) from a <see cref="UserProfile"/>
     /// (a model for a user that is used to transfer data between the server and the client)
     /// by copying the properties of the model.
     /// </summary>
@@ -42,17 +49,10 @@ public class ChatUser : IUser
         return new ChatUser
         {
             Nickname = userModel.Nickname,
-            Channels = userModel.Channels.ToList()
+            LastSeen = userModel.LastSeen
         };
     }
-
-    /// <summary>
-    /// <see cref="CreateFromModel"/> for a collection of user models.
-    /// </summary>
-    public static List<IUser> CreateFromModels(IEnumerable<IUser> userModels)
-    {
-        return userModels.Select(user => CreateFromModel(user)).Cast<IUser>().ToList();
-    }
+    
 
     /// <summary>
     /// Adds a channel to the user's list of channels.

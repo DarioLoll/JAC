@@ -44,8 +44,17 @@ public class ClientManager
     {
         _serverSocket = serverSocket;
         Logger = logger;
+        Server.Instance.Stopping += OnServerStopping;
     }
-    
+
+    private async Task OnServerStopping()
+    {
+        Logger.LogServiceInfo($"Disconnecting all {_sessions.Count} clients...");
+        List<Session> connections = new(_connections);
+        foreach (var connection in connections)
+           await connection.Close();
+    }
+
     public async void AcceptClients()
     {
         try
@@ -67,6 +76,7 @@ public class ClientManager
                     if(sender.User == null) return;
                     _sessions.Remove(sender.User!);
                     sender.User!.IsOnline = false;
+                    sender.User.LastSeen = DateTime.Now;
                 };
 
                 Thread communicationThread = new(session.HandleCommunication)
@@ -78,12 +88,10 @@ public class ClientManager
         }
         catch (Exception)
         {
-            //Assuming that the exception is caused by the server socket being closed
-            Logger.LogServiceInfo($"Disconnecting all {_sessions.Count} clients...");
-            List<Session> connections = new(_connections);
-            foreach (var connection in connections)
-                connection.Close();
+            // ignored
         }
     }
+    
+    
 
 }

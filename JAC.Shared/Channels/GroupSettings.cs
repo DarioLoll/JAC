@@ -1,14 +1,20 @@
-﻿namespace JAC.Shared.Channels;
+﻿using System.Text.Json;
+
+namespace JAC.Shared.Channels;
 
 /// <summary>
 /// Represents the settings for a <see cref="IGroupChannel"/>
 /// </summary>
-public struct GroupSettings
+public class GroupSettings
 {
-    public GroupSettings()
+    public void CopyFrom(GroupSettings settings)
     {
+        ReadOnlyForMembers = settings.ReadOnlyForMembers;
+        AllowMembersToAdd = settings.AllowMembersToAdd;
+        AllowMembersToChangeName = settings.AllowMembersToChangeName;
+        AllowMembersToChangeDescription = settings.AllowMembersToChangeDescription;
     }
-
+    
     /// <summary>
     /// If only admins can send messages to the group.
     /// <remarks>Default is false</remarks>

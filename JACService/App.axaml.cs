@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -12,6 +13,8 @@ public partial class App : Application
 {
     public const string DefaultLogPath = "../../../";
     private FileLogger _logger;
+    
+    public event EventHandler<ShutdownRequestedEventArgs>? ShutdownRequested;
 
     /// <summary>
     /// Changes the path where the log files are stored
@@ -28,6 +31,7 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            desktop.ShutdownRequested += OnShutdownRequested;
             _logger = FileLogger.LoadFromConfig(DefaultLogPath);
             string[]? args = desktop.Args;
             Server server = Server.Instance;
@@ -69,5 +73,11 @@ public partial class App : Application
                 }
             }
         }
+    }
+
+    protected virtual void OnShutdownRequested(object? sender, ShutdownRequestedEventArgs e)
+    {
+        Server.Instance.Stop();
+        ShutdownRequested?.Invoke(sender, e);
     }
 }

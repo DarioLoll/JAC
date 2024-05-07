@@ -77,7 +77,9 @@ public class FileLogger : IServiceLogger
     private void LogToFile(string message, string fileName)
     {
         string logPath = Path.Combine(PathToLogFile, fileName);
-        File.AppendAllText(logPath, FormatLogMessage(message));
+        string formattedMessage = FormatLogMessage(message);
+        File.AppendAllText(logPath, formattedMessage);
+        Console.WriteLine(formattedMessage);
     }
     
     private string FormatLogMessage(string message) => $"{DateTime.Now:G}: {message}\n";

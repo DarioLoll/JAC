@@ -8,6 +8,9 @@ namespace JAC.Shared;
 public class SocketWriter
 {
     private readonly Socket _socket;
+    
+    private const int MaxCharacters = 4096; // 8092 Bytes, 1 Character = 2 Bytes
+
 
     public SocketWriter(Socket socket)
     {
@@ -32,7 +35,19 @@ public class SocketWriter
         var prefix = packet.ParameterlessPacketType == null 
             ? PacketBase.GetPrefix(packetType) 
             : PacketBase.GetPrefix(packet.ParameterlessPacketType.Value);
-        string message = $"{prefix} {JsonSerializer.Serialize(packet, packetType)}";
-        await Send(socket, message);
+        var json = JsonSerializer.Serialize(packet, packetType);
+        string packetAsString = $"{prefix} {json.Length + 1} {json}";
+        if (packetAsString.Length >= MaxCharacters)
+        {
+            // Fragment the packet if it's too large
+            var fragmentSize = MaxCharacters - 500;
+            var fragments = packetAsString.FragmentIntoPackets(fragmentSize);
+            foreach (var fragment in fragments)
+            {
+                Console.WriteLine($"Sending fragment {fragment.SequenceNumber} of {fragment.Id}");
+                await Send(socket, fragment);
+            }
+        }
+        else await Send(socket, packetAsString);
     }
 }

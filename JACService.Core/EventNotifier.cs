@@ -13,18 +13,12 @@ namespace JACService.Core;
 public class EventNotifier
 {
     public static EventNotifier Instance { get; } = new();
-
-    private IServiceLogger? _logger;
-
-    private EventNotifier()
-    {
-        if(ChatServiceDirectory.Loaded)
-            Initialize();
-        else
-            ChatServiceDirectory.DataLoaded += Initialize;
-    }
     
-    private void Initialize()
+    private static IServiceLogger? _logger;
+
+    private EventNotifier() { }
+    
+    public void Initialize()
     {
         _logger = Server.Instance.Logger;
         ChatServiceDirectory.Instance.UserJoinedChannel += OnUserJoinedChannel;

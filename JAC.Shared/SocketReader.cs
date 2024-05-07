@@ -6,6 +6,10 @@ namespace JAC.Shared;
 public class SocketReader
 {
     private readonly Socket _socket;
+    
+    private string _cache = string.Empty;
+    
+    private const int BufferSize = 8092;
 
     public SocketReader(Socket socket)
     {
@@ -14,15 +18,16 @@ public class SocketReader
     
     public async Task<string> Read()
     {
-        var buffer = new byte[1024];
-        await _socket.ReceiveAsync(buffer);
-        return Encoding.ASCII.GetString(buffer).Trim('\0');
+        return await Read(_socket);
     }
     
     public static async Task<string> Read(Socket socket)
     {
-        var buffer = new byte[1024];
+        var buffer = new byte[BufferSize];
         await socket.ReceiveAsync(buffer);
-        return Encoding.ASCII.GetString(buffer).Trim('\0');
+        var message = Encoding.ASCII.GetString(buffer).Trim('\0');
+        
+        return message;
     }
+
 }

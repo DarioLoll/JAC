@@ -33,12 +33,16 @@ public class ServerPacketHandler : PacketHandler
             { PacketBase.GetPrefix<CreateGroupPacket>(), CreateGroup },
             { PacketBase.GetPrefix<OpenPrivateChannelPacket>(), OpenPrivateChannel },
             { PacketBase.GetPrefix(ParameterlessPacket.GetChannels), GetChannels },
+            { PacketBase.GetPrefix(ParameterlessPacket.Disconnect), OnClientDisconnect },
             { PacketBase.GetPrefix<KickUserPacket>(), KickUser },
             { PacketBase.GetPrefix<LeaveGroupPacket>(), LeaveGroup },
+            { PacketBase.GetPrefix<GetNewMessagesPacket>(), GetNewMessages },
+            { PacketBase.GetPrefix<FragmentPacket>(), OnPacketFragmentReceived },
         };
         JsonSerializerOptions = JsonSerializerOptions.Default;
     }
     
+
     private bool CheckPacket(PacketBase? packet)
     {
         if (packet == null)
@@ -130,6 +134,11 @@ public class ServerPacketHandler : PacketHandler
             var result = channel.RemoveUser(user, Session.User!);
             ProcessActionResult(result);
         }
+        
+        private void OnClientDisconnect(string json)
+        {
+            Session.Close();
+        }
 
         private void GetChannels(string _)
         {
@@ -143,6 +152,27 @@ public class ServerPacketHandler : PacketHandler
             Session.Send(new GetChannelsResponsePacket
             {
                 Channels = ChatServiceDirectory.GetChannels(Session.User).ToCorrespondingChannelModels()
+            });
+        }
+        
+        private void GetNewMessages(string json)
+        {
+            GetNewMessagesPacket? packet = PacketBase.FromJson<GetNewMessagesPacket>(json, JsonSerializerOptions);
+            if (!CheckPacket(packet)) return;
+            var messages = new Dictionary<ulong, IEnumerable<Message>>();
+            foreach (var channelId in packet!.ChannelIds)
+            {
+                var channel = ChatServiceDirectory.Instance.GetChannel(channelId);
+                if (channel == null)
+                {
+                    Session.SendError(ErrorType.ChannelNotFound);
+                    return;
+                }
+                messages[channelId] = channel.GetMessages(Session.User!.LastSeen);
+            }
+            Session.Send(new GetNewMessagesResponsePacket
+            {
+                Messages = messages
             });
         }
 

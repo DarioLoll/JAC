@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using JAC.Models;
 using JAC.Shared;
+using JAC.Shared.Packets;
 
 namespace JAC.ViewModels;
 
@@ -47,13 +49,26 @@ public partial class MainViewModel : ViewModelBase
         {
             AddChannel(channel);
         }
+        SubscribeToEvents();
+    }
+
+    private void SubscribeToEvents()
+    {
+        Directory.ChannelAdded += AddChannel;
+        Directory.ChannelRemoved += RemoveChannel;
     }
     
+
     [RelayCommand]
-    private void SendMessage()
+    private async Task SendMessage()
     {
-        SelectedChannel.SendMessage(MessageContent);
+        var message = MessageContent;
         MessageContent = string.Empty;
+        await ChatClient.Instance.Send(new SendMessagePacket
+        {
+            ChannelId = SelectedChannel.Channel.Id,
+            Message = message
+        });
     }
     
     private void AddChannel(BaseChannel channel)

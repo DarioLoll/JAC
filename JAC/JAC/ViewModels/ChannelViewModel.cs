@@ -20,8 +20,20 @@ public partial class ChannelViewModel : ObservableObject
     {
         Channel = channel;
         Messages = new ObservableCollection<Message>(channel.Messages);
+        channel.MessageSent += message => Messages.Add(message);
+        channel.UsersChanged += OnUsersChanged;
+        if (channel is GroupChannel groupChannel)
+        {
+            groupChannel.NameChanged += () => OnPropertyChanged(nameof(Name));
+            groupChannel.DescriptionChanged += () => OnPropertyChanged(nameof(Description));
+        }
     }
-    
+
+    private void OnUsersChanged()
+    {
+        OnPropertyChanged(nameof(MemberCount));
+    }
+
     [RelayCommand]
     private void SelectChannel()
     {
@@ -68,9 +80,5 @@ public partial class ChannelViewModel : ObservableObject
     {
         Selected?.Invoke(this);
     }
-
-    public async void SendMessage(string messageContent)
-    {
-        Console.WriteLine("Sending message " + messageContent);
-    }
+    
 }

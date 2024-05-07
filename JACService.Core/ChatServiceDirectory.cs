@@ -12,9 +12,8 @@ public class ChatServiceDirectory
 {
     public static ChatServiceDirectory Instance { get; } = new();
     
-    [JsonConstructor] private ChatServiceDirectory() { }
+    [JsonIgnore] private Random _random = new();
     
-    private Random _random = new();
     [JsonInclude] private List<ChatUser> _users = new();
     [JsonInclude] private List<BaseChannel> _channels = new();
     
@@ -30,14 +29,11 @@ public class ChatServiceDirectory
     /// The single global channel that all users are a member of.
     /// </summary>
     [JsonIgnore] public BaseChannel? GlobalChannel => _channels.Find(c => c.Id == 0);
+    
     /// <summary>
     /// The path to the file where the chat data is saved.
     /// </summary>
     public string SavePath { get; } = "chatdata.json";
-    /// <summary>
-    /// Indicates whether the chat data has been loaded from the file yet.
-    /// </summary>
-    public static bool Loaded { get; private set; }
     
     /// <summary>
     /// Occurs when a user joins a channel.
@@ -63,10 +59,6 @@ public class ChatServiceDirectory
     /// Occurs when a group channel's description is changed.
     /// </summary>
     public event Action<GroupChannel>? GroupDescriptionChanged;
-    /// <summary>
-    /// Occurs when the chat data is loaded from the file.
-    /// </summary>
-    public static event Action? DataLoaded;
     
     /// <summary>
     /// Loads the chat data from the file at <see cref="SavePath"/>.
@@ -80,12 +72,15 @@ public class ChatServiceDirectory
             {
                 ChatServiceDirectory? loaded = JsonSerializer.Deserialize<ChatServiceDirectory>(json, new JsonSerializerOptions
                 {
-                    Converters = { new AbstractToConcreteConverter<IUser, ChatUser>() }
+                    Converters = { new AbstractToConcreteConverter<IUser, ChatUser>() },
+                    IncludeFields = true
                 });
                 if (loaded != null)
                 {
-                    _users = loaded._users;
-                    _channels = loaded._channels;
+                    foreach (var loadedChannel in loaded.Channels) 
+                        OnChannelCreated(loadedChannel);
+                    foreach (var loadedUser in loaded.Users)
+                        AddUser(loadedUser);
                 }
             }
             catch (Exception e)
@@ -96,27 +91,11 @@ public class ChatServiceDirectory
         // Create the global channel if it doesn't exist after loading from the file
         if(GlobalChannel == null)
         {
-            var demoUser = new ChatUser
-            {
-                Nickname = "DemoUser",
-                Channels = { 0 },
-                IsOnline = true
-            };
-            var globalChannel = new BaseChannel
-            {
-                Id = 0,
-                Created = DateTime.Now,
-                Messages = new List<Message>()
-                {
-                    new(demoUser.ToUserModel(), "Welcome to the global chat!"),
-                    new(demoUser.ToUserModel(), "Testing!"),
-                },
-            };
+            var globalChannel = new BaseChannel(0, DateTime.Now);
             OnChannelCreated(globalChannel);
         }
         BaseChannel.ChannelCreated += OnChannelCreated;
-        Loaded = true;
-        OnDataLoaded();
+        EventNotifier.Instance.Initialize();
     }
     
     private void OnChannelCreated(BaseChannel channel)
@@ -136,9 +115,9 @@ public class ChatServiceDirectory
     /// </summary>
     public void Save()
     {
-        JsonSerializerOptions options = new()
+        var options = new JsonSerializerOptions
         {
-            IgnoreReadOnlyProperties = true,
+            IncludeFields = true
         };
         string json = JsonSerializer.Serialize(this, options);
         File.WriteAllText(SavePath, json);
@@ -166,6 +145,7 @@ public class ChatServiceDirectory
                 OnUserLeftChannel(user, channel);
             }
         };
+        if (user.Channels.Contains(0)) return;
         GlobalChannel!.Users.Add(user);
         user.JoinChannel(GlobalChannel.Id);
     }
@@ -193,7 +173,7 @@ public class ChatServiceDirectory
     /// Gets all channels that a user is a member of.
     /// </summary>
     /// <returns>A list of all channels that the given user is a member of</returns>
-    public static IEnumerable<BaseChannel> GetChannels(IUser user) => Instance.Channels.Where(channel => user.Channels.Contains(channel.Id));
+    public static IEnumerable<BaseChannel> GetChannels(ChatUser user) => Instance.Channels.Where(channel => user.Channels.Contains(channel.Id));
     
     /// <summary>
     /// Generates a new unique channel id. Channels are identified by their unique id.
@@ -239,10 +219,5 @@ public class ChatServiceDirectory
     protected virtual void OnMessageSent(BaseChannel channel, Message message)
     {
         MessageSent?.Invoke(channel, message);
-    }
-
-    private static void OnDataLoaded()
-    {
-        DataLoaded?.Invoke();
     }
 }

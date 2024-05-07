@@ -22,6 +22,8 @@ public class Server
     public bool IsOnline { get; private set; }
     
     public ClientManager? ClientManager => _clientManager;
+
+    public event Func<Task>? Stopping;
     
 
     private Server()
@@ -49,25 +51,21 @@ public class Server
         }
     }
     
-    public bool Stop()
+    public async void Stop()
     {
-        if (!IsOnline || _socket == null)
-        {
+        if (!IsOnline || _socket == null) 
             Logger?.LogServiceError("Service is not running");
-            return false;
-        }
         try
         {
+            await OnStopping();
             _socket?.Close();
             IsOnline = false;
             Logger?.LogServiceInfo($"Service stopped on {IpAddress}:{Port}");
             ChatServiceDirectory.Instance.Save();
-            return true;
         }
         catch (Exception e)
         {
             Logger?.LogServiceError(e.Message);
-            return false;
         }
     }
     
@@ -76,5 +74,11 @@ public class Server
         Stop();
         return Start();
     }
-    
+
+    protected virtual async Task OnStopping()
+    {
+        var task = Stopping?.Invoke();
+        if (task != null)
+            await task;
+    }
 }

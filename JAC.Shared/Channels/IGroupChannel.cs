@@ -18,9 +18,9 @@ public interface IGroupChannel : IChannel
     public string Description { get; set; }
     
     /// <summary>
-    /// List of users who possess admin privileges in the group.
+    /// List of names of users who possess admin privileges in the group.
     /// </summary>
-    public IList<IUser> Admins { get; init; }
+    public IList<string> Admins { get; init; }
     
     /// <summary>
     /// <inheritdoc cref="GroupSettings"/>

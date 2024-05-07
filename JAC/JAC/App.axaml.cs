@@ -11,6 +11,8 @@ namespace JAC;
 
 public partial class App : Application
 {
+    public event EventHandler<ShutdownRequestedEventArgs>? ShutdownRequested; 
+    
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -21,6 +23,7 @@ public partial class App : Application
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            desktop.ShutdownRequested += OnShutdownRequested;
             desktop.MainWindow = new MainWindow
             {
                 DataContext = new Navigator()
@@ -36,5 +39,11 @@ public partial class App : Application
         bool connected = await ChatClient.Instance.Connect();
         Console.WriteLine($"Client connected: {connected}");
         base.OnFrameworkInitializationCompleted();
+    }
+
+    protected virtual void OnShutdownRequested(object? sender, ShutdownRequestedEventArgs e)
+    {
+        ChatClient.Instance.Close();
+        ShutdownRequested?.Invoke(sender, e);
     }
 }

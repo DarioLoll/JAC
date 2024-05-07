@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:i="https://github.com/projektanker/icons.avalonia"
              xmlns:viewModels="clr-namespace:JAC.ViewModels"
+             xmlns:views="clr-namespace:JAC.Views"
              xmlns:shared="clr-namespace:JAC.Shared;assembly=JAC.Shared"
              mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
              x:Class="JAC.Views.MainView"
@@ -168,7 +169,8 @@
                     <!-- Chat -->
                     <ScrollViewer Grid.Row="1"
                                   HorizontalAlignment="Stretch"
-                                  VerticalAlignment="Stretch">
+                                  VerticalAlignment="Stretch"
+                                  views:AutoScrollBehavior.AutoScroll="True">
                         <ItemsControl ItemsSource="{Binding SelectedChannel.Messages}">
                                 <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
@@ -191,7 +193,7 @@
                                                         <Grid ColumnDefinitions="*,Auto"
                                                                     HorizontalAlignment="Stretch">
                                                                 
-                                                                <TextBlock Text="{Binding Sender.Nickname}"
+                                                                <TextBlock Text="{Binding SenderName}"
                                                                            FontSize="20"
                                                                            Foreground="#EEEEEE"
                                                                            HorizontalAlignment="Left"

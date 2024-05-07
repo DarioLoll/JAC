@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
+using DynamicData;
 using JAC.Shared;
 using JAC.Shared.Channels;
 
@@ -11,39 +13,118 @@ namespace JAC.Models;
 /// </summary>
 public class GroupChannel : BaseChannel, IGroupChannel
 {
+    private string _name = string.Empty;
+    
     /// <summary>
     /// <inheritdoc cref="IGroupChannel.Name"/>
     /// </summary>
-    public string Name { get; set; }
+    public string Name 
+    { 
+        get => _name;
+        set
+        {
+            if (_name != value)
+            {
+                _name = value;
+                OnNameChanged();
+            }
+        }
+    }
+    
+    private string _description = string.Empty;
+    
     /// <summary>
     /// <inheritdoc cref="IGroupChannel.Description"/>
     /// </summary>
-    public string Description { get; set; } = string.Empty;
+    public string Description 
+    { 
+        get => _description;
+        set
+        {
+            if (_description != value)
+            {
+                _description = value;
+                OnDescriptionChanged();
+            }
+        }
+    }
+    
     /// <summary>
     /// <inheritdoc cref="IGroupChannel.Admins"/>
     /// </summary>
-    public IList<IUser> Admins { get; init; } = new List<IUser>();
+    public IList<string> Admins { get; init; } = new List<string>();
+    
     /// <summary>
     /// <inheritdoc cref="IGroupChannel.Settings"/>
     /// </summary>
     public GroupSettings Settings { get; init; }
     
-    public GroupChannel(ulong id, DateTime created, string name) : base(id, created)
+    public event Action? AdminsChanged;
+    
+    public event Action? DescriptionChanged;
+    
+    public event Action? NameChanged;
+
+    [JsonConstructor]
+    public GroupChannel(ulong id, string name, string description, DateTime created, IList<IUser> users, 
+        IList<Message> messages, GroupSettings settings) : base(id, created, users, messages)
     {
         Name = name;
+        Description = description;
+        Settings = settings;
     }
-    
+
     /// <summary>
-    /// Creates a GroupChannel (client-side) from a <see cref="GroupChannelModel"/>
+    /// Creates a GroupChannel (client-side) from a <see cref="GroupChannelProfile"/>
     /// (a model for a group channel that is used to transfer data between the server and the client)
     /// by copying the properties of the model.
     /// </summary>
-    public GroupChannel(GroupChannelModel model) : base(model)
+    public GroupChannel(GroupChannelProfile profile) : base(profile)
     {
-        Name = model.Name;
-        Description = model.Description;
-        Admins = model.Admins.Select(admin => new User(admin)).Cast<IUser>().ToList();
-        Settings = model.Settings;
+        Name = profile.Name;
+        Description = profile.Description;
+        Admins = profile.Admins.ToList();
+        Settings = profile.Settings;
     }
     
+    public void ChangeUserRank(IUser user)
+    {
+        if (Admins.Contains(user.Nickname))
+        {
+            Admins.Remove(user.Nickname);
+        }
+        else
+        {
+            Admins.Add(user.Nickname);
+        }
+        OnAdminsChanged();
+    }
+
+    public override void UpdateFromModel(ChannelProfileBase channelModel)
+    {
+        base.UpdateFromModel(channelModel);
+        if (channelModel is GroupChannelProfile groupChannelModel)
+        {
+            Name = groupChannelModel.Name;
+            Description = groupChannelModel.Description;
+            Admins.RemoveMany(Admins.Except(groupChannelModel.Admins));
+            Admins.AddRange(groupChannelModel.Admins.Except(Admins));
+            Settings.CopyFrom(groupChannelModel.Settings);
+        }
+    }
+
+    protected virtual void OnAdminsChanged()
+    {
+        AdminsChanged?.Invoke();
+    }
+
+    protected virtual void OnDescriptionChanged()
+    {
+        DescriptionChanged?.Invoke();
+    }
+
+    protected virtual void OnNameChanged()
+    {
+        NameChanged?.Invoke();
+    }
 }

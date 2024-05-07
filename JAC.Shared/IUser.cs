@@ -11,7 +11,12 @@ public interface IUser
     string Nickname { get; init; }
     
     /// <summary>
-    /// List of channel ids that the user is a member of.
+    /// The date and time when the user was last seen online.
     /// </summary>
-    IList<ulong> Channels { get; init; }
+    DateTime LastSeen { get; set; }
+    
+    /// <summary>
+    /// If the user is currently online.
+    /// </summary>
+    bool IsOnline { get; set; }
 }

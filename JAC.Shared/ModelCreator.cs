@@ -11,13 +11,12 @@ public static class ModelCreator
     /// <summary>
     /// Creates a ChannelModelBase from the given channel by copying its properties
     /// </summary>
-    public static ChannelModelBase ToChannelModelBase(this IChannel channel)
+    public static ChannelProfileBase ToChannelModelBase(this IChannel channel)
     {
-        return new ChannelModelBase
+        return new ChannelProfileBase
         {
             Id = channel.Id,
             Users = CreateUserModels(channel.Users),
-            Messages = channel.Messages,
             Created = channel.Created
         };
     }
@@ -25,17 +24,16 @@ public static class ModelCreator
     /// <summary>
     /// Creates a GroupChannelModel from the given group channel by copying its properties
     /// </summary>
-    public static GroupChannelModel ToGroupChannelModel(this IGroupChannel channel)
+    public static GroupChannelProfile ToGroupChannelModel(this IGroupChannel channel)
     {
-        return new GroupChannelModel
+        return new GroupChannelProfile
         {
             Id = channel.Id,
             Users = CreateUserModels(channel.Users),
-            Messages = channel.Messages.ToList(),
             Created = channel.Created,
             Name = channel.Name,
             Description = channel.Description,
-            Admins = CreateUserModels(channel.Admins),
+            Admins = channel.Admins.ToList(),
             Settings = channel.Settings
         };
     }
@@ -43,7 +41,7 @@ public static class ModelCreator
     /// <summary>
     /// Converts the given channel to the corresponding model based on its type by copying its properties
     /// </summary>
-    public static ChannelModelBase ToCorrespondingChannelModel(this IChannel channel)
+    public static ChannelProfileBase ToCorrespondingChannelModel(this IChannel channel)
     {
         if (channel is IGroupChannel groupChannel)
         {
@@ -55,7 +53,7 @@ public static class ModelCreator
     /// <summary>
     /// Converts the given channels to the corresponding models based on their types by copying their properties
     /// </summary>
-    public static IEnumerable<ChannelModelBase> ToCorrespondingChannelModels(this IEnumerable<IChannel> channels)
+    public static IEnumerable<ChannelProfileBase> ToCorrespondingChannelModels(this IEnumerable<IChannel> channels)
     {
         return channels.Select(channel => channel.ToCorrespondingChannelModel());
     }
@@ -63,19 +61,20 @@ public static class ModelCreator
     /// <summary>
     /// Converts the given user to a UserModel by copying its properties
     /// </summary>
-    public static UserModel ToUserModel(this IUser user)
+    public static UserProfile ToUserModel(this IUser user)
     {
-        return new UserModel
+        return new UserProfile
         {
             Nickname = user.Nickname,
-            Channels = user.Channels.ToList()
+            LastSeen = user.LastSeen,
+            IsOnline = user.IsOnline
         };
     }
 
     /// <summary>
     /// Converts the given users to UserModels by copying their properties
     /// </summary>
-    public static List<UserModel> CreateUserModels(IEnumerable<IUser> users)
+    public static List<UserProfile> CreateUserModels(IEnumerable<IUser> users)
     {
         return users.Select(user => ToUserModel(user)).ToList();
     }

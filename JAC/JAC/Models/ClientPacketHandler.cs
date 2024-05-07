@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
 using JAC.Shared;
+using JAC.Shared.Channels;
 using JAC.Shared.Packets;
 
 namespace JAC.Models;
@@ -10,26 +14,6 @@ namespace JAC.Models;
 public class ClientPacketHandler : PacketHandler
 {
     /// <summary>
-    /// Occurs when the user this client is logged in as is added to a channel
-    /// </summary>
-    public event Action<ChannelAddedPacket>? ChannelAdded;
-    /// <summary>
-    /// Occurs when the description of a channel this client is in is changed
-    /// </summary>
-    public event Action<ChannelDescriptionChangedPacket>? ChannelDescriptionChanged;
-    /// <summary>
-    /// Occurs when a member of a channel this client is in have changed
-    /// </summary>
-    public event Action<ChannelMembersChangedPacket>? ChannelMembersChanged;
-    /// <summary>
-    /// Occurs when the name of a channel this client is in is changed
-    /// </summary>
-    public event Action<ChannelNameChangedPacket>? ChannelNameChanged;
-    /// <summary>
-    /// Occurs when the user this client is logged in as is removed from a channel
-    /// </summary>
-    public event Action<ChannelRemovedPacket>? ChannelRemoved;
-    /// <summary>
     /// Occurs when the server responds to the client's request for channels
     /// </summary>
     public event Action<GetChannelsResponsePacket>? ChannelsReceived;
@@ -37,10 +21,6 @@ public class ClientPacketHandler : PacketHandler
     /// Occurs when this client logs in successfully
     /// </summary>
     public event Action<LoginSuccessPacket>? LoginSucceeded;
-    /// <summary>
-    /// Occurs when there has been a message sent to a channel this client is in
-    /// </summary>
-    public event Action<MessageReceivedPacket>? MessageReceived;
     
     public ClientPacketHandler()
     {
@@ -53,16 +33,48 @@ public class ClientPacketHandler : PacketHandler
             { PacketBase.GetPrefix<ChannelRemovedPacket>(), OnChannelRemoved },
             { PacketBase.GetPrefix<ErrorPacket>(), OnError },
             { PacketBase.GetPrefix<GetChannelsResponsePacket>(), OnChannelsReceived },
+            { PacketBase.GetPrefix<GetNewMessagesResponsePacket>(), OnNewMessagesReceived },
             { PacketBase.GetPrefix<LoginSuccessPacket>(), OnLoginSucceeded },
             { PacketBase.GetPrefix<MessageReceivedPacket>(), OnMessageReceived },
+            { PacketBase.GetPrefix(ParameterlessPacket.Disconnect), OnServerShutDown },
+            { PacketBase.GetPrefix<FragmentPacket>(), OnPacketFragmentReceived }
         };
+    }
+
+    
+
+    private void OnServerShutDown(string packetJson)
+    {
+        //later, some kind of notification will be displayed
+    }
+
+    private void OnNewMessagesReceived(string packetJson)
+    {
+        var packet = PacketBase.FromJson<GetNewMessagesResponsePacket>(packetJson, JsonSerializerOptions);
+        if (packet == null) return;
+        var directory = ChatClient.Instance.Directory;
+        foreach (var channelId in packet.Messages.Keys)   
+        {
+            var channel = directory?.GetChannel(channelId);
+            if (channel == null) return;
+            var messages = packet.Messages[channelId].ToList();
+            messages.Sort();
+            foreach (var message in messages)
+            {
+                channel.AddMessage(message);
+            }
+        }
+        
     }
 
     private void OnMessageReceived(string packetJson)
     {
         var packet = PacketBase.FromJson<MessageReceivedPacket>(packetJson, JsonSerializerOptions);
         if (packet == null) return;
-        MessageReceived?.Invoke(packet);
+        var directory = ChatClient.Instance.Directory;
+        var channel = directory?.GetChannel(packet.ChannelId);
+        if (channel == null) return;
+        channel.AddMessage(packet.Message);
     }
 
     private void OnLoginSucceeded(string packetJson)
@@ -72,10 +84,38 @@ public class ClientPacketHandler : PacketHandler
         LoginSucceeded?.Invoke(packet);
     }
 
-    private void OnChannelsReceived(string packetJson)
+    private async void OnChannelsReceived(string packetJson)
     {
         var packet = PacketBase.FromJson<GetChannelsResponsePacket>(packetJson, JsonSerializerOptions);
         if (packet == null) return;
+        var directory = ChatClient.Instance.Directory;
+        foreach (var savedChannel in directory!.Channels)
+        {
+            bool thisUserIsStillInSavedChannel = packet.Channels.Any(channel => channel.Id == savedChannel.Id);
+            if (!thisUserIsStillInSavedChannel)
+                directory.RemoveChannel(savedChannel.Id);
+        }
+        foreach (var channelModel in packet.Channels)
+        {
+            bool alreadyAdded = directory.Channels.Any(channel => channel.Id == channelModel.Id);
+            if (alreadyAdded)
+            {
+                var channel = directory.GetChannel(channelModel.Id);
+                channel!.UpdateFromModel(channelModel);
+            }
+            if (channelModel is GroupChannelProfile groupChannel)
+            {
+                directory.AddChannel(new GroupChannel(groupChannel));
+            }
+            else
+            {
+                directory.AddChannel(new BaseChannel(channelModel));
+            }
+        }
+        await ChatClient.Instance.Send(new GetNewMessagesPacket
+        {
+            ChannelIds = directory.Channels.Select(channel => channel.Id).ToList()
+        });
         ChannelsReceived?.Invoke(packet);
     }
 
@@ -90,34 +130,59 @@ public class ClientPacketHandler : PacketHandler
     {
         var packet = PacketBase.FromJson<ChannelRemovedPacket>(packetJson, JsonSerializerOptions);
         if (packet == null) return;
-        ChannelRemoved?.Invoke(packet);
+        var directory = ChatClient.Instance.Directory;
+        directory?.RemoveChannel(packet.RemovedChannelId);
     }
 
     private void OnChannelNameChanged(string packetJson)
     {
         var packet = PacketBase.FromJson<ChannelNameChangedPacket>(packetJson, JsonSerializerOptions);
         if (packet == null) return;
-        ChannelNameChanged?.Invoke(packet);
+        var directory = ChatClient.Instance.Directory;
+        var channel = directory?.GetChannel(packet.ChannelId);
+        if (channel is not GroupChannel gc) return;
+        gc.Name = packet.NewName;
     }
 
     private void OnChannelMembersChanged(string packetJson)
     {
         var packet = PacketBase.FromJson<ChannelMembersChangedPacket>(packetJson, JsonSerializerOptions);
         if (packet == null) return;
-        ChannelMembersChanged?.Invoke(packet);
+        var channel = ChatClient.Instance.Directory?.GetChannel(packet.ChannelId);
+        var user = packet.User;
+        if (channel == null) return;
+        switch (packet.ChangeType)
+        {
+            case ChannelMemberChangeType.Joined:
+                channel.AddUser(new User(user)); break;
+            case ChannelMemberChangeType.Left:
+                channel.RemoveUser(new User(user)); break;
+            case ChannelMemberChangeType.RankChanged:
+                ((GroupChannel)channel).ChangeUserRank(new User(user)); break;
+        }
     }
 
     private void OnChannelDescriptionChanged(string packetJson)
     {
         var packet = PacketBase.FromJson<ChannelDescriptionChangedPacket>(packetJson, JsonSerializerOptions);
         if (packet == null) return;
-        ChannelDescriptionChanged?.Invoke(packet);
+        var directory = ChatClient.Instance.Directory;
+        var channel = directory?.GetChannel(packet.ChannelId);
+        if (channel is not GroupChannel gc) return;
+        gc.Description = packet.NewDescription;
     }
 
     private void OnChannelAdded(string packetJson)
     {
         var packet = PacketBase.FromJson<ChannelAddedPacket>(packetJson, JsonSerializerOptions);
         if (packet == null) return;
-        ChannelAdded?.Invoke(packet);
+        var directory = ChatClient.Instance.Directory;
+        var channelModel = packet.NewChannel;
+        var channel = channelModel switch
+        {
+            GroupChannelProfile gcm => new GroupChannel(gcm),
+            _ => new BaseChannel(channelModel)
+        };
+        directory?.AddChannel(channel);
     }
 }
