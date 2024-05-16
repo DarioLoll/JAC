@@ -993,3 +993,86 @@
 07/05/2024 22:35:43: Service is not running
 07/05/2024 22:35:43: Disconnecting all 1 clients...
 07/05/2024 22:35:43: Service stopped on 127.0.0.1:8080
+16/05/2024 22:07:38: Service started on 127.0.0.1:8080
+16/05/2024 22:07:43: Disconnecting all 0 clients...
+16/05/2024 22:07:43: Service stopped on 127.0.0.1:8080
+16/05/2024 22:07:49: Service is not running
+16/05/2024 22:07:49: Disconnecting all 0 clients...
+16/05/2024 22:07:49: Service stopped on 127.0.0.1:8080
+16/05/2024 22:07:52: Service started on 127.0.0.1:8080
+16/05/2024 22:07:56: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+16/05/2024 22:07:58: Disconnecting all 0 clients...
+16/05/2024 22:07:58: Disconnecting all 0 clients...
+16/05/2024 22:07:58: Service stopped on 127.0.0.1:8080
+16/05/2024 22:23:08: Service started on 127.0.0.1:8080
+16/05/2024 22:23:09: Disconnecting all 0 clients...
+16/05/2024 22:23:09: Service stopped on 127.0.0.1:8080
+16/05/2024 22:23:12: Service started on 127.0.0.1:8080
+16/05/2024 22:23:15: Disconnecting all 0 clients...
+16/05/2024 22:23:15: Disconnecting all 0 clients...
+16/05/2024 22:23:15: Service stopped on 127.0.0.1:8080
+16/05/2024 22:23:16: Service started on 127.0.0.1:8080
+16/05/2024 22:23:26: Client connected from 127.0.0.1:12017
+16/05/2024 22:25:18: Service started on 127.0.0.1:8080
+16/05/2024 22:25:24: Client connected from 127.0.0.1:12049
+16/05/2024 22:26:18: Service started on 127.0.0.1:8080
+16/05/2024 22:26:24: Client connected from 127.0.0.1:12073
+16/05/2024 22:27:50: Service started on 127.0.0.1:8080
+16/05/2024 22:28:00: Client connected from 127.0.0.1:12099
+16/05/2024 22:29:08: User fgfg joined channel 0.
+16/05/2024 22:31:24: Service started on 127.0.0.1:8080
+16/05/2024 22:31:33: Client connected from 127.0.0.1:12127
+16/05/2024 22:31:37: User tester joined channel 0.
+16/05/2024 22:32:19: Client connected from 127.0.0.1:12138
+16/05/2024 22:32:23: User tester2 joined channel 0.
+16/05/2024 22:34:51: Service started on 127.0.0.1:8080
+16/05/2024 22:34:58: Client connected from 127.0.0.1:12161
+16/05/2024 22:35:01: User gfhffgdh joined channel 0.
+16/05/2024 22:35:37: Service started on 127.0.0.1:8080
+16/05/2024 22:35:43: Client connected from 127.0.0.1:12181
+16/05/2024 22:35:46: User tzuhkj joined channel 0.
+16/05/2024 22:36:08: Disconnecting all 1 clients...
+16/05/2024 22:36:08: Client disconnected from 127.0.0.1:12181
+16/05/2024 22:36:08: Service stopped on 127.0.0.1:8080
+16/05/2024 22:36:39: Service started on 127.0.0.1:8080
+16/05/2024 22:36:46: Client connected from 127.0.0.1:12204
+16/05/2024 22:36:56: User efrgthjk joined channel 0.
+16/05/2024 22:38:42: Service started on 127.0.0.1:8080
+16/05/2024 22:38:49: Client connected from 127.0.0.1:12230
+16/05/2024 22:39:12: Disconnecting all 0 clients...
+16/05/2024 22:39:12: Client disconnected from 127.0.0.1:12230
+16/05/2024 22:39:29: Service started on 127.0.0.1:8080
+16/05/2024 22:39:36: Client connected from 127.0.0.1:40278
+16/05/2024 22:44:18: Service started on 127.0.0.1:8080
+16/05/2024 22:44:26: Client connected from 127.0.0.1:40331
+16/05/2024 22:45:30: Service started on 127.0.0.1:8080
+16/05/2024 22:45:38: Client connected from 127.0.0.1:40365
+16/05/2024 22:45:47: User tester4 joined channel 0.
+16/05/2024 22:46:47: Client disconnected from 127.0.0.1:40365
+16/05/2024 22:47:16: Disconnecting all 0 clients...
+16/05/2024 22:47:16: Service stopped on 127.0.0.1:8080
+16/05/2024 22:47:17: Service is not running
+16/05/2024 22:51:06: Service is not running
+16/05/2024 22:51:53: Service started on 127.0.0.1:8080
+16/05/2024 22:51:59: Client connected from 127.0.0.1:40413
+16/05/2024 22:52:03: User dario1 joined channel 0.
+16/05/2024 22:52:32: Client disconnected from 127.0.0.1:40413
+16/05/2024 22:52:32: An established connection was aborted by the software in your host machine.
+16/05/2024 22:52:36: Disconnecting all 0 clients...
+16/05/2024 22:52:36: Service stopped on 127.0.0.1:8080
+16/05/2024 22:52:36: Service is not running
+16/05/2024 22:55:01: Service started on 127.0.0.1:8080
+16/05/2024 22:55:07: Client connected from 127.0.0.1:40445
+16/05/2024 22:55:24: Client connected from 127.0.0.1:40448
+16/05/2024 22:56:15: Client disconnected from 127.0.0.1:40448
+16/05/2024 22:56:16: Client disconnected from 127.0.0.1:40445
+16/05/2024 22:56:41: Disconnecting all 0 clients...
+16/05/2024 22:56:41: Service stopped on 127.0.0.1:8080
+16/05/2024 22:56:43: Service is not running
+16/05/2024 22:59:40: Service started on 127.0.0.1:8080
+16/05/2024 22:59:45: Client connected from 127.0.0.1:40472
+16/05/2024 22:59:49: User tester1 joined channel 0.
+16/05/2024 22:59:59: Client connected from 127.0.0.1:40475
+16/05/2024 23:00:06: User tester2 joined channel 0.
+16/05/2024 23:00:26: Client disconnected from 127.0.0.1:40475
+16/05/2024 23:00:31: Client disconnected from 127.0.0.1:40472

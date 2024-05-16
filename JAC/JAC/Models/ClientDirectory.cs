@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using Avalonia;
+using System.Threading.Tasks;
 using JAC.Shared;
 
 namespace JAC.Models;
@@ -32,10 +31,19 @@ public class ClientDirectory
     /// </summary>
     public const string DirectoryPath = "chatdata-{username}.json";
 
+    /// <summary>
+    /// The list of channels this user is in (received from the server)
+    /// </summary>
     public List<BaseChannel> Channels { get; private set; }
     
+    /// <summary>
+    /// Occurs when a channel is added to the list of channels this user is in
+    /// </summary>
     public event Action<BaseChannel>? ChannelAdded;
     
+    /// <summary>
+    /// Occurs when a channel is removed from the list of channels this user is in
+    /// </summary>
     public event Action<BaseChannel>? ChannelRemoved;
 
     /// <summary>
@@ -43,6 +51,8 @@ public class ClientDirectory
     /// </summary>
     public void AddChannel(BaseChannel channel)
     {
+        var existingChannel = Channels.Find(c => c.Id == channel.Id);
+        if (existingChannel != null) Channels.Remove(existingChannel);
         Channels.Add(channel);
         OnChannelAdded(channel);
     }
@@ -59,18 +69,24 @@ public class ClientDirectory
         }
     }
     
-    public void SaveData()
+    /// <summary>
+    /// Saves the data to a file at <see cref="DirectoryPath"/> asynchronously
+    /// </summary>
+    public async Task SaveDataAsync()
     {
         var path = DirectoryPath.Replace("{username}", User.Nickname);
         var data = JsonSerializer.Serialize(this);
-        File.WriteAllText(path, data);
+        await File.WriteAllTextAsync(path, data);
     }
     
-    public void LoadData()
+    /// <summary>
+    /// Loads the data from a file at <see cref="DirectoryPath"/> asynchronously
+    /// </summary>
+    public async Task LoadDataAsync()
     {
         var path = DirectoryPath.Replace("{username}", User.Nickname);
         if (!File.Exists(path)) return;
-        var data = File.ReadAllText(path);
+        var data = await File.ReadAllTextAsync(path);
         var options = new JsonSerializerOptions
         {
             Converters = { new AbstractToConcreteConverter<IUser, User>() }
@@ -80,6 +96,11 @@ public class ClientDirectory
         Channels = directory.Channels;
     }
     
+    /// <summary>
+    /// Gets a channel by its ID
+    /// </summary>
+    /// <param name="id">The ID of the channel to get</param>
+    /// <returns>The channel with the specified ID, or null if it doesn't exist</returns>
     public BaseChannel? GetChannel(ulong id)
     {
         return Channels.Find(channel => channel.Id == id);

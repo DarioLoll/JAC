@@ -1,7 +1,4 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-
-namespace JAC.Shared;
+﻿namespace JAC.Shared;
 
 /// <summary>
 /// Represents a message sent in a channel.

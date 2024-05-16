@@ -1,5 +1,4 @@
 ﻿using JAC.Shared;
-using JAC.Shared.Channels;
 using JAC.Shared.Packets;
 using JACService.Core.Contracts;
 
@@ -32,7 +31,7 @@ public class EventNotifier
 
     private void OnGroupDescriptionChanged(GroupChannel group)
     {
-        _logger?.LogServiceInfo($"Group {group.Id} description changed to \"{group.Description}\".");
+        _logger?.LogServiceInfoAsync($"Group {group.Id} description changed to \"{group.Description}\".");
         var updatePacket = new ChannelDescriptionChangedPacket
         {
             ChannelId = group.Id,
@@ -43,7 +42,7 @@ public class EventNotifier
 
     private void OnGroupNameChanged(GroupChannel group)
     {
-        _logger?.LogServiceInfo($"Group {group.Id} name changed to \"{group.Name}\".");
+        _logger?.LogServiceInfoAsync($"Group {group.Id} name changed to \"{group.Name}\".");
         var updatePacket = new ChannelNameChangedPacket
         {
             ChannelId = group.Id,
@@ -64,7 +63,7 @@ public class EventNotifier
 
     private void OnUserRankChanged(ChatUser user, BaseChannel channel)
     {
-        _logger?.LogServiceInfo($"User {user.Nickname} rank in channel {channel.Id} changed.");
+        _logger?.LogServiceInfoAsync($"User {user.Nickname} rank in channel {channel.Id} changed.");
         var updatePacket = new ChannelMembersChangedPacket
         {
             ChangeType = ChannelMemberChangeType.RankChanged,
@@ -76,7 +75,7 @@ public class EventNotifier
 
     private void OnUserLeftChannel(ChatUser user, BaseChannel channel)
     {
-        _logger?.LogServiceInfo($"User {user.Nickname} left channel {channel.Id}.");
+        _logger?.LogServiceInfoAsync($"User {user.Nickname} left channel {channel.Id}.");
         var updatePacket = new ChannelMembersChangedPacket
         {
             ChangeType = ChannelMemberChangeType.Left,
@@ -94,7 +93,7 @@ public class EventNotifier
 
     private void OnUserJoinedChannel(ChatUser user, BaseChannel channel)
     {
-        _logger?.LogServiceInfo($"User {user.Nickname} joined channel {channel.Id}.");
+        _logger?.LogServiceInfoAsync($"User {user.Nickname} joined channel {channel.Id}.");
         var groupUpdatePacket = new ChannelMembersChangedPacket
         {
             ChangeType = ChannelMemberChangeType.Joined,

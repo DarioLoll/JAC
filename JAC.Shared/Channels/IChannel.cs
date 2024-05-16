@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-
-namespace JAC.Shared.Channels;
+﻿namespace JAC.Shared.Channels;
 
 /// <summary>
 /// Represents a chat channel, which is a group of users that can send messages to each other.

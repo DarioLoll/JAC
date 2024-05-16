@@ -4,15 +4,14 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using JACService.Core;
-using JACService.ViewModels;
 using JACService.Views;
 
 namespace JACService;
 
-public partial class App : Application
+public class App : Application
 {
     public const string DefaultLogPath = "../../../";
-    private FileLogger _logger;
+    private FileLogger _logger = null!;
     
     public event EventHandler<ShutdownRequestedEventArgs>? ShutdownRequested;
 
@@ -27,12 +26,12 @@ public partial class App : Application
         AvaloniaXamlLoader.Load(this);
     }
 
-    public override void OnFrameworkInitializationCompleted()
+    public override async void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.ShutdownRequested += OnShutdownRequested;
-            _logger = FileLogger.LoadFromConfig(DefaultLogPath);
+            _logger = await FileLogger.LoadFromConfigAsync(DefaultLogPath);
             string[]? args = desktop.Args;
             Server server = Server.Instance;
             server.Logger = _logger;
@@ -41,6 +40,7 @@ public partial class App : Application
             {
                 DataContext = new Navigator(server, _logger),
             };
+            desktop.MainWindow.Show();
         }
 
         base.OnFrameworkInitializationCompleted();
@@ -75,9 +75,9 @@ public partial class App : Application
         }
     }
 
-    protected virtual void OnShutdownRequested(object? sender, ShutdownRequestedEventArgs e)
+    protected virtual async void OnShutdownRequested(object? sender, ShutdownRequestedEventArgs e)
     {
-        Server.Instance.Stop();
+        await Server.Instance.StopAsync();
         ShutdownRequested?.Invoke(sender, e);
     }
 }

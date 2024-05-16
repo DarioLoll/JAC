@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace JAC.Shared;
 
@@ -34,6 +35,19 @@ public class PacketBase
     /// </summary>
     public ParameterlessPacket? ParameterlessPacketType { get; }
     
+    public static Type GetType(string prefix)
+    {
+        var packetName = prefix.Substring(1);
+        bool isParameterless = Enum.TryParse<ParameterlessPacket>(packetName, true, out _);
+        if (isParameterless)
+            return typeof(PacketBase);
+        var typeName = packetName + "Packet";
+        var type = Type.GetType($"JAC.Shared.Packets.{typeName}", true, true);
+        if (type == null)
+            throw new SerializationException($"Could not find a packet type with the prefix {prefix}");
+        return type;
+    }
+    
     /// <summary>
     /// Gets the prefix of a parameterless packet.
     /// </summary>
@@ -44,12 +58,14 @@ public class PacketBase
         return "/" + parameterlessPacketType.ToString().ToLower();
     }
     
-    public PacketBase()
+    public string GetPrefix()
     {
-        ParameterlessPacketType = null;
+        return ParameterlessPacketType.HasValue ? GetPrefix(ParameterlessPacketType.Value) : GetPrefix(GetType());
     }
+    
 
-    public PacketBase(ParameterlessPacket parameterlessPacketType)
+    [JsonConstructor]
+    public PacketBase(ParameterlessPacket? parameterlessPacketType = null)
     {
         ParameterlessPacketType = parameterlessPacketType;
     }

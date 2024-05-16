@@ -1,5 +1,4 @@
-﻿using System.Runtime.Serialization;
-using System.Text.Json;
+﻿using System.Text.Json;
 using JACService.Core.Contracts;
 
 namespace JACService.Core;
@@ -20,7 +19,7 @@ public class FileLogger : IServiceLogger
         set
         {
             _overwriteOnRestart = value;
-            SaveConfig();
+            _ = Task.Run(SaveConfigAsync);
         }
     }
 
@@ -35,7 +34,7 @@ public class FileLogger : IServiceLogger
         set
         {
             _option = value;
-            SaveConfig();
+            _ = Task.Run(SaveConfigAsync);
         }
     }
 
@@ -56,59 +55,37 @@ public class FileLogger : IServiceLogger
         PathToLogFile = pathToLogFile;
     }
     
-    public void LogServiceInfo(string message) => LogToFile(message, "ServiceLogs.txt");
+    public Task LogServiceInfoAsync(string message) => LogToFileAsync(message, "ServiceLogs.txt");
 
-    public void LogServiceError(string message)
+    public Task LogServiceErrorAsync(string message)
     {
         if(Option is FileLoggerOption.SeparateErrorFile or FileLoggerOption.SeparateAllFiles)
-            LogToFile(message, ErrorLogFileName);
-        else
-            LogToFile(message, MainLogFileName);
+            return LogToFileAsync(message, ErrorLogFileName);
+        return LogToFileAsync(message, MainLogFileName);
     }
 
-    public void LogRequestInfo(string message)
+    public Task LogRequestInfoAsync(string message)
     {
         if(Option is FileLoggerOption.SeparateRequestFile or FileLoggerOption.SeparateAllFiles)
-            LogToFile(message, RequestLogFileName);
-        else
-            LogToFile(message, MainLogFileName);
+            return LogToFileAsync(message, RequestLogFileName);
+        return LogToFileAsync(message, MainLogFileName);
     }
     
-    private void LogToFile(string message, string fileName)
+    private async Task LogToFileAsync(string message, string fileName)
     {
         string logPath = Path.Combine(PathToLogFile, fileName);
         string formattedMessage = FormatLogMessage(message);
-        File.AppendAllText(logPath, formattedMessage);
+        await File.AppendAllTextAsync(logPath, formattedMessage);
         Console.WriteLine(formattedMessage);
     }
     
     private string FormatLogMessage(string message) => $"{DateTime.Now:G}: {message}\n";
-    
-    public void ClearLogs()
-    {
-        File.WriteAllText(Path.Combine(PathToLogFile, MainLogFileName), string.Empty);
-        File.WriteAllText(Path.Combine(PathToLogFile, ErrorLogFileName), string.Empty);
-        File.WriteAllText(Path.Combine(PathToLogFile, RequestLogFileName), string.Empty);
-    }
 
-    private void SaveConfig()
+    private async Task SaveConfigAsync()
     {
         string configPath = Path.Combine(PathToLogFile, ConfigFileName);
         string json = JsonSerializer.Serialize(this);
-        File.WriteAllText(configPath, json);
-    }
-
-    public void LoadConfig()
-    {
-        string configPath = Path.Combine(PathToLogFile, ConfigFileName);
-        if (!File.Exists(configPath)) return;
-        string json = File.ReadAllText(configPath);
-        var savedLogger = JsonSerializer.Deserialize<FileLogger>(json);
-        if (savedLogger is null) return;
-        OverwriteOnRestart = savedLogger.OverwriteOnRestart;
-        Option = savedLogger.Option;
-        if (OverwriteOnRestart) 
-            ClearLogs();
+        await File.WriteAllTextAsync(configPath, json);
     }
     
     /// <summary>
@@ -116,11 +93,11 @@ public class FileLogger : IServiceLogger
     /// </summary>
     /// <param name="pathToLogFile">The path to the directory where the config file is stored, excluding the file name</param>
     /// <returns>A FileLogger configured as saved in the config file, or a new, default FileLogger if the config file was not found</returns>
-    public static FileLogger LoadFromConfig(string pathToLogFile)
+    public static async Task<FileLogger> LoadFromConfigAsync(string pathToLogFile)
     {
         string configPath = Path.Combine(pathToLogFile, ConfigFileName);
         if (!File.Exists(configPath)) return new FileLogger(pathToLogFile);
-        string json = File.ReadAllText(configPath);
+        string json = await File.ReadAllTextAsync(configPath);
         return JsonSerializer.Deserialize<FileLogger>(json) ?? new FileLogger(pathToLogFile);
     }
 }

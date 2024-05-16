@@ -11,7 +11,7 @@ public class PacketHandler
     /// <summary>
     /// The mappings of packet prefixes to methods that handle those.
     /// </summary>
-    protected Dictionary<string, Action<string>> PacketHandlers { get; init; } = new();
+    protected Dictionary<string, Func<PacketBase, Task>> PacketHandlers { get; init; } = new();
 
     /// <summary>
     /// A cache of packet fragments that are waiting for all fragments to arrive.
@@ -38,16 +38,16 @@ public class PacketHandler
         return allSequenceNumbersArrived;
     }
     
-    protected void OnPacketFragmentReceived(string json)
+    protected Task OnPacketFragmentReceived(PacketBase packetBase)
     {
-        var packet = PacketBase.FromJson<FragmentPacket>(json, JsonSerializerOptions);
-        if (packet == null) return;
+        var packet = packetBase as FragmentPacket;
+        if (packet == null) return Task.CompletedTask;
         if (!PacketFragmentCache.ContainsKey(packet.Id))
             PacketFragmentCache.Add(packet.Id, new List<FragmentPacket>());
-        if (!AllFragmentsReceived(packet.Id)) return;
+        if (!AllFragmentsReceived(packet.Id)) return Task.CompletedTask;
         var fragments = PacketFragmentCache[packet.Id];
         var fullPacket = fragments.AssemblePacket();
-        Handle(fullPacket);
+        return HandleAsync(fullPacket);
     }
 
     public JsonSerializerOptions JsonSerializerOptions { get; init; } = new();
@@ -55,15 +55,12 @@ public class PacketHandler
     /// <summary>
     /// Handles an incoming packet by calling the appropriate method based on the packet prefix.
     /// </summary>
-    /// <param name="packetAsString">The string received on the socket which looks like this: "/{prefix} {json}"</param>
-    public void Handle(string packetAsString)
+    /// <param name="packet">The packet to handle</param>
+    public async Task HandleAsync(PacketBase packet)
     {
-        Console.WriteLine($"------------------------\n\rPacket received: {packetAsString}\n\r------------------------\n\r");
-        var parts = packetAsString.Split(' ', 2);
-        if (parts.Length < 1) return;
-        var prefix = parts[0];
-        var parameters = parts.Length > 1 ? parts[1] : string.Empty;
+        var prefix = packet.GetPrefix();
+        Console.WriteLine($"------------------------\n\rPacket received: {prefix}\n\r------------------------\n\r");
         if (PacketHandlers.TryGetValue(prefix, out var handler))
-            handler(parameters);
+            await handler(packet);
     }
 }

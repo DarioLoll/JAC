@@ -11,7 +11,7 @@ public class ActionResult<T> : ActionReport
     /// <summary>
     /// The result of the action.
     /// </summary>
-    public T? Result { get; init; } = default;
+    public T? Result { get; init; }
     
     /// <returns>An ActionResult indicating a success and containing the given result as the result of the action</returns>
     public static ActionResult<T> Succeeded(T result) => new() { Success = true, Result = result };

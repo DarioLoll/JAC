@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-
-namespace JAC.Shared.Channels;
+﻿namespace JAC.Shared.Channels;
 
 /// <summary>
 /// Represents the settings for a <see cref="IGroupChannel"/>
@@ -19,7 +17,7 @@ public class GroupSettings
     /// If only admins can send messages to the group.
     /// <remarks>Default is false</remarks>
     /// </summary>
-    public bool ReadOnlyForMembers { get; set; } = false;
+    public bool ReadOnlyForMembers { get; set; }
     
     /// <summary>
     /// If everyone, including non-admins, can add new members to the group.
@@ -31,7 +29,7 @@ public class GroupSettings
     /// If everyone, including non-admins, can change the name of the group.
     /// <remarks>Default is false</remarks>
     /// </summary>
-    public bool AllowMembersToChangeName { get; set; } = false;
+    public bool AllowMembersToChangeName { get; set; }
     
     /// <summary>
     /// If everyone, including non-admins, can change the description of the group.

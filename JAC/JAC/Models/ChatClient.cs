@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text.Json;
-using System.Text.Json.Serialization.Metadata;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using JAC.Shared;
-using JAC.Shared.Channels;
 using JAC.Shared.Packets;
 using JAC.ViewModels;
 
@@ -19,9 +16,27 @@ namespace JAC.Models;
 public class ChatClient
 {
     private Socket? _socket;
+    private SocketReader? _socketReader;
+    /// <summary>
+    /// The canceller for the listening task (breaking the loop)
+    /// </summary>
+    private CancellationTokenSource _listeningCanceller = new();
+    
+    /// <summary>
+    /// Whether the client is currently connected to the server
+    /// </summary>
     public bool IsConnected => _socket?.Connected ?? false;
+    /// <summary>
+    /// The singleton instance of the client
+    /// </summary>
     public static ChatClient Instance { get; } = new ChatClient();
+    /// <summary>
+    /// The default IP address to connect to if not specified
+    /// </summary>
     public static IPAddress DefaultIpAddress => IPAddress.Loopback;
+    /// <summary>
+    /// The default port to connect to if not specified
+    /// </summary>
     public const ushort DefaultPort = 8080;
     
     /// <summary>
@@ -53,12 +68,13 @@ public class ChatClient
         try
         {
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            _socketReader = new SocketReader(_socket);
             var finalEndPoint = endPoint ?? new IPEndPoint(DefaultIpAddress, DefaultPort);
             await _socket.ConnectAsync(finalEndPoint);
-            Listen();
+            StartListening();
             return true;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return false;
         }
@@ -67,22 +83,19 @@ public class ChatClient
     /// <summary>
     /// Starts listening for incoming packets asynchronously
     /// </summary>
-    private async void Listen()
+    private void StartListening()
     {
-        try
+        _socketReader!.PacketReceived += HandlePacket;
+        //fire and forget - the listening task is not awaited (it will run on a separate thread)
+        _ = Task.Run(() => _socketReader.ListenAsync(_listeningCanceller.Token));
+    }
+    
+    private async Task HandlePacket(PacketBase packet)
+    {
+        await Dispatcher.UIThread.InvokeAsync(async () =>
         {
-            while (IsConnected)
-            {
-                var request = await SocketReader.Read(_socket!);
-                Dispatcher.UIThread.Invoke(() => PacketHandler.Handle(request));
-            }
-            Close();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Exception occured: {e.Message}");
-            Close();
-        }
+            await PacketHandler.HandleAsync(packet);
+        });
     }
     
     /// <summary>
@@ -102,7 +115,7 @@ public class ChatClient
     /// <summary>
     /// Shuts down the client and closes the connection
     /// </summary>
-    public async void Close()
+    public async Task Close()
     {
         if (IsConnected)
         {
@@ -113,22 +126,23 @@ public class ChatClient
         OnDisconnected();
     }
 
-    private async void OnLoggedIn(LoginSuccessPacket packet)
+    private async Task OnLoggedIn(LoginSuccessPacket packet)
     {
         Directory = new ClientDirectory(new User(packet.User));
-        Directory.LoadData();
+        await Directory.LoadDataAsync();
         PacketHandler.ChannelsReceived += OnChannelsReceived;
         await Send(new PacketBase(ParameterlessPacket.GetChannels));
     }
 
-    private void OnChannelsReceived(GetChannelsResponsePacket packet)
+    private Task OnChannelsReceived(GetChannelsResponsePacket packet)
     {
         Navigator.Instance.SwitchToViewModel(new MainViewModel(Directory!));
+        return Task.CompletedTask;
     }
 
     protected virtual void OnDisconnected()
     {
-        Directory?.SaveData();
+        Directory?.SaveDataAsync();
         Disconnected?.Invoke();
     }
 }

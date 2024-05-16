@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using JAC.Shared;
-using JAC.Shared.Channels;
 
 namespace JACService.Core;
 
@@ -63,11 +62,11 @@ public class ChatServiceDirectory
     /// <summary>
     /// Loads the chat data from the file at <see cref="SavePath"/>.
     /// </summary>
-    public void Load()
+    public async Task LoadAsync()
     {
         if (File.Exists(SavePath))
         {
-            string json = File.ReadAllText(SavePath);
+            string json = await File.ReadAllTextAsync(SavePath);
             try
             {
                 ChatServiceDirectory? loaded = JsonSerializer.Deserialize<ChatServiceDirectory>(json, new JsonSerializerOptions
@@ -85,7 +84,8 @@ public class ChatServiceDirectory
             }
             catch (Exception e)
             {
-                Server.Instance.Logger?.LogServiceError($"Chat Directory failed to load: {e.Message}");
+                await Task.Run(() => 
+                    Server.Instance.Logger?.LogServiceErrorAsync($"Chat Directory failed to load: {e.Message}"));
             }
         }
         // Create the global channel if it doesn't exist after loading from the file
@@ -113,14 +113,14 @@ public class ChatServiceDirectory
     /// <summary>
     /// Saves the chat data to the file at <see cref="SavePath"/>.
     /// </summary>
-    public void Save()
+    public async Task SaveAsync()
     {
         var options = new JsonSerializerOptions
         {
             IncludeFields = true
         };
         string json = JsonSerializer.Serialize(this, options);
-        File.WriteAllText(SavePath, json);
+        await File.WriteAllTextAsync(SavePath, json);
     }
 
     /// <summary>

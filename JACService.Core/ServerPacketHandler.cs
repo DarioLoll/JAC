@@ -1,7 +1,5 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization.Metadata;
 using JAC.Shared;
-using JAC.Shared.Channels;
 using JAC.Shared.Packets;
 
 namespace JACService.Core;
@@ -22,7 +20,7 @@ public class ServerPacketHandler : PacketHandler
         Session = session;
         // Assigning methods to packet prefixes.
         // For example, if a packet with the prefix "/sendmessage" is received, the method SendMessage will be called.
-        PacketHandlers = new Dictionary<string, Action<string>>
+        PacketHandlers = new Dictionary<string, Func<PacketBase, Task>>
         {
             { PacketBase.GetPrefix<SendMessagePacket>(), SendMessage},
             { PacketBase.GetPrefix<LoginPacket>(), HandleLogin },
@@ -43,166 +41,166 @@ public class ServerPacketHandler : PacketHandler
     }
     
 
-    private bool CheckPacket(PacketBase? packet)
+    private async Task<bool> CheckPacket(PacketBase? packet)
     {
         if (packet == null)
         {
-            Session.SendError(ErrorType.UnknownError);
+            await Session.SendError(ErrorType.UnknownError);
             return false;
         }
         if (Session.User == null)
         {
-            Session.SendError(ErrorType.NotLoggedIn);
+            await Session.SendError(ErrorType.NotLoggedIn);
             return false;
         }
         return true;
     }
     
-    private void ProcessActionResult(ActionReport report)
+    private async Task ProcessActionResult(ActionReport report)
     {
         if(!report.Success)
-            Session.SendError(report.Error!.Value);
+            await Session.SendError(report.Error!.Value);
     }
 
     //Below are the methods that handle the packets. First, the packet is deserialized,
     //then the packet is checked for validity, and then the appropriate action is taken.
     #region Methods for handling packets
     
-        private void SendMessage(string json)
+        private async Task SendMessage(PacketBase packetBase)
         {
-            SendMessagePacket? packet = PacketBase.FromJson<SendMessagePacket>(json, JsonSerializerOptions);
-            if (!CheckPacket(packet)) return;
+            SendMessagePacket? packet = packetBase as SendMessagePacket;
+            if (!await CheckPacket(packet)) return;
             //The channel to which the message is sent is found by its id.
             var channel = ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
             if(channel == null)
             {
-                Session.SendError(ErrorType.ChannelNotFound);
+                await Session.SendError(ErrorType.ChannelNotFound);
                 return;
             }
             var result = channel.SendMessage(Session.User!, packet.Message);
-            ProcessActionResult(result);
+            await ProcessActionResult(result);
         }
 
-        private void OpenPrivateChannel(string json)
+        private async Task OpenPrivateChannel(PacketBase packetBase)
         {
-            OpenPrivateChannelPacket? packet = PacketBase.FromJson<OpenPrivateChannelPacket>(json, JsonSerializerOptions);
-            if (!CheckPacket(packet)) return;
+            OpenPrivateChannelPacket? packet = packetBase as OpenPrivateChannelPacket;
+            if (!await CheckPacket(packet)) return;
             //The user who this user wants to open a private channel with is found by their username.
             var otherUser = ChatServiceDirectory.Instance.FindUser(packet!.Username);
             if(otherUser == null)
             {
-                Session.SendError(ErrorType.UserNotFound);
+                await Session.SendError(ErrorType.UserNotFound);
                 return;
             }
             var result = BaseChannel.OpenPrivateChannel(ChatServiceDirectory.Instance.GetNextChannelId(), Session.User!, otherUser);
-            ProcessActionResult(result);
+            await ProcessActionResult(result);
         }
 
-        private void LeaveGroup(string json)
+        private async Task LeaveGroup(PacketBase packetBase)
         {
-            LeaveGroupPacket? packet = PacketBase.FromJson<LeaveGroupPacket>(json, JsonSerializerOptions);
-            if (!CheckPacket(packet)) return;
+            LeaveGroupPacket? packet = packetBase as LeaveGroupPacket;
+            if (!await CheckPacket(packet)) return;
             //The channel from which the user wants to leave is found by its id.
             var channel = ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
             if (channel == null)
             {
-                Session.SendError(ErrorType.ChannelNotFound);
+                await Session.SendError(ErrorType.ChannelNotFound);
                 return;
             }
             var result = channel.RemoveUser(Session.User!, Session.User!);
-            ProcessActionResult(result);
+            await ProcessActionResult(result);
         }
 
-        private void KickUser(string json)
+        private async Task KickUser(PacketBase packetBase)
         {
-            KickUserPacket? packet = PacketBase.FromJson<KickUserPacket>(json, JsonSerializerOptions);
-            if (!CheckPacket(packet)) return;
+            KickUserPacket? packet = packetBase as KickUserPacket;
+            if (!await CheckPacket(packet)) return;
             //The packet contains the username of the user to be kicked and
             //the id of the channel from which they are to be kicked.
             var channel = ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
             if (channel == null)
             {
-                Session.SendError(ErrorType.ChannelNotFound);
+                await Session.SendError(ErrorType.ChannelNotFound);
                 return;
             }
             var user = ChatServiceDirectory.Instance.FindUser(packet.Username);
             if(user == null)
             {
-                Session.SendError(ErrorType.UserNotFound);
+                await Session.SendError(ErrorType.UserNotFound);
                 return;
             }
             var result = channel.RemoveUser(user, Session.User!);
-            ProcessActionResult(result);
+            await ProcessActionResult(result);
         }
         
-        private void OnClientDisconnect(string json)
+        private async Task OnClientDisconnect(PacketBase packetBase)
         {
-            Session.Close();
+            await Session.Close();
         }
 
-        private void GetChannels(string _)
+        private async Task GetChannels(PacketBase packetBase)
         {
             //The get channels packet does not contain any data, it is just a string "/getchannels".
             if (Session.User == null)
             {
-                Session.SendError(ErrorType.NotLoggedIn);
+                await Session.SendError(ErrorType.NotLoggedIn);
                 return;
             }
             //The user's channels are sent to the client via a get channels response packet.
-            Session.Send(new GetChannelsResponsePacket
+            await Session.Send(new GetChannelsResponsePacket
             {
                 Channels = ChatServiceDirectory.GetChannels(Session.User).ToCorrespondingChannelModels()
             });
         }
         
-        private void GetNewMessages(string json)
+        private async Task GetNewMessages(PacketBase packetBase)
         {
-            GetNewMessagesPacket? packet = PacketBase.FromJson<GetNewMessagesPacket>(json, JsonSerializerOptions);
-            if (!CheckPacket(packet)) return;
+            GetNewMessagesPacket? packet = packetBase as GetNewMessagesPacket;
+            if (!await CheckPacket(packet)) return;
             var messages = new Dictionary<ulong, IEnumerable<Message>>();
             foreach (var channelId in packet!.ChannelIds)
             {
                 var channel = ChatServiceDirectory.Instance.GetChannel(channelId);
                 if (channel == null)
                 {
-                    Session.SendError(ErrorType.ChannelNotFound);
+                    await Session.SendError(ErrorType.ChannelNotFound);
                     return;
                 }
                 messages[channelId] = channel.GetMessages(Session.User!.LastSeen);
             }
-            Session.Send(new GetNewMessagesResponsePacket
+            await Session.Send(new GetNewMessagesResponsePacket
             {
                 Messages = messages
             });
         }
 
-        private void CreateGroup(string json)
+        private async Task CreateGroup(PacketBase packetBase)
         {
-            CreateGroupPacket? packet = PacketBase.FromJson<CreateGroupPacket>(json, JsonSerializerOptions);
-            if (!CheckPacket(packet)) return;
+            CreateGroupPacket? packet = packetBase as CreateGroupPacket;
+            if (!await CheckPacket(packet)) return;
             ulong channelId = ChatServiceDirectory.Instance.GetNextChannelId();
             var result = GroupChannel.CreateGroupChannel(channelId, Session.User!, packet!.Name, packet.Description);
-            ProcessActionResult(result);
+            await ProcessActionResult(result);
         }
         
 
-        private void HandleLogin(string json)
+        private async Task HandleLogin(PacketBase packetBase)
         {
-            LoginPacket? packet = PacketBase.FromJson<LoginPacket>(json, JsonSerializerOptions);
+            LoginPacket? packet = packetBase as LoginPacket;
             if (packet == null)
             {
-                Session.SendError(ErrorType.UnknownError);
+                await Session.SendError(ErrorType.UnknownError);
                 return;
             }
             if (Session.User != null)
             {
-                Session.SendError(ErrorType.AlreadyLoggedIn);
+                await Session.SendError(ErrorType.AlreadyLoggedIn);
                 return;
             }
             ChatUser? user = ChatServiceDirectory.Instance.FindUser(packet.Username);
             if(user != null && user.IsOnline)
             {
-                Session.SendError(ErrorType.UsernameTaken);
+                await Session.SendError(ErrorType.UsernameTaken);
                 return;
             }
             if (user == null)
@@ -220,77 +218,77 @@ public class ServerPacketHandler : PacketHandler
                 Session.User = user;
                 user.IsOnline = true;
             }
-            Session.Send(new LoginSuccessPacket{ User = Session.User.ToUserModel() });
+            await Session.Send(new LoginSuccessPacket{ User = Session.User.ToUserModel() });
         }
         
-        private void AddUserToGroup(string json)
+        private async Task AddUserToGroup(PacketBase packetBase)
         {
-            AddUserToGroupPacket? packet = PacketBase.FromJson<AddUserToGroupPacket>(json, JsonSerializerOptions);
-            if (!CheckPacket(packet)) return;
+            AddUserToGroupPacket? packet = packetBase as AddUserToGroupPacket;
+            if (!await CheckPacket(packet)) return;
             //The user to be added to the group is found by their username.
             //The group is found by its id.
             ChatUser? user = ChatServiceDirectory.Instance.FindUser(packet!.Username);
             var channel = (GroupChannel?)ChatServiceDirectory.Instance.GetChannel(packet.ChannelId);
             if(channel == null)
             {
-                Session.SendError(ErrorType.ChannelNotFound);
+                await Session.SendError(ErrorType.ChannelNotFound);
                 return;
             }
             if(user == null)
             {
-                Session.SendError(ErrorType.UserNotFound);
+                await Session.SendError(ErrorType.UserNotFound);
                 return;
             }
             var result = channel.AddUser(user, Session.User!);
-            ProcessActionResult(result);
+            await ProcessActionResult(result);
         }
         
-        private void ChangeGroupName(string json)
+        private async Task ChangeGroupName(PacketBase packetBase)
         {
-            ChangeGroupNamePacket? packet = PacketBase.FromJson<ChangeGroupNamePacket>(json, JsonSerializerOptions);
-            if (!CheckPacket(packet)) return;
+            ChangeGroupNamePacket? packet = packetBase as ChangeGroupNamePacket;
+            if (!await CheckPacket(packet)) return;
             var channel = (GroupChannel?)ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
             if(channel == null)
             {
-                Session.SendError(ErrorType.ChannelNotFound);
+                await Session.SendError(ErrorType.ChannelNotFound);
                 return;
             }
             var result = channel.ChangeName(Session.User!, packet.NewName);
-            ProcessActionResult(result);
+            await ProcessActionResult(result);
         }
         
-        private void ChangeGroupDescription(string json)
+        private async Task ChangeGroupDescription(PacketBase packetBase)
         {
-            ChangeGroupDescriptionPacket? packet = PacketBase.FromJson<ChangeGroupDescriptionPacket>(json, JsonSerializerOptions);
-            if (!CheckPacket(packet)) return;
+            ChangeGroupDescriptionPacket? packet = packetBase as ChangeGroupDescriptionPacket;
+            if (!await CheckPacket(packet)) return;
             var channel = (GroupChannel?)ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
             if(channel == null)
             {
-                Session.SendError(ErrorType.ChannelNotFound);
+                await Session.SendError(ErrorType.ChannelNotFound);
                 return;
             }
             var result = channel.ChangeDescription(Session.User!, packet.Description);
-            ProcessActionResult(result);
+            await ProcessActionResult(result);
         }
         
-        private void ChangeUserRank(string json)
+        private async Task ChangeUserRank(PacketBase packetBase)
         {
-            ChangeUserRankPacket? packet = PacketBase.FromJson<ChangeUserRankPacket>(json, JsonSerializerOptions);
-            if (!CheckPacket(packet)) return;
+            ChangeUserRankPacket? packet = packetBase as ChangeUserRankPacket;
+            if (!await CheckPacket(packet)) return;
             var channel = (GroupChannel?)ChatServiceDirectory.Instance.GetChannel(packet!.ChannelId);
             if(channel == null)
             {
-                Session.SendError(ErrorType.ChannelNotFound);
+                await Session.SendError(ErrorType.ChannelNotFound);
                 return;
             }
             var user = ChatServiceDirectory.Instance.FindUser(packet.Username);
             if(user == null)
             {
-                Session.SendError(ErrorType.UserNotFound);
+                await Session.SendError(ErrorType.UserNotFound);
                 return;
             }
             var result = channel.ChangeUserRank(user, Session.User!);
-            ProcessActionResult(result);
+            await ProcessActionResult(result);
         }
     
     #endregion

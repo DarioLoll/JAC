@@ -10,13 +10,12 @@ public static class PacketFragmentManager
     /// unique across the entire session, since there are only 65536 possible values.
     /// But it only needs to be unique within a given time frame.
     /// </summary>
-    private static ushort _currentPacketId = 0;
+    private static ushort _currentPacketId;
 
     /// <summary>
     /// Fragments a packet into smaller packets <see cref="FragmentPacket"/>.
     /// </summary>
     /// <param name="packetJson">The packet to fragment (including the prefix).</param>
-    /// <param name="packetType">The type of the packet to fragment.</param>
     /// <param name="fragmentSize">The size of each fragment in characters.</param>
     /// <returns>The fragments of the packet.</returns>
     public static IEnumerable<FragmentPacket> FragmentIntoPackets(this string packetJson, int fragmentSize)
@@ -51,11 +50,13 @@ public static class PacketFragmentManager
     /// </summary>
     /// <param name="fragments">The fragments making up the packet.</param>
     /// <returns>The assembled packet as "/{prefix} {packet json}".</returns>
-    public static string AssemblePacket(this IEnumerable<FragmentPacket> fragments)
+    public static PacketBase AssemblePacket(this IEnumerable<FragmentPacket> fragments)
     {
         var fragmentsList = fragments.ToList();
         fragmentsList.Sort();
         var packetData = string.Join("", fragmentsList.Select(f => f.Data));
-        return packetData;
+        var prefix = packetData.Split(' ', 2)[0];
+        var packet = JsonSerializer.Deserialize(packetData, PacketBase.GetType(prefix));
+        return packet as PacketBase ?? throw new JsonException("Could not deserialize packet.");
     }
 }

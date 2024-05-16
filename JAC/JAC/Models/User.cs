@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Serialization;
 using JAC.Shared;
 
@@ -38,6 +36,10 @@ public class User : IUser
         IsOnline = isOnline;
     }
 
+    /// <summary>
+    /// Updates the user's properties from a model.
+    /// </summary>
+    /// <param name="userProfile">The model to update from.</param>
     public void UpdateFromModel(UserProfile userProfile)
     {
         LastSeen = userProfile.LastSeen;

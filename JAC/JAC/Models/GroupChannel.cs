@@ -59,10 +59,19 @@ public class GroupChannel : BaseChannel, IGroupChannel
     /// </summary>
     public GroupSettings Settings { get; init; }
     
+    /// <summary>
+    /// Occurs when the admins of the group channel change.
+    /// </summary>
     public event Action? AdminsChanged;
     
+    /// <summary>
+    /// Occurs when the description of the group channel changes.
+    /// </summary>
     public event Action? DescriptionChanged;
     
+    /// <summary>
+    /// Occurs when the name of the group channel changes.
+    /// </summary>
     public event Action? NameChanged;
 
     [JsonConstructor]
@@ -87,6 +96,11 @@ public class GroupChannel : BaseChannel, IGroupChannel
         Settings = profile.Settings;
     }
     
+    /// <summary>
+    /// Changes the rank of a user in the group channel
+    /// (If the user is an admin, they will be demoted, otherwise promoted)
+    /// </summary>
+    /// <param name="user">The user to change the rank of.</param>
     public void ChangeUserRank(IUser user)
     {
         if (Admins.Contains(user.Nickname))
@@ -100,6 +114,10 @@ public class GroupChannel : BaseChannel, IGroupChannel
         OnAdminsChanged();
     }
 
+    /// <summary>
+    /// Updates the group channel with the data from the model.
+    /// </summary>
+    /// <param name="channelModel">The model to update the group channel with.</param>
     public override void UpdateFromModel(ChannelProfileBase channelModel)
     {
         base.UpdateFromModel(channelModel);

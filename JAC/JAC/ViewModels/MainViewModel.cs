@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DynamicData;
 using JAC.Models;
 using JAC.Shared;
 using JAC.Shared.Packets;
@@ -20,7 +18,7 @@ public partial class MainViewModel : ViewModelBase
     
     [ObservableProperty] private ObservableCollection<ChannelViewModel> _channels = new();
     
-    private ChannelViewModel? _selectedChannel = null!;
+    private ChannelViewModel? _selectedChannel;
     
     public bool ChannelSelected => _selectedChannel != null;
     
@@ -28,7 +26,7 @@ public partial class MainViewModel : ViewModelBase
     
     public ChannelViewModel SelectedChannel
     {
-        get => _selectedChannel;
+        get => _selectedChannel!;
         set
         {
             if (_selectedChannel != value)

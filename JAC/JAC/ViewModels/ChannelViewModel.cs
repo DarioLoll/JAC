@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using JAC.Models;
 using JAC.Shared;
-using JAC.Shared.Packets;
 
 namespace JAC.ViewModels;
 
@@ -43,9 +41,10 @@ public partial class ChannelViewModel : ObservableObject
     public string Name => Channel switch
     {
         GroupChannel gc => gc.Name,
-        BaseChannel bc => bc.Id == 0 
+        { } bc => bc.Id == 0 
             ? "Global Chat" 
-            : bc.Users.FirstOrDefault(user => user.Nickname != ChatClient.Instance.Directory?.User.Nickname)?.Nickname,
+            : bc.Users.FirstOrDefault(user => user.Nickname != ChatClient.Instance.Directory?.User.Nickname)?.Nickname
+            ?? "{Error}",
     };
     
     public bool IsGroupChannel => Channel is GroupChannel;

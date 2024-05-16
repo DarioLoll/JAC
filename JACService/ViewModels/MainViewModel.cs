@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using JACService.Core;
 using JACService.Core.Contracts;
@@ -7,8 +8,8 @@ namespace JACService.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
-    private Server _server;
-    private IServiceLogger _logger;
+    private readonly Server _server;
+    private readonly IServiceLogger _logger;
 
     public MainViewModel(Server server, IServiceLogger logger)
     {
@@ -33,15 +34,15 @@ public partial class MainViewModel : ViewModelBase
         set => SetProperty(ref _serverStatus, value);
     }
     
-    [RelayCommand] private void StartServer()
+    [RelayCommand] private async Task StartServer()
     {
-        _server.Start();
+        await _server.StartAsync();
         OnServerStatusChanged();
     }
 
-    [RelayCommand] private void StopServer()
+    [RelayCommand] private async Task StopServer()
     {
-        _server.Stop();
+        await _server.StopAsync();
         OnServerStatusChanged();
         (_logger as FileLogger)!.OverwriteOnRestart = true;
     }

@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using JAC.Shared;
-using ReactiveUI;
 
 namespace JAC.ViewModels;
 

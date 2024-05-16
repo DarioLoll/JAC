@@ -8,7 +8,7 @@ public partial class Navigator : ObservableObject
     [ObservableProperty]
     private ViewModelBase _currentViewModel;
 
-    public static Navigator Instance { get; private set; }
+    public static Navigator Instance { get; private set; } = null!;
     
     public Navigator()
     {

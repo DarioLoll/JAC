@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
+using System.Threading.Tasks;
 using JAC.Shared;
 using JAC.Shared.Channels;
 using JAC.Shared.Packets;
@@ -16,11 +15,11 @@ public class ClientPacketHandler : PacketHandler
     /// <summary>
     /// Occurs when the server responds to the client's request for channels
     /// </summary>
-    public event Action<GetChannelsResponsePacket>? ChannelsReceived;
+    public event Func<GetChannelsResponsePacket, Task>? ChannelsReceived;
     /// <summary>
     /// Occurs when this client logs in successfully
     /// </summary>
-    public event Action<LoginSuccessPacket>? LoginSucceeded;
+    public event Func<LoginSuccessPacket, Task>? LoginSucceeded;
     
     public ClientPacketHandler()
     {
@@ -43,20 +42,21 @@ public class ClientPacketHandler : PacketHandler
 
     
 
-    private void OnServerShutDown(string packetJson)
+    private Task OnServerShutDown(PacketBase packetBase)
     {
         //later, some kind of notification will be displayed
+        return Task.CompletedTask;
     }
 
-    private void OnNewMessagesReceived(string packetJson)
+    private Task OnNewMessagesReceived(PacketBase packetBase)
     {
-        var packet = PacketBase.FromJson<GetNewMessagesResponsePacket>(packetJson, JsonSerializerOptions);
-        if (packet == null) return;
+        var packet = packetBase as GetNewMessagesResponsePacket;
+        if (packet == null) return Task.CompletedTask;
         var directory = ChatClient.Instance.Directory;
         foreach (var channelId in packet.Messages.Keys)   
         {
             var channel = directory?.GetChannel(channelId);
-            if (channel == null) return;
+            if (channel == null) return Task.CompletedTask;
             var messages = packet.Messages[channelId].ToList();
             messages.Sort();
             foreach (var message in messages)
@@ -64,29 +64,32 @@ public class ClientPacketHandler : PacketHandler
                 channel.AddMessage(message);
             }
         }
-        
+
+        return Task.CompletedTask;
     }
 
-    private void OnMessageReceived(string packetJson)
+    private Task OnMessageReceived(PacketBase packetBase)
     {
-        var packet = PacketBase.FromJson<MessageReceivedPacket>(packetJson, JsonSerializerOptions);
-        if (packet == null) return;
+        var packet = packetBase as MessageReceivedPacket;
+        if (packet == null) return Task.CompletedTask;
         var directory = ChatClient.Instance.Directory;
         var channel = directory?.GetChannel(packet.ChannelId);
-        if (channel == null) return;
+        if (channel == null) return Task.CompletedTask;
         channel.AddMessage(packet.Message);
+        return Task.CompletedTask;
     }
 
-    private void OnLoginSucceeded(string packetJson)
+    private Task OnLoginSucceeded(PacketBase packetBase)
     {
-        var packet = PacketBase.FromJson<LoginSuccessPacket>(packetJson, JsonSerializerOptions);
-        if (packet == null) return;
+        var packet = packetBase as LoginSuccessPacket;
+        if (packet == null) return Task.CompletedTask;
         LoginSucceeded?.Invoke(packet);
+        return Task.CompletedTask;
     }
 
-    private async void OnChannelsReceived(string packetJson)
+    private async Task OnChannelsReceived(PacketBase packetBase)
     {
-        var packet = PacketBase.FromJson<GetChannelsResponsePacket>(packetJson, JsonSerializerOptions);
+        var packet = packetBase as GetChannelsResponsePacket;
         if (packet == null) return;
         var directory = ChatClient.Instance.Directory;
         foreach (var savedChannel in directory!.Channels)
@@ -119,38 +122,41 @@ public class ClientPacketHandler : PacketHandler
         ChannelsReceived?.Invoke(packet);
     }
 
-    private void OnError(string packetJson)
+    private Task OnError(PacketBase packetBase)
     {
-        ErrorPacket? packet = PacketBase.FromJson<ErrorPacket>(packetJson, JsonSerializerOptions);
-        if (packet == null) return;
+        ErrorPacket? packet = packetBase as ErrorPacket;
+        if (packet == null) return Task.CompletedTask;
         Navigator.Instance.CurrentViewModel.DisplayError(packet.ErrorType);
+        return Task.CompletedTask;
     }
 
-    private void OnChannelRemoved(string packetJson)
+    private Task OnChannelRemoved(PacketBase packetBase)
     {
-        var packet = PacketBase.FromJson<ChannelRemovedPacket>(packetJson, JsonSerializerOptions);
-        if (packet == null) return;
+        var packet = packetBase as ChannelRemovedPacket;
+        if (packet == null) return Task.CompletedTask;
         var directory = ChatClient.Instance.Directory;
         directory?.RemoveChannel(packet.RemovedChannelId);
+        return Task.CompletedTask;
     }
 
-    private void OnChannelNameChanged(string packetJson)
+    private Task OnChannelNameChanged(PacketBase packetBase)
     {
-        var packet = PacketBase.FromJson<ChannelNameChangedPacket>(packetJson, JsonSerializerOptions);
-        if (packet == null) return;
+        var packet = packetBase as ChannelNameChangedPacket;
+        if (packet == null) return Task.CompletedTask;
         var directory = ChatClient.Instance.Directory;
         var channel = directory?.GetChannel(packet.ChannelId);
-        if (channel is not GroupChannel gc) return;
+        if (channel is not GroupChannel gc) return Task.CompletedTask;
         gc.Name = packet.NewName;
+        return Task.CompletedTask;
     }
 
-    private void OnChannelMembersChanged(string packetJson)
+    private Task OnChannelMembersChanged(PacketBase packetBase)
     {
-        var packet = PacketBase.FromJson<ChannelMembersChangedPacket>(packetJson, JsonSerializerOptions);
-        if (packet == null) return;
+        var packet = packetBase as ChannelMembersChangedPacket;
+        if (packet == null) return Task.CompletedTask;
         var channel = ChatClient.Instance.Directory?.GetChannel(packet.ChannelId);
         var user = packet.User;
-        if (channel == null) return;
+        if (channel == null) return Task.CompletedTask;
         switch (packet.ChangeType)
         {
             case ChannelMemberChangeType.Joined:
@@ -160,22 +166,25 @@ public class ClientPacketHandler : PacketHandler
             case ChannelMemberChangeType.RankChanged:
                 ((GroupChannel)channel).ChangeUserRank(new User(user)); break;
         }
+
+        return Task.CompletedTask;
     }
 
-    private void OnChannelDescriptionChanged(string packetJson)
+    private Task OnChannelDescriptionChanged(PacketBase packetBase)
     {
-        var packet = PacketBase.FromJson<ChannelDescriptionChangedPacket>(packetJson, JsonSerializerOptions);
-        if (packet == null) return;
+        var packet = packetBase as ChannelDescriptionChangedPacket;
+        if (packet == null) return Task.CompletedTask;
         var directory = ChatClient.Instance.Directory;
         var channel = directory?.GetChannel(packet.ChannelId);
-        if (channel is not GroupChannel gc) return;
+        if (channel is not GroupChannel gc) return Task.CompletedTask;
         gc.Description = packet.NewDescription;
+        return Task.CompletedTask;
     }
 
-    private void OnChannelAdded(string packetJson)
+    private Task OnChannelAdded(PacketBase packetBase)
     {
-        var packet = PacketBase.FromJson<ChannelAddedPacket>(packetJson, JsonSerializerOptions);
-        if (packet == null) return;
+        var packet = packetBase as ChannelAddedPacket;
+        if (packet == null) return Task.CompletedTask;
         var directory = ChatClient.Instance.Directory;
         var channelModel = packet.NewChannel;
         var channel = channelModel switch
@@ -184,5 +193,6 @@ public class ClientPacketHandler : PacketHandler
             _ => new BaseChannel(channelModel)
         };
         directory?.AddChannel(channel);
+        return Task.CompletedTask;
     }
 }

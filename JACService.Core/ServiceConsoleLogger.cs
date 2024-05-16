@@ -3,14 +3,29 @@ using JACService.Core.Contracts;
 
 namespace JACService.Core;
 
+/// <summary>
+/// A service that logs information and errors to the console
+/// </summary>
 public class ServiceConsoleLogger : IServiceLogger
 {
-    public void LogServiceInfo(string message) => Log(message, ConsoleColor.Green);
+    public Task LogServiceInfoAsync(string message)
+    {
+        Log(message, ConsoleColor.Green);
+        return Task.CompletedTask;
+    }
 
-    public void LogServiceError(string message) => Log(message, ConsoleColor.Red);
+    public Task LogServiceErrorAsync(string message)
+    {
+        Log(message, ConsoleColor.Red);
+        return Task.CompletedTask;
+    }
 
-    public void LogRequestInfo(string message) => Log(message, ConsoleColor.Yellow);
-    
+    public Task LogRequestInfoAsync(string message)
+    {
+        Log(message, ConsoleColor.Yellow);
+        return Task.CompletedTask;
+    }
+
     private void Log(string message, ConsoleColor color)
     {
         Console.ForegroundColor = color;

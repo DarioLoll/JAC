@@ -1,13 +1,12 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
 
 namespace JAC.Views;
 
 public class AutoScrollBehavior : AvaloniaObject
 {
     public static readonly AttachedProperty<bool> AutoScrollProperty =
-        AvaloniaProperty.RegisterAttached<AutoScrollBehavior, ScrollViewer, bool>("AutoScroll", false);
+        AvaloniaProperty.RegisterAttached<AutoScrollBehavior, ScrollViewer, bool>("AutoScroll");
 
     static AutoScrollBehavior()
     {
@@ -40,7 +39,7 @@ public class AutoScrollBehavior : AvaloniaObject
 
     public static bool GetAutoScroll(AvaloniaObject obj)
     {
-        return (bool)obj.GetValue(AutoScrollProperty);
+        return obj.GetValue(AutoScrollProperty);
     }
 
     public static void SetAutoScroll(AvaloniaObject obj, bool value)

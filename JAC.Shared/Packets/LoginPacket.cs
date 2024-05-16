@@ -1,7 +1,4 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-
-namespace JAC.Shared.Packets;
+﻿namespace JAC.Shared.Packets;
 
 /// <summary>
 /// Packet to log in to the chat system.

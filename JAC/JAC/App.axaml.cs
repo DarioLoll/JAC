@@ -1,5 +1,4 @@
 using System;
-using System.Net.Sockets;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -9,7 +8,7 @@ using JAC.Views;
 
 namespace JAC;
 
-public partial class App : Application
+public class App : Application
 {
     public event EventHandler<ShutdownRequestedEventArgs>? ShutdownRequested; 
     
@@ -41,9 +40,9 @@ public partial class App : Application
         base.OnFrameworkInitializationCompleted();
     }
 
-    protected virtual void OnShutdownRequested(object? sender, ShutdownRequestedEventArgs e)
+    protected virtual async void OnShutdownRequested(object? sender, ShutdownRequestedEventArgs e)
     {
-        ChatClient.Instance.Close();
+        await ChatClient.Instance.Close();
         ShutdownRequested?.Invoke(sender, e);
     }
 }
