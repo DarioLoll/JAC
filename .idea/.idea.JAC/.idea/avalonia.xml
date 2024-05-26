@@ -3,7 +3,12 @@
   <component name="AvaloniaProject">
     <option name="projectPerEditor">
       <map>
+        <entry key="JAC.UILib/Colors/DefaultColors.axaml" value="JAC/JAC.Browser/JAC.Browser.csproj" />
+        <entry key="JAC.UILib/Colors/DefaultDark.axaml" value="JAC/JAC.Browser/JAC.Browser.csproj" />
+        <entry key="JAC.UILib/Styles/DefaultStyles.axaml" value="JAC/JAC.Browser/JAC.Browser.csproj" />
+        <entry key="JAC.UILib/testcontrol.axaml" value="JAC/JAC.Browser/JAC.Browser.csproj" />
         <entry key="JAC/JAC/App.axaml" value="JAC/JAC.Browser/JAC.Browser.csproj" />
+        <entry key="JAC/JAC/Views/AddChannelDialog.axaml" value="JAC/JAC.Desktop/JAC.Desktop.csproj" />
         <entry key="JAC/JAC/Views/LoginView.axaml" value="JAC/JAC.Desktop/JAC.Desktop.csproj" />
         <entry key="JAC/JAC/Views/MainView.axaml" value="JAC/JAC.Desktop/JAC.Desktop.csproj" />
         <entry key="JAC/JAC/Views/MainWindow.axaml" value="JAC/JAC.Browser/JAC.Browser.csproj" />

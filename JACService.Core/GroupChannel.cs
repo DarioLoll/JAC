@@ -202,4 +202,9 @@ public class GroupChannel : BaseChannel, IGroupChannel
     {
         RankChanged?.Invoke(user);
     }
+
+    public override string ToString()
+    {
+        return $"Group {Name}\n\r{base.ToString()}";
+    }
 }

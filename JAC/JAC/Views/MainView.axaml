@@ -8,250 +8,270 @@
              xmlns:shared="clr-namespace:JAC.Shared;assembly=JAC.Shared"
              mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
              x:Class="JAC.Views.MainView"
-             x:DataType="viewModels:MainViewModel">
-    
-    <!-- Main Grid -->
-    <!-- 1. Column - Profile, Channels -->
-    <!-- 2. Column - Chat, Chat Input -->
-    <Grid ColumnDefinitions="*,3*">
-        
-        <!-- Left Grid -->
-        <!-- 1. Row - App Header -->
-        <!-- 2. Row - Profile, Settings -->
-        <!-- 3. Row - Channels -->
-        <Grid Column="0" 
-              Background="#050510"
-              RowDefinitions="Auto,Auto,*"
-              >
-            
-            <!-- App Header -->
-            <StackPanel Orientation="Horizontal"
-                        Margin="20"
-                        HorizontalAlignment="Center">
-                <i:Icon Value="mdi-chat-plus-outline"
-                        FontSize="50" 
-                        Margin="0 0 20 0"></i:Icon>
-                <TextBlock Text="JAC"
-                           FontFamily="/Assets/Fonts/Cakecafe.ttf#Cakecafe"
-                           FontSize="30" 
-                           TextAlignment="Center"
-                           Foreground="White" 
-                           Margin="10,0,0,0"
-                           VerticalAlignment="Center"></TextBlock>
-            </StackPanel>
-            
-            <!-- Profile -->
-            <StackPanel Grid.Row="1"
-                        Margin="20"
-                        HorizontalAlignment="Left"
-                        Orientation="Horizontal">
-                <i:Icon Value="mdi-account"
-                        FontSize="50" 
-                        Margin="0 0 20 0"
-                        HorizontalAlignment="Left"/>
-                <TextBlock Text="{Binding Username}"
-                           FontSize="30" 
-                           TextAlignment="Center"
-                           HorizontalAlignment="Left"
-                           Foreground="White" 
-                           Margin="10,0,0,0"
-                           VerticalAlignment="Center"/>
-            </StackPanel>
-            
-            <!-- Settings -->
-            <Button i:Attached.Icon="mdi-plus"
-                    Grid.Row="1"
-                    Width="70"
-                    Height="70"
-                    FontSize="50"
-                    Background="Transparent"
-                    HorizontalAlignment="Right"
-                    Margin="20"/>
-            
-            <!-- Channels -->
-            <ScrollViewer Grid.Row="2" 
-                          VerticalScrollBarVisibility="Disabled"
-                          HorizontalScrollBarVisibility="Disabled"
-                          Background="#11111A">
-                    
-                    <ItemsControl ItemsSource="{Binding Channels}">
+             x:DataType="viewModels:MainViewModel"
+             FontFamily="{DynamicResource UnitedSans}"
+             Background="{DynamicResource BackgroundBrush}">
+
+    <Grid>
+        <!-- Main Grid -->
+        <!-- 1. Column - Channels -->
+        <!-- 2. Column - Chat, Chat Input -->
+        <!-- 3. Column - Profile etc. -->
+        <Grid ColumnDefinitions="*,2.5*,*">
+
+            <!-- Left Grid - Channels-->
+            <Grid Column="0"
+                  Background="{DynamicResource BackgroundBrush}">
+
+                <!-- Channels -->
+                <Border Margin="40"
+                        CornerRadius="30"
+                        BorderBrush="{DynamicResource InputFieldBrush}"
+                        BorderThickness="4">
+                    <ScrollViewer VerticalScrollBarVisibility="Disabled"
+                                  HorizontalScrollBarVisibility="Disabled">
+
+                        <ItemsControl ItemsSource="{Binding Channels}">
                             <ItemsControl.ItemTemplate>
-                                    <DataTemplate DataType="{x:Type viewModels:ChannelViewModel}">
-                                            <!-- Channel -->
-                                            <Button Height="100"
-                                                    Margin="0 10"
-                                                    Background="Transparent"
-                                                    VerticalAlignment="Top"
-                                                    HorizontalAlignment="Stretch"
-                                                    Command="{Binding SelectChannelCommand}">
-                                                    
-                                                    <Grid RowDefinitions="*, *"
-                                                          ColumnDefinitions="Auto, *"
-                                                          VerticalAlignment="Center">
-                                                    
-                                                        <!-- Channel Icon -->
-                                                        <i:Icon Grid.RowSpan="2"
-                                                                Value="mdi-account-group-outline"
-                                                                FontSize="50"
-                                                                Margin="30 0"
-                                                                VerticalAlignment="Center"
-                                                                HorizontalAlignment="Center"/>
-                                                            
-                                                        <!-- Channel Name -->
-                                                        <TextBlock Grid.Column="1"
-                                                                   Grid.Row="0"
-                                                                   Text="{Binding Name}"
-                                                                   FontSize="30"
-                                                                   Foreground="White"
-                                                                   VerticalAlignment="Center"
-                                                                   HorizontalAlignment="Left"/>
-                                                        
-                                                        <!-- Channel Description -->
-                                                        <TextBlock Grid.Column="1"
-                                                                   Grid.Row="1"
-                                                                   FontSize="20"
-                                                                   Foreground="Gray"
-                                                                   VerticalAlignment="Center"
-                                                                   HorizontalAlignment="Left">
-                                                                <Run Text="{Binding MemberCount}"/>
-                                                                <Run Text="Members"/>
-                                                        </TextBlock>
-                                                            
-                                                    </Grid>
-                                            </Button>
-                                            
-                                    </DataTemplate>
+                                <DataTemplate DataType="{x:Type viewModels:ChannelViewModel}">
+                                    <!-- Channel -->
+                                    <Button Height="100"
+                                            Background="{DynamicResource BackgroundBrush}"
+                                            CornerRadius="30"
+                                            BorderThickness="0"
+                                            HorizontalAlignment="Stretch"
+                                            HorizontalContentAlignment="Left"
+                                            Command="{Binding SelectChannelCommand}">
+
+                                        <Grid RowDefinitions="*, *"
+                                              ColumnDefinitions="Auto, *">
+
+                                            <!-- Channel Icon -->
+                                            <Ellipse StrokeThickness="2"
+                                                     Stroke="{DynamicResource InputFieldBrush}"
+                                                     Fill="{DynamicResource ElementBrush}"
+                                                     Width="50"
+                                                     Height="50"
+                                                     Grid.RowSpan="2"
+                                                     VerticalAlignment="Center"
+                                                     HorizontalAlignment="Center"/>
+                                            <i:Icon Grid.Row="0"
+                                                    Grid.Column="0"
+                                                    Grid.RowSpan="2"
+                                                    Value="mdi-account-group-outline"
+                                                    FontSize="30"
+                                                    Margin="30 0"
+                                                    Foreground="{DynamicResource ForegroundBrush}"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Left" />
+
+                                            <!-- Channel Name -->
+                                            <TextBlock Grid.Column="1"
+                                                       Grid.Row="0"
+                                                       Text="{Binding Name}"
+                                                       FontSize="25"
+                                                       Foreground="White"
+                                                       VerticalAlignment="Center"
+                                                       HorizontalAlignment="Left" />
+
+                                            <!-- Channel Description -->
+                                            <TextBlock Grid.Column="1"
+                                                       Grid.Row="1"
+                                                       FontSize="15"
+                                                       Foreground="Gray"
+                                                       VerticalAlignment="Center"
+                                                       HorizontalAlignment="Left">
+                                                <Run
+                                                    Text="{Binding MemberCount}" />
+                                                <Run Text="Members" />
+                                            </TextBlock>
+
+                                        </Grid>
+                                    </Button>
+
+                                </DataTemplate>
                             </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                    
-            </ScrollViewer>
-            
-        </Grid>
-        
-        <!-- Right Grid -->
-        <!-- Either displays a title screen, or the selected channel -->
-        <Grid Column="1"
-              Background="#15151F">
-            
+                        </ItemsControl>
+
+                    </ScrollViewer>
+                </Border>
+
+            </Grid>
+
+            <!-- Middle Grid -->
+            <!-- Either displays a title screen, or the selected channel -->
+            <Grid Column="1"
+                  Background="{DynamicResource BackgroundBrush}">
+
                 <!-- Title Screen -->
+                <!--IsVisible="{Binding ChannelSelected, 
+                        Converter={StaticResource InverseBooleanConverter}}"-->
                 <Grid IsVisible="{Binding ChannelSelected, 
                         Converter={StaticResource InverseBooleanConverter}}">
-                        
-                        <TextBlock Text="Just Another Chat"
-                                   FontFamily="/Assets/Fonts/Cakecafe.ttf#Cakecafe"
-                                   FontSize="70"
-                                   Foreground="#EEEEEE"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
-                        
+
+                    <TextBlock Text="JUST ANOTHER CHAT"
+                               FontFamily="{StaticResource UnitedSansLight}"
+                               FontSize="80"
+                               Foreground="#EEEEEE"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+
                 </Grid>
-            
+
                 <!-- Channel -->
+                <!--IsVisible="{Binding ChannelSelected}"-->
                 <Grid IsVisible="{Binding ChannelSelected}"
                       RowDefinitions="Auto,*,Auto">
-                    
+
                     <!-- Channel Header -->
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Stretch"
-                                Background="#11111A">
-                        <i:Icon Value="mdi-account-group"
-                                FontSize="60"
-                                Foreground="#DDDDDD"
-                                Margin="100 40 70 40"/>
-                        <TextBlock Text="Global Chat"
-                                   FontSize="40" 
-                                   TextAlignment="Center"
-                                   Foreground="#DDDDDD" 
-                                   Margin="0 55 0 45"
-                                   VerticalAlignment="Center"/>
-                    </StackPanel>
-                    
+                    <Border CornerRadius="30"
+                            BorderBrush="{DynamicResource InputFieldBrush}"
+                            BorderThickness="0 0 0 5">
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Stretch">
+                            <Grid Margin="100 20 70 20">
+                                <Ellipse Stroke="{DynamicResource InputFieldBrush}"
+                                         StrokeThickness="2"
+                                         Fill="{DynamicResource ElementBrush}"
+                                         Width="90"
+                                         Height="90"/>
+                                <i:Icon Value="mdi-account-group"
+                                        FontSize="50"
+                                        Foreground="{DynamicResource ForegroundBrush}"/>
+                            </Grid>
+                            
+                            <TextBlock Text="Global Chat"
+                                       FontSize="45"
+                                       TextAlignment="Center"
+                                       Foreground="{DynamicResource ForegroundBrush}"
+                                       Margin="0 55 0 45"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+
                     <!-- Chat -->
                     <ScrollViewer Grid.Row="1"
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Stretch"
                                   views:AutoScrollBehavior.AutoScroll="True">
                         <ItemsControl ItemsSource="{Binding SelectedChannel.Messages}">
-                                <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                                <StackPanel HorizontalAlignment="Stretch" 
-                                                            VerticalAlignment="Stretch"/>
-                                        </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Stretch"
+                                                Margin="20"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type shared:Message}">
-                                        <!-- Message -->
-                                        <Border Margin="30 10"
-                                                Background="#11111A"
-                                                CornerRadius="20"
-                                                HorizontalAlignment="Left">
-                                                
-                                                <Grid RowDefinitions="Auto,*"
-                                                      Margin="15 15">
+                                    <!-- Message -->
+                                    <Border Margin="30 10"
+                                            Background="{DynamicResource ElementBrush}"
+                                            CornerRadius="15"
+                                            HorizontalAlignment="Left"> 
 
-                                                        <!-- Sender, Time -->
-                                                        <Grid ColumnDefinitions="*,Auto"
-                                                                    HorizontalAlignment="Stretch">
-                                                                
-                                                                <TextBlock Text="{Binding SenderName}"
-                                                                           FontSize="20"
-                                                                           Foreground="#EEEEEE"
-                                                                           HorizontalAlignment="Left"
-                                                                           VerticalAlignment="Center"/>
-                                                                
-                                                                <TextBlock Grid.Column="1"
-                                                                           Text="{Binding TimeSent, StringFormat='{}{0:HH:mm}'}"
-                                                                           FontSize="10"
-                                                                           Foreground="#AAAAAA"
-                                                                           Margin="40 0 0 0"
-                                                                           HorizontalAlignment="Right"
-                                                                           TextAlignment="Right"
-                                                                           VerticalAlignment="Center"/>
-                                                                
-                                                        </Grid>
-                                                        
-                                                        <!-- Content -->
-                                                        <TextBlock Grid.Row="1"
-                                                                   Margin="0 10 0 0"
-                                                                   Text="{Binding Content}"
-                                                                   FontSize="15"
-                                                                   Foreground="#DDDDDD"
-                                                                   HorizontalAlignment="Left"
-                                                                   VerticalAlignment="Center"/>
-                                                </Grid>
-                                        </Border>
+                                        <Grid RowDefinitions="Auto,*"
+                                              Margin="20 15">
+
+                                            <!-- Sender, Time -->
+                                            <Grid
+                                                ColumnDefinitions="*,Auto"
+                                                HorizontalAlignment="Stretch">
+
+                                                <TextBlock
+                                                    Text="{Binding SenderName}"
+                                                    FontSize="22"
+                                                    Foreground="{DynamicResource ForegroundBrush}"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"/>
+
+                                                <TextBlock
+                                                    Grid.Column="1"
+                                                    Text="{Binding TimeSent, StringFormat='{}{0:HH:mm}'}"
+                                                    FontSize="13"
+                                                    Foreground="{DynamicResource DisabledBrush}"
+                                                    FontFamily="{DynamicResource FiraMono}"
+                                                    Padding="5"
+                                                    Margin="40 0 0 0"
+                                                    HorizontalAlignment="Right"
+                                                    TextAlignment="Right"
+                                                    VerticalAlignment="Center" />
+
+                                            </Grid>
+
+                                            <!-- Content -->
+                                            <TextBlock Grid.Row="1"
+                                                       Margin="0 10 0 0"
+                                                       Text="{Binding Content}"
+                                                       TextWrapping="Wrap"
+                                                       LineSpacing="0.5"
+                                                       LetterSpacing="0.3"
+                                                       FontSize="17"
+                                                       FontFamily="{DynamicResource LucidaSans}"
+                                                       Foreground="{DynamicResource ForegroundBrush}"
+                                                       HorizontalAlignment="Left"
+                                                       VerticalAlignment="Center" />
+                                        </Grid>
+                                    </Border>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </ScrollViewer>
-                    
+
                     <!-- Chat Input -->
-                    <Grid Grid.Row="2">
-                        <TextBox Text="{Binding MessageContent}"
-                                 FontSize="25"
-                                 Padding="25"
-                                 CornerRadius="40"
-                                 Background="#11111A"
-                                 Foreground="White"
-                                 Margin="20 20 20 20"
-                                 VerticalAlignment="Center"
-                                 HorizontalAlignment="Stretch"/>
-                        <Button i:Attached.Icon="mdi-send"
-                                Padding="20 5"
-                                FontSize="40"
-                                Background="Transparent"
-                                Foreground="White"
-                                Margin="20 0 60 0"
-                                CornerRadius="20"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Right"
-                                Command="{Binding SendMessageCommand}"/>
-                    </Grid>
+                    <Border Grid.Row="2"
+                            BorderThickness="0 5 0 0"
+                            BorderBrush="{DynamicResource InputFieldBrush}"
+                            CornerRadius="40">
+                        <Grid Grid.Row="2">
+                            <TextBox Text="{Binding MessageContent}"
+                                     FontSize="25"
+                                     Padding="25"
+                                     CornerRadius="20"
+                                     BorderThickness="0"
+                                     Background="{DynamicResource ElementBrush}"
+                                     Foreground="{DynamicResource ForegroundBrush}"
+                                     Margin="20 20 20 20"
+                                     VerticalAlignment="Center"
+                                     HorizontalAlignment="Stretch" />
+                            <Button i:Attached.Icon="mdi-send"
+                                    Background="Transparent"
+                                    Padding="20 5"
+                                    FontSize="40"
+                                    BorderThickness="0"
+                                    Margin="20 0 60 0"
+                                    CornerRadius="10"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Right"
+                                    Command="{Binding SendMessageCommand}" />
+                        </Grid>
+                    </Border>
                 </Grid>
+
+            </Grid> <!-- Middle Grid -->
             
-            
-        </Grid>
+            <!-- Right Grid -->
+            <Border Grid.Column="2"
+                    Margin="40"
+                    BorderThickness="4"
+                    BorderBrush="{DynamicResource InputFieldBrush}"
+                    CornerRadius="30">
+                
+                
+                
+            </Border>
+
+        </Grid> <!-- Main Grid -->
         
-    </Grid>
-    
+        <!-- Add Channel Dialog -->
+        <!--<Border IsVisible="{Binding AddChannelDialogVisible}"
+                Background="#000000"
+                Opacity="0.6"/> 
+        <views:AddChannelDialog Height="800"
+                                Width="700"
+                                Background="#11111A"
+                                IsVisible="{Binding AddChannelDialogVisible}"/>-->
+        
+    </Grid> <!--Wrapper Grid-->
+
 </UserControl>

@@ -1,16 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using JAC.Models;
 using JAC.Shared;
+using JAC.Shared.Channels;
 
 namespace JAC.ViewModels;
 
 public partial class ChannelViewModel : ObservableObject
 {
-    public BaseChannel Channel { get; private set; }
+    public BaseChannel Channel { get; set; }
 
     public event Action<ChannelViewModel>? Selected;
     
@@ -25,6 +27,13 @@ public partial class ChannelViewModel : ObservableObject
             groupChannel.NameChanged += () => OnPropertyChanged(nameof(Name));
             groupChannel.DescriptionChanged += () => OnPropertyChanged(nameof(Description));
         }
+    }
+
+    public ChannelViewModel()
+    {
+        Channel = new GroupChannel(1, "Global", "fgfgfdgdfgdfg", DateTime.Now, new List<IUser>(),
+            new List<Message>(), new GroupSettings());
+        Messages = new ObservableCollection<Message>();
     }
 
     private void OnUsersChanged()

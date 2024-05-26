@@ -24,6 +24,8 @@ public partial class MainViewModel : ViewModelBase
     
     [ObservableProperty] private string _messageContent = string.Empty;
     
+    [ObservableProperty] private bool _addChannelDialogVisible;
+    
     public ChannelViewModel SelectedChannel
     {
         get => _selectedChannel!;

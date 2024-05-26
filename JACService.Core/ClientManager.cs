@@ -28,19 +28,20 @@ public class ClientManager
     /// <summary>
     /// Sends the given packet to all users in the given collection
     /// </summary>
-    public void BroadCast(IEnumerable<ChatUser> users, PacketBase packet)
+    public async Task BroadCastAsync(IEnumerable<ChatUser> users, PacketBase packet)
     {
         foreach (var user in users) 
-            SendToUser(user, packet);
+            await SendToUserAsync(user, packet);
     }
     
     /// <summary>
     /// Sends the given packet to the given user
     /// </summary>
-    public void SendToUser(ChatUser user, PacketBase packet)
+    public async Task SendToUserAsync(ChatUser user, PacketBase packet)
     {
         var session = FindSession(user);
-        session?.Send(packet);
+        var task = session?.Send(packet);
+        if (task != null) await task;
     }
     
     public ClientManager(Socket serverSocket, IServiceLogger? logger)
@@ -72,7 +73,7 @@ public class ClientManager
             try
             {
                 var clientSocket = await _serverSocket.AcceptAsync(cancellationToken);
-                await OnClientAccepted(clientSocket);
+                OnClientAccepted(clientSocket);
             }
             catch(OperationCanceledException)
             {
@@ -80,7 +81,7 @@ public class ClientManager
             }
             catch (Exception e)
             {
-                await Task.Run(() => Logger?.LogServiceErrorAsync(e.Message));
+                Logger?.LogServiceErrorAsync(e.Message);
                 break;
             }
         }
@@ -90,10 +91,9 @@ public class ClientManager
     /// Creates a session for the given client socket and starts listening for incoming packets
     /// </summary>
     /// <param name="clientSocket">The socket of the client that connected</param>
-    private async Task OnClientAccepted(Socket clientSocket)
+    private void OnClientAccepted(Socket clientSocket)
     {
-        await Task.Run(() => 
-            Logger?.LogServiceInfoAsync($"Client connected from {clientSocket.RemoteEndPoint}"));
+        Logger?.LogServiceInfoAsync($"Client connected from {clientSocket.RemoteEndPoint}");
         var session = new Session(clientSocket, Logger);
         _connections.Add(session);
         session.UserLoggedIn += OnUserLoggedIn;
@@ -105,6 +105,7 @@ public class ClientManager
     {
         _sessions.Add(user, session);
         user.IsOnline = true;
+        Logger?.LogRequestInfoAsync($"User logged in {user}");
     }
     
     private void OnSessionClosed(Session session)
@@ -114,6 +115,7 @@ public class ClientManager
         _sessions.Remove(session.User!);
         session.User!.IsOnline = false;
         session.User.LastSeen = DateTime.Now;
+        Logger?.LogServiceInfoAsync($"Client disconnected, user: {session.User}");
     }
 
 }

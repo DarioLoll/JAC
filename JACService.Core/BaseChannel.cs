@@ -131,4 +131,9 @@ public class BaseChannel : IChannel
     {
         ChannelCreated?.Invoke(channel);
     }
+
+    public override string ToString()
+    {
+        return $"Channel {Id}\n\rCreated at {Created}\n\rBy {Users[0]}\n\rWith {Users.Count} users.";
+    }
 }

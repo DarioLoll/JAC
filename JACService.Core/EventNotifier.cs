@@ -37,7 +37,7 @@ public class EventNotifier
             ChannelId = group.Id,
             NewDescription = group.Description
         };
-        Server.Instance.ClientManager?.BroadCast(group.OnlineUsers, updatePacket);
+        Server.Instance.ClientManager?.BroadCastAsync(group.OnlineUsers, updatePacket);
     }
 
     private void OnGroupNameChanged(GroupChannel group)
@@ -48,7 +48,7 @@ public class EventNotifier
             ChannelId = group.Id,
             NewName = group.Name
         };
-        Server.Instance.ClientManager?.BroadCast(group.OnlineUsers, updatePacket);
+        Server.Instance.ClientManager?.BroadCastAsync(group.OnlineUsers, updatePacket);
     }
 
     private void OnMessageSent(BaseChannel channel, Message message)
@@ -58,7 +58,7 @@ public class EventNotifier
             ChannelId = channel.Id,
             Message = message
         };
-        Server.Instance.ClientManager?.BroadCast(channel.OnlineUsers, updatePacket);
+        Server.Instance.ClientManager?.BroadCastAsync(channel.OnlineUsers, updatePacket);
     }
 
     private void OnUserRankChanged(ChatUser user, BaseChannel channel)
@@ -70,7 +70,7 @@ public class EventNotifier
             ChannelId = channel.Id,
             User = user.ToUserModel()
         };
-        Server.Instance.ClientManager?.BroadCast(channel.OnlineUsers, updatePacket);
+        Server.Instance.ClientManager?.BroadCastAsync(channel.OnlineUsers, updatePacket);
     }
 
     private void OnUserLeftChannel(ChatUser user, BaseChannel channel)
@@ -82,13 +82,13 @@ public class EventNotifier
             ChannelId = channel.Id,
             User = user.ToUserModel()
         };
-        Server.Instance.ClientManager?.BroadCast(channel.OnlineUsers, updatePacket);
+        Server.Instance.ClientManager?.BroadCastAsync(channel.OnlineUsers, updatePacket);
         
         var userUpdatePacket = new ChannelRemovedPacket
         {
             RemovedChannelId = channel.Id
         };
-        Server.Instance.ClientManager?.SendToUser(user, userUpdatePacket);
+        Server.Instance.ClientManager?.SendToUserAsync(user, userUpdatePacket);
     }
 
     private void OnUserJoinedChannel(ChatUser user, BaseChannel channel)
@@ -101,12 +101,12 @@ public class EventNotifier
             User = user.ToUserModel()
         };
         var usersToUpdate = channel.OnlineUsers.Where(u => u != user);
-        Server.Instance.ClientManager?.BroadCast(usersToUpdate, groupUpdatePacket);
+        Server.Instance.ClientManager?.BroadCastAsync(usersToUpdate, groupUpdatePacket);
 
         var userUpdatePacket = new ChannelAddedPacket
         {
             NewChannel = channel.ToCorrespondingChannelModel()
         };
-        Server.Instance.ClientManager?.SendToUser(user, userUpdatePacket);
+        Server.Instance.ClientManager?.SendToUserAsync(user, userUpdatePacket);
     }
 }

@@ -81,4 +81,9 @@ public class ChatUser : IUser
     {
         LeftChannel?.Invoke(channelId);
     }
+
+    public override string ToString()
+    {
+        return Nickname;
+    }
 }

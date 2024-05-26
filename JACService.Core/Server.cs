@@ -94,7 +94,7 @@ public class Server
     public async Task StopAsync()
     {
         if (!IsOnline || _socket == null) 
-            await Task.Run(() => Logger?.LogServiceErrorAsync("Service is not running"));
+            await Task.Run(() => Logger?.LogServiceErrorAsync("Tried to stop a service that is not running."));
         try
         {
             await OnStopping();

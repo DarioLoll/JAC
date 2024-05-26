@@ -77,15 +77,18 @@ public class Session
 
     private void OnSocketReaderError(Exception exception)
     {
-        // _ means that the task is not awaited (runs on another thread)
-        _ = Task.Run(() => Logger?.LogServiceErrorAsync(exception.Message));
+        Logger?.LogServiceErrorAsync(exception.Message);
     }
 
     /// <summary>
     /// Sends a packet to the client on this session
     /// </summary>
     /// <param name="packet">The packet to send</param>
-    public async Task Send(PacketBase packet) => await _socketWriter.Send(packet);
+    public async Task Send(PacketBase packet)
+    {
+        Logger?.LogServiceInfoAsync($"Sending {packet.GetPrefix()} packet to {User?.Nickname ?? "null?"}");
+        await _socketWriter.Send(packet);
+    }
 
     /// <summary>
     /// Sends an error packet to the client on this session

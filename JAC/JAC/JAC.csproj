@@ -12,6 +12,12 @@
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\Fonts\Cakecafe.ttf" />
+        <AvaloniaResource Include="Assets\Fonts\united_sans_medium.ttf" />
+        <AvaloniaResource Include="Assets\Fonts\united_sans_light.ttf" />
+        <AvaloniaResource Include="Assets\Fonts\firacode.ttf" />
+        <AvaloniaResource Include="Assets\Fonts\fira_mono.ttf" />
+        <AvaloniaResource Include="Assets\Fonts\lucidasans.ttf" />
+        
     </ItemGroup>
 
     <ItemGroup>
@@ -29,6 +35,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\JAC.Shared\JAC.Shared.csproj" />
+      <ProjectReference Include="..\..\JAC.UILib\JAC.UILib.csproj" />
     </ItemGroup>
 
     <ItemGroup>

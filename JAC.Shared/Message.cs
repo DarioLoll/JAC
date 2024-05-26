@@ -8,12 +8,12 @@ public class Message : IComparable<Message>
     /// <summary>
     /// The id of the user who sent this message.
     /// </summary>
-    public string SenderName { get; }
+    public string SenderName { get; set; }
     
     /// <summary>
     /// The content of the message.
     /// </summary>
-    public string Content { get; }
+    public string Content { get; set; }
     
     /// <summary>
     /// The time the message was sent.
@@ -25,6 +25,13 @@ public class Message : IComparable<Message>
         SenderName = senderName;
         Content = content;
         TimeSent = timeSent == default ? DateTime.Now : timeSent;
+    }
+
+    public Message()
+    {
+        SenderName = string.Empty;
+        Content = string.Empty;
+        TimeSent = DateTime.Now;
     }
 
     /// <summary>

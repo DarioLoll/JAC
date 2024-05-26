@@ -18,7 +18,6 @@
 
     <ItemGroup>
       <Folder Include="ControlTemplates\" />
-      <Folder Include="Styles\" />
     </ItemGroup>
 
     
