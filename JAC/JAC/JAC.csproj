@@ -17,6 +17,9 @@
         <AvaloniaResource Include="Assets\Fonts\firacode.ttf" />
         <AvaloniaResource Include="Assets\Fonts\fira_mono.ttf" />
         <AvaloniaResource Include="Assets\Fonts\lucidasans.ttf" />
+        <AvaloniaResource Include="Assets\Fonts\Poppins-Regular.ttf" />
+        <AvaloniaResource Include="Assets\Fonts\LexendThin.ttf" />
+        <AvaloniaResource Include="Assets\Images\Logo.png" />
         
     </ItemGroup>
 

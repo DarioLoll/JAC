@@ -38,14 +38,13 @@
             
         </StackPanel>
         
-        <Button Content="Log In"
+        <Button Classes="margin20 centered padding15 withTransitions"
+                Content="Log In"
                 Grid.Row="2"
                 Width="200"
-                HorizontalAlignment="Center"
                 Command="{Binding LoginCommand}"
                 HorizontalContentAlignment="Center"
                 FontSize="25"
-                Padding="15"
                 CornerRadius="10"/>
         
     </Grid>

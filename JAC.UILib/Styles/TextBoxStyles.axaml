@@ -1,0 +1,81 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="50"
+                Background="{DynamicResource BgLayer1}">
+            <TextBox Text=""
+                     Watermark="rergerherh"
+                     Classes="withTransitions"
+                     Width="300"/>
+        </Border>
+    </Design.PreviewWith>
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Colors/DefaultColors.axaml"/>
+                <ResourceInclude Source="/Colors/AllColors.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Styles.Resources>
+    
+    <Style Selector="TextBox">
+        <Setter Property="Background" Value="{DynamicResource BgLayer2}"/>
+        <Setter Property="Foreground" Value="{DynamicResource PlaceholderBrush}"/>
+        <Setter Property="Padding" Value="25"/>
+        <Setter Property="FontFamily" Value="{DynamicResource Poppins}"/>
+        <Setter Property="BorderThickness" Value="3"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="CornerRadius" Value="25"/>
+        
+        <Style Selector="^ /template/ Border#border">
+            <Setter Property="BorderBrush" Value="Transparent"/>
+        </Style>
+        
+        <Style Selector="^:pointerover">
+            <Setter Property="Background" Value="{DynamicResource BgLayer2_400}"/>
+            <Setter Property="RenderTransform" Value="scale(1.02)"/>
+        </Style>
+        <Style Selector="^:pointerover /template/ Border#border">
+            <Setter Property="BorderBrush" Value="Transparent"/>
+        </Style>
+        
+        <Style Selector="^:focus">
+            <Setter Property="Background" Value="{DynamicResource BgLayer2_700}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}"/>
+            <Setter Property="RenderTransform" Value="scale(1.02)"/>
+            
+            <Style Selector="^ /template/ Border#border">
+                <Setter Property="BorderBrush" Value="{DynamicResource AccentBlue900}"/>
+            </Style>
+        </Style>
+    </Style>
+    
+    <Style Selector="TextBox.withTransitions">
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Duration="0:0:0.1" Property="Foreground"/>
+                <BrushTransition Duration="0:0:0.1" Property="Background"/>
+                <BrushTransition Duration="0:0:0.1" Property="BorderBrush"/>
+                <DoubleTransition Duration="0:0:0.2" Property="Opacity"/>
+                <TransformOperationsTransition Duration="0:0:0.15" Property="RenderTransform"/>
+            </Transitions>
+        </Setter>
+        <Style Selector="^:focus">
+            <Style Selector="^ /template/ Border#border">
+                <Setter Property="Transitions" >
+                    <Transitions>
+                        <BrushTransition Duration="0:0:0.2" Property="BorderBrush"/>
+                    </Transitions>
+                </Setter>
+            </Style>
+        </Style>
+    </Style>
+    
+    <Style Selector="TextBox.small">
+        <Setter Property="CornerRadius" Value="15"/>
+        <Setter Property="Padding" Value="15"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Width" Value="200"/>
+    </Style>
+    
+</Styles>

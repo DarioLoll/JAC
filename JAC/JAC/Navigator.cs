@@ -16,7 +16,7 @@ public partial class Navigator : ObservableObject
         CurrentViewModel = new LoginViewModel();
         CurrentViewModel.OnActivated();
     }
-    
+
     public void SwitchToViewModel(ViewModelBase viewModel)
     {
         CurrentViewModel.OnDeactivated();

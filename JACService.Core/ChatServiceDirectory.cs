@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using JAC.Shared;
-using JACService.Core.Contracts;
+using JACService.Core.Logging;
 
 namespace JACService.Core;
 
@@ -17,7 +17,7 @@ public class ChatServiceDirectory
     [JsonInclude] private List<ChatUser> _users = new();
     [JsonInclude] private List<BaseChannel> _channels = new();
 
-    private IServiceLogger? _logger;
+    private IServiceLogger _logger = new ServiceConsoleLogger(false);
     
     /// <summary>
     /// All users stored in the chat service.
@@ -70,6 +70,7 @@ public class ChatServiceDirectory
         _logger = Server.Instance.Logger;
         if (File.Exists(SavePath))
         {
+            await _logger.LogAsync(LogType.Info, "Chat data file found, loading data...");
             string json = await File.ReadAllTextAsync(SavePath);
             try
             {
@@ -80,16 +81,24 @@ public class ChatServiceDirectory
                 });
                 if (loaded != null)
                 {
+                    _users.Clear();
+                    _channels.Clear();
                     foreach (var loadedChannel in loaded.Channels) 
-                        OnChannelCreated(loadedChannel, false);
+                        OnChannelCreated(loadedChannel);
                     foreach (var loadedUser in loaded.Users)
-                        AddUser(loadedUser, false);
+                        AddUser(loadedUser);
                 }
+                await _logger.LogAsync(LogType.Info, "Service data loaded.", true);
             }
             catch (Exception e)
             {
-                _logger?.LogServiceErrorAsync($"Chat Directory failed to load: {e.Message}");
+                await _logger.LogAsync(LogType.Error, "An error occurred while loading the chat data.");
+                await _logger.LogAsync(LogType.Error, "\t" + e.Message, true);
             }
+        }
+        else
+        {
+            await _logger.LogAsync(LogType.Warning,"No chat data file found, starting with an empty chat service...");
         }
         // Create the global channel if it doesn't exist after loading from the file
         if(GlobalChannel == null)
@@ -97,11 +106,11 @@ public class ChatServiceDirectory
             var globalChannel = new BaseChannel(0, DateTime.Now);
             OnChannelCreated(globalChannel);
         }
-        BaseChannel.ChannelCreated += channel => OnChannelCreated(channel);
+        BaseChannel.ChannelCreated += OnChannelCreated;
         EventNotifier.Instance.Initialize();
     }
     
-    private void OnChannelCreated(BaseChannel channel, bool log = true)
+    private void OnChannelCreated(BaseChannel channel)
     {
         _channels.Add(channel);
         channel.MessageSent += message => OnMessageSent(channel, message);
@@ -111,8 +120,6 @@ public class ChatServiceDirectory
             gc.DescriptionChanged += _ => OnGroupDescriptionChanged(gc);
             gc.RankChanged += user => OnUserRankChanged(user, gc);
         }
-        if(log)
-            _logger?.LogServiceInfoAsync($"Channel created:\n\r{channel}");
     }
 
     /// <summary>
@@ -126,12 +133,13 @@ public class ChatServiceDirectory
         };
         string json = JsonSerializer.Serialize(this, options);
         await File.WriteAllTextAsync(SavePath, json);
+        await _logger.LogAsync(LogType.Info, $"Service data saved to {SavePath}.");
     }
 
     /// <summary>
     /// Registers a new user in the chat service.
     /// </summary>
-    public void AddUser(ChatUser user, bool log = true)
+    public void AddUser(ChatUser user)
     {
         _users.Add(user);
         user.JoinedChannel += (channelId) =>
@@ -153,8 +161,6 @@ public class ChatServiceDirectory
         if (user.Channels.Contains(0)) return;
         GlobalChannel!.Users.Add(user);
         user.JoinChannel(GlobalChannel.Id);
-        if(log)
-            _logger?.LogServiceInfoAsync($"New user logged in:\n\r{user}");
     }
 
     //Not used in the current implementation. Will be used when deleting accounts is implemented.

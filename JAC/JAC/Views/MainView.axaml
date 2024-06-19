@@ -2,276 +2,75 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:i="https://github.com/projektanker/icons.avalonia"
              xmlns:viewModels="clr-namespace:JAC.ViewModels"
-             xmlns:views="clr-namespace:JAC.Views"
-             xmlns:shared="clr-namespace:JAC.Shared;assembly=JAC.Shared"
              mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="1080"
              x:Class="JAC.Views.MainView"
              x:DataType="viewModels:MainViewModel"
-             FontFamily="{DynamicResource UnitedSans}"
-             Background="{DynamicResource BackgroundBrush}">
-
-    <Grid>
-        <!-- Main Grid -->
-        <!-- 1. Column - Channels -->
-        <!-- 2. Column - Chat, Chat Input -->
-        <!-- 3. Column - Profile etc. -->
-        <Grid ColumnDefinitions="*,2.5*,*">
-
-            <!-- Left Grid - Channels-->
-            <Grid Column="0"
-                  Background="{DynamicResource BackgroundBrush}">
-
-                <!-- Channels -->
-                <Border Margin="40"
-                        CornerRadius="30"
-                        BorderBrush="{DynamicResource InputFieldBrush}"
-                        BorderThickness="4">
-                    <ScrollViewer VerticalScrollBarVisibility="Disabled"
-                                  HorizontalScrollBarVisibility="Disabled">
-
-                        <ItemsControl ItemsSource="{Binding Channels}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate DataType="{x:Type viewModels:ChannelViewModel}">
-                                    <!-- Channel -->
-                                    <Button Height="100"
-                                            Background="{DynamicResource BackgroundBrush}"
-                                            CornerRadius="30"
-                                            BorderThickness="0"
-                                            HorizontalAlignment="Stretch"
-                                            HorizontalContentAlignment="Left"
-                                            Command="{Binding SelectChannelCommand}">
-
-                                        <Grid RowDefinitions="*, *"
-                                              ColumnDefinitions="Auto, *">
-
-                                            <!-- Channel Icon -->
-                                            <Ellipse StrokeThickness="2"
-                                                     Stroke="{DynamicResource InputFieldBrush}"
-                                                     Fill="{DynamicResource ElementBrush}"
-                                                     Width="50"
-                                                     Height="50"
-                                                     Grid.RowSpan="2"
-                                                     VerticalAlignment="Center"
-                                                     HorizontalAlignment="Center"/>
-                                            <i:Icon Grid.Row="0"
-                                                    Grid.Column="0"
-                                                    Grid.RowSpan="2"
-                                                    Value="mdi-account-group-outline"
-                                                    FontSize="30"
-                                                    Margin="30 0"
-                                                    Foreground="{DynamicResource ForegroundBrush}"
-                                                    VerticalAlignment="Center"
-                                                    HorizontalAlignment="Left" />
-
-                                            <!-- Channel Name -->
-                                            <TextBlock Grid.Column="1"
-                                                       Grid.Row="0"
-                                                       Text="{Binding Name}"
-                                                       FontSize="25"
-                                                       Foreground="White"
-                                                       VerticalAlignment="Center"
-                                                       HorizontalAlignment="Left" />
-
-                                            <!-- Channel Description -->
-                                            <TextBlock Grid.Column="1"
-                                                       Grid.Row="1"
-                                                       FontSize="15"
-                                                       Foreground="Gray"
-                                                       VerticalAlignment="Center"
-                                                       HorizontalAlignment="Left">
-                                                <Run
-                                                    Text="{Binding MemberCount}" />
-                                                <Run Text="Members" />
-                                            </TextBlock>
-
-                                        </Grid>
-                                    </Button>
-
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-
-                    </ScrollViewer>
-                </Border>
-
-            </Grid>
-
-            <!-- Middle Grid -->
-            <!-- Either displays a title screen, or the selected channel -->
-            <Grid Column="1"
-                  Background="{DynamicResource BackgroundBrush}">
-
-                <!-- Title Screen -->
-                <!--IsVisible="{Binding ChannelSelected, 
-                        Converter={StaticResource InverseBooleanConverter}}"-->
-                <Grid IsVisible="{Binding ChannelSelected, 
-                        Converter={StaticResource InverseBooleanConverter}}">
-
-                    <TextBlock Text="JUST ANOTHER CHAT"
-                               FontFamily="{StaticResource UnitedSansLight}"
-                               FontSize="80"
-                               Foreground="#EEEEEE"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center" />
-
-                </Grid>
-
-                <!-- Channel -->
-                <!--IsVisible="{Binding ChannelSelected}"-->
-                <Grid IsVisible="{Binding ChannelSelected}"
-                      RowDefinitions="Auto,*,Auto">
-
-                    <!-- Channel Header -->
-                    <Border CornerRadius="30"
-                            BorderBrush="{DynamicResource InputFieldBrush}"
-                            BorderThickness="0 0 0 5">
-                        <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Stretch">
-                            <Grid Margin="100 20 70 20">
-                                <Ellipse Stroke="{DynamicResource InputFieldBrush}"
-                                         StrokeThickness="2"
-                                         Fill="{DynamicResource ElementBrush}"
-                                         Width="90"
-                                         Height="90"/>
-                                <i:Icon Value="mdi-account-group"
-                                        FontSize="50"
-                                        Foreground="{DynamicResource ForegroundBrush}"/>
-                            </Grid>
-                            
-                            <TextBlock Text="Global Chat"
-                                       FontSize="45"
-                                       TextAlignment="Center"
-                                       Foreground="{DynamicResource ForegroundBrush}"
-                                       Margin="0 55 0 45"
-                                       VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Border>
-
-                    <!-- Chat -->
-                    <ScrollViewer Grid.Row="1"
-                                  HorizontalAlignment="Stretch"
-                                  VerticalAlignment="Stretch"
-                                  views:AutoScrollBehavior.AutoScroll="True">
-                        <ItemsControl ItemsSource="{Binding SelectedChannel.Messages}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel HorizontalAlignment="Stretch"
-                                                VerticalAlignment="Stretch"
-                                                Margin="20"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate DataType="{x:Type shared:Message}">
-                                    <!-- Message -->
-                                    <Border Margin="30 10"
-                                            Background="{DynamicResource ElementBrush}"
-                                            CornerRadius="15"
-                                            HorizontalAlignment="Left"> 
-
-                                        <Grid RowDefinitions="Auto,*"
-                                              Margin="20 15">
-
-                                            <!-- Sender, Time -->
-                                            <Grid
-                                                ColumnDefinitions="*,Auto"
-                                                HorizontalAlignment="Stretch">
-
-                                                <TextBlock
-                                                    Text="{Binding SenderName}"
-                                                    FontSize="22"
-                                                    Foreground="{DynamicResource ForegroundBrush}"
-                                                    HorizontalAlignment="Left"
-                                                    VerticalAlignment="Center"/>
-
-                                                <TextBlock
-                                                    Grid.Column="1"
-                                                    Text="{Binding TimeSent, StringFormat='{}{0:HH:mm}'}"
-                                                    FontSize="13"
-                                                    Foreground="{DynamicResource DisabledBrush}"
-                                                    FontFamily="{DynamicResource FiraMono}"
-                                                    Padding="5"
-                                                    Margin="40 0 0 0"
-                                                    HorizontalAlignment="Right"
-                                                    TextAlignment="Right"
-                                                    VerticalAlignment="Center" />
-
-                                            </Grid>
-
-                                            <!-- Content -->
-                                            <TextBlock Grid.Row="1"
-                                                       Margin="0 10 0 0"
-                                                       Text="{Binding Content}"
-                                                       TextWrapping="Wrap"
-                                                       LineSpacing="0.5"
-                                                       LetterSpacing="0.3"
-                                                       FontSize="17"
-                                                       FontFamily="{DynamicResource LucidaSans}"
-                                                       Foreground="{DynamicResource ForegroundBrush}"
-                                                       HorizontalAlignment="Left"
-                                                       VerticalAlignment="Center" />
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-
-                    <!-- Chat Input -->
-                    <Border Grid.Row="2"
-                            BorderThickness="0 5 0 0"
-                            BorderBrush="{DynamicResource InputFieldBrush}"
-                            CornerRadius="40">
-                        <Grid Grid.Row="2">
-                            <TextBox Text="{Binding MessageContent}"
-                                     FontSize="25"
-                                     Padding="25"
-                                     CornerRadius="20"
-                                     BorderThickness="0"
-                                     Background="{DynamicResource ElementBrush}"
-                                     Foreground="{DynamicResource ForegroundBrush}"
-                                     Margin="20 20 20 20"
-                                     VerticalAlignment="Center"
-                                     HorizontalAlignment="Stretch" />
-                            <Button i:Attached.Icon="mdi-send"
-                                    Background="Transparent"
-                                    Padding="20 5"
-                                    FontSize="40"
-                                    BorderThickness="0"
-                                    Margin="20 0 60 0"
-                                    CornerRadius="10"
-                                    VerticalAlignment="Center"
-                                    HorizontalAlignment="Right"
-                                    Command="{Binding SendMessageCommand}" />
-                        </Grid>
-                    </Border>
-                </Grid>
-
-            </Grid> <!-- Middle Grid -->
-            
-            <!-- Right Grid -->
-            <Border Grid.Column="2"
-                    Margin="40"
-                    BorderThickness="4"
-                    BorderBrush="{DynamicResource InputFieldBrush}"
-                    CornerRadius="30">
-                
-                
-                
-            </Border>
-
-        </Grid> <!-- Main Grid -->
+             Background="{DynamicResource BgLayer1}">
+    
+    <Grid ColumnDefinitions="*,1.5*">
         
-        <!-- Add Channel Dialog -->
-        <!--<Border IsVisible="{Binding AddChannelDialogVisible}"
-                Background="#000000"
-                Opacity="0.6"/> 
-        <views:AddChannelDialog Height="800"
-                                Width="700"
-                                Background="#11111A"
-                                IsVisible="{Binding AddChannelDialogVisible}"/>-->
-        
-    </Grid> <!--Wrapper Grid-->
+        <!-- Left Column -->
 
+        <Grid RowDefinitions="*,Auto,Auto,*,*">
+            <TextBlock Classes="centered Title"
+                       Text="Login." />
+
+            <TextBox Grid.Row="1"
+                     Classes="centered withTransitions margin20"
+                     Width="550"
+                     FontSize="27"
+                     Watermark="Enter your name..." />
+            <TextBox Grid.Row="2"
+                     Classes="centered withTransitions margin20"
+                     RevealPassword="False"
+                     PasswordChar="*"
+                     Width="550"
+                     FontSize="27"
+                     Watermark="Enter your password..." />
+            <ToggleButton Grid.Row="3"
+                      Width="100"
+                      Height="50"
+                      Classes="margin20 withTransitions"
+                      IsChecked="True"/>
+            <Button Grid.Row="4"
+                    Classes="centered withTransitions"
+                    Content="Login"
+                    Width="250"
+                    FontSize="27" />
+        </Grid>
+        
+        <!-- Right Column -->
+        <Rectangle Grid.Column="1"
+                   Opacity="0.5">
+            <Rectangle.Fill>
+                <LinearGradientBrush>
+                    <LinearGradientBrush.GradientStops>
+                        <GradientStop Offset="0" Color="{DynamicResource AccentBlueContrast200}"/>
+                        <GradientStop Offset="1" Color="{DynamicResource AccentBlueContrast800}"/>
+                    </LinearGradientBrush.GradientStops>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        
+        
+        <StackPanel Grid.Column="1"
+                    Classes="centered margin20">
+            <TextBlock Classes="centered margin20 LexendBold"
+                       FontSize="100"
+                       Text="Welcome!" />
+            <Image Classes="margin20 centered"
+                   Source="/Assets/Images/Logo.png"
+                   Opacity="0.6"
+                   Width="700"/>
+            <TextBlock Classes="centered LexendThin"
+                       FontSize="100">
+                <Run Text="J"/><Run Text="ust" FontSize="50"/>
+                <Run Text="A"/><Run Text="nother" FontSize="50"/>
+                <Run Text="C"/><Run Text="hat" FontSize="50"/>
+            </TextBlock>
+        </StackPanel>
+        
+    </Grid>
+    
 </UserControl>

@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using System.Net.Sockets;
-using JACService.Core.Contracts;
+using JACService.Core.Logging;
 
 namespace JACService.Core;
 
@@ -24,7 +24,7 @@ public class Server
     /// <summary>
     /// The logger service used to log messages
     /// </summary>
-    public IServiceLogger? Logger { get; set; }
+    public IServiceLogger Logger { get; set; }
     
     /// <summary>
     /// The default port that will be used if no port is specified
@@ -75,16 +75,17 @@ public class Server
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             _socket.Bind(new IPEndPoint(IpAddress, Port));
             _socket.Listen(10);
-            _clientManager = new ClientManager(_socket, Logger!);
+            _clientManager = new ClientManager(_socket, Logger);
             await ChatServiceDirectory.Instance.LoadAsync(); 
             // fire and forget of the task that accepts clients (runs in the background)
             _ = Task.Run(() => _clientManager.AcceptClients(_clientAcceptingCanceller.Token));
             IsOnline = true;
-            await Task.Run(() => Logger?.LogServiceInfoAsync($"Service started on {IpAddress}:{Port}"));
+            await Logger.LogAsync(LogType.Info,$"Service started on {IpAddress}:{Port}.");
         }
         catch (Exception e)
         {
-            await Task.Run(() => Logger?.LogServiceErrorAsync(e.Message));
+            await Logger.LogAsync(LogType.Error, $"Exception occurred while starting.");
+            await Logger.LogAsync(LogType.Error, e.Message, true);
         }
     }
     
@@ -94,20 +95,22 @@ public class Server
     public async Task StopAsync()
     {
         if (!IsOnline || _socket == null) 
-            await Task.Run(() => Logger?.LogServiceErrorAsync("Tried to stop a service that is not running."));
+            await Logger.LogAsync(LogType.Warning, "Tried to stop the server while it was not running.", true);
         try
         {
+            await Logger.LogAsync(LogType.Info, "Stopping service...", true);
             await OnStopping();
             // cancel the accepting task
             await _clientAcceptingCanceller.CancelAsync();
             _socket?.Close();
             IsOnline = false;
-            await Task.Run(() => Logger?.LogServiceInfoAsync($"Service stopped on {IpAddress}:{Port}"));
+            await Logger.LogAsync(LogType.Info, "Service stopped, saving the data...");
             await ChatServiceDirectory.Instance.SaveAsync();
         }
         catch (Exception e)
         {
-            await Task.Run(() => Logger?.LogServiceErrorAsync(e.Message));
+            await Logger.LogAsync(LogType.Error, $"Exception occurred while stopping.");
+            await Logger.LogAsync(LogType.Error, e.Message, true);
         }
     }
 

@@ -18,8 +18,8 @@
                 <views:MainView/>
             </DataTemplate>
         </Grid.Resources>
-        
         <ContentControl Content="{Binding CurrentViewModel}" x:DataType="jacService:Navigator"/>
     </Grid>
+    
 
 </Window>

@@ -3,14 +3,21 @@
   <component name="AvaloniaProject">
     <option name="projectPerEditor">
       <map>
+        <entry key="JAC.UILib/Colors/AllColors.axaml" value="JAC/JAC.Browser/JAC.Browser.csproj" />
         <entry key="JAC.UILib/Colors/DefaultColors.axaml" value="JAC/JAC.Browser/JAC.Browser.csproj" />
         <entry key="JAC.UILib/Colors/DefaultDark.axaml" value="JAC/JAC.Browser/JAC.Browser.csproj" />
+        <entry key="JAC.UILib/Styles/ButtonStyles.axaml" value="JAC/JAC.Browser/JAC.Browser.csproj" />
+        <entry key="JAC.UILib/Styles/ControlStyles.axaml" value="JAC/JAC.Browser/JAC.Browser.csproj" />
         <entry key="JAC.UILib/Styles/DefaultStyles.axaml" value="JAC/JAC.Browser/JAC.Browser.csproj" />
+        <entry key="JAC.UILib/Styles/TextBlockStyles.axaml" value="JAC/JAC.Browser/JAC.Browser.csproj" />
+        <entry key="JAC.UILib/Styles/TextBoxStyles.axaml" value="JAC/JAC.Desktop/JAC.Desktop.csproj" />
+        <entry key="JAC.UILib/Styles/ToggleButtonStyles.axaml" value="JAC/JAC.Desktop/JAC.Desktop.csproj" />
         <entry key="JAC.UILib/testcontrol.axaml" value="JAC/JAC.Browser/JAC.Browser.csproj" />
         <entry key="JAC/JAC/App.axaml" value="JAC/JAC.Browser/JAC.Browser.csproj" />
         <entry key="JAC/JAC/Views/AddChannelDialog.axaml" value="JAC/JAC.Desktop/JAC.Desktop.csproj" />
         <entry key="JAC/JAC/Views/LoginView.axaml" value="JAC/JAC.Desktop/JAC.Desktop.csproj" />
         <entry key="JAC/JAC/Views/MainView.axaml" value="JAC/JAC.Desktop/JAC.Desktop.csproj" />
+        <entry key="JAC/JAC/Views/MainViewSciFi.axaml" value="JAC/JAC.Browser/JAC.Browser.csproj" />
         <entry key="JAC/JAC/Views/MainWindow.axaml" value="JAC/JAC.Browser/JAC.Browser.csproj" />
         <entry key="JACService/App.axaml" value="JACService/JACService.csproj" />
         <entry key="JACService/Views/MainView.axaml" value="JACService/JACService.csproj" />

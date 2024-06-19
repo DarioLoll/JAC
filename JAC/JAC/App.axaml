@@ -13,21 +13,20 @@
 
     <Application.Styles>
         <SimpleTheme />
+        <StyleInclude Source="avares://JAC.UILib/Styles/ControlStyles.axaml"/>
+        <StyleInclude Source="avares://JAC.UILib/Styles/ButtonStyles.axaml"/>
+        <StyleInclude Source="avares://JAC.UILib/Styles/TextBoxStyles.axaml"/>
+        <StyleInclude Source="avares://JAC.UILib/Styles/TextBlockStyles.axaml"/>
+        <StyleInclude Source="avares://JAC.UILib/Styles/ToggleButtonStyles.axaml"/>
     </Application.Styles>
              
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
-                    <SolidColorBrush x:Key="TestBrush">#ecf8ed</SolidColorBrush>
-                    <FontFamily x:Key="FiraCode">avares://JAC/Assets/Fonts/firacode.ttf#Fira</FontFamily>
-                    <FontFamily x:Key="FiraMono">avares://JAC/Assets/Fonts/fira_mono.ttf#Fura</FontFamily>
-                    <FontFamily x:Key="CakeCafe">avares://JAC/Assets/Fonts/Cakecafe.ttf#Cakecafe</FontFamily>
-                    <FontFamily x:Key="LucidaSans">avares://JAC/Assets/Fonts/lucidasans.ttf#Lucida</FontFamily>
-                    <FontFamily x:Key="UnitedSansLight">avares://JAC/Assets/Fonts/united_sans_light.ttf#United</FontFamily>
-                    <FontFamily x:Key="UnitedSans">avares://JAC/Assets/Fonts/united_sans_medium.ttf#United</FontFamily>
                     <services:InverseBooleanConverter x:Key="InverseBooleanConverter" />
                 </ResourceDictionary>
+                <ResourceInclude Source="avares://JAC.UILib/Colors/AllColors.axaml"/>
                 <ResourceInclude Source="avares://JAC.UILib/Colors/DefaultColors.axaml"/>
             </ResourceDictionary.MergedDictionaries>
             

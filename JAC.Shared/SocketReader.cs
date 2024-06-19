@@ -23,7 +23,7 @@ public class SocketReader
     /// <summary>
     /// Fires when an error occurs during the reading process
     /// </summary>
-    public event Action<Exception>? Error;
+    public event Func<Exception, Task>? Error;
 
     public SocketReader(Socket socket)
     {

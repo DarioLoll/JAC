@@ -134,6 +134,8 @@ public class BaseChannel : IChannel
 
     public override string ToString()
     {
+        if(Id == 0)
+            return $"Global Channel: {Users.Count} users.";
         return $"Channel {Id}\n\rCreated at {Created}\n\rBy {Users[0]}\n\rWith {Users.Count} users.";
     }
 }

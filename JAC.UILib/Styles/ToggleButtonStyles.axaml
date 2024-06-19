@@ -1,0 +1,161 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:avalonia="https://github.com/projektanker/icons.avalonia"
+        xmlns:converters="clr-namespace:JAC.UILib.Converters">
+    <Design.PreviewWith>
+        <Border Padding="100">
+            <ToggleButton Width="100"
+                          Height="50"
+                          IsChecked="False"
+                          Classes="withTransitions">
+            </ToggleButton>
+        </Border>
+    </Design.PreviewWith>
+    
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Colors/DefaultColors.axaml"/>
+                <ResourceInclude Source="/Colors/AllColors.axaml"/>
+                <ResourceDictionary>
+                    <converters:NumberFactorConverter x:Key="NumberFactorConverter"/>
+                    <converters:TogglePositionCalculator x:Key="TogglePositionCalculator"/>
+                    <converters:BoolConverter x:Key="BoolConverter"/>
+                    
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Styles.Resources>
+
+    <!-- Add Styles Here -->
+    <Style Selector="ToggleButton">
+        <Setter Property="CornerRadius" Value="10000"/>
+        <Setter Property="Background" Value="{DynamicResource BgLayer2}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BgLayer5}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Width" Value="100"/>
+        <Setter Property="Height" Value="50"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid>
+                    <ContentPresenter Name="PART_ContentPresenter"
+                                      Padding="{TemplateBinding Padding}"
+                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                      Background="{TemplateBinding Background}"
+                                      BorderBrush="{TemplateBinding BorderBrush}"
+                                      BorderThickness="{TemplateBinding BorderThickness}"
+                                      Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                      CornerRadius="{TemplateBinding CornerRadius}"
+                                      RecognizesAccessKey="True"
+                                      TextElement.Foreground="{TemplateBinding Foreground}" />
+                    <Canvas Name="PART_Canvas"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
+                        <Ellipse Name="PART_Toggle"
+                                 Fill="{TemplateBinding BorderBrush}"
+                                 Width="{TemplateBinding Width, 
+                                 Converter={StaticResource NumberFactorConverter}, ConverterParameter=0.3}"
+                                 Height="{Binding Width, RelativeSource={RelativeSource Self}}"
+                                 Canvas.Top="{Binding Width, RelativeSource={RelativeSource Self},
+                                 Converter={StaticResource NumberFactorConverter},
+                                 ConverterParameter=0.35}"
+                                 Canvas.Left="10">
+                            <!--<Canvas.Left>
+                                <MultiBinding Converter="{StaticResource TogglePositionCalculator}">
+                                    <Binding Path="Width" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                    <Binding Path="IsChecked" RelativeSource="{RelativeSource TemplatedParent}"/>
+                                </MultiBinding>
+                            </Canvas.Left>-->
+
+                        </Ellipse>
+                    </Canvas>
+                    
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+        
+        <Style Selector="^:checked /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource AccentBlueContrast700}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BgLayer0}" />
+        </Style>
+        <Style Selector="^:checked">
+            <Setter Property="BorderBrush" Value="{DynamicResource BgLayer1}" />
+        </Style>
+        <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource BgLayer2_300}" />
+        </Style>
+        <Style Selector="^:pointerover">
+            <Setter Property="BorderBrush" Value="{DynamicResource BgLayer4}" />
+            <Setter Property="RenderTransform" Value="scale(1.02)"/>
+        </Style>
+        <Style Selector="^:pointerover:checked /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource AccentBlue900}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BgLayer1}" />
+        </Style>
+        <Style Selector="^:pointerover:checked">
+            <Setter Property="BorderBrush" Value="{DynamicResource BgLayer1}" />
+        </Style>
+        <Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource BgLayer2_200}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BgLayer3}" />
+        </Style>
+        <Style Selector="^:pressed">
+            <Setter Property="BorderBrush" Value="{DynamicResource BgLayer3}" />
+            <Setter Property="RenderTransform" Value="scale(0.98)"/>
+        </Style>
+        <Style Selector="^:pressed:checked /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource AccentBlue500}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BgLayer0}" />
+        </Style>
+        <Style Selector="^:pressed:checked">
+            <Setter Property="BorderBrush" Value="{DynamicResource BgLayer1}" />
+        </Style>
+    </Style>
+    
+    <Style Selector="ToggleButton.withTransitions">
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Duration="0:0:0.1" Property="Foreground"/>
+                <BrushTransition Duration="0:0:0.1" Property="Background"/>
+                <BrushTransition Duration="0:0:0.1" Property="BorderBrush"/>
+                <DoubleTransition Duration="0:0:0.1" Property="Opacity"/>
+                <TransformOperationsTransition Duration="0:0:0.15" Property="RenderTransform"/>
+            </Transitions>
+        </Setter>
+        
+        <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Duration="0:0:0.1" Property="Foreground"/>
+                    <BrushTransition Duration="0:0:0.1" Property="Background"/>
+                    <BrushTransition Duration="0:0:0.1" Property="BorderBrush"/>
+                    <DoubleTransition Duration="0:0:0.1" Property="Opacity"/>
+                    <TransformOperationsTransition Duration="0:0:0.15" Property="RenderTransform"/>
+                </Transitions>
+            </Setter>
+        </Style>
+        
+        <Style Selector="^:unchecked /template/ Ellipse#PART_Toggle">
+            <Style.Animations>
+                <Animation Duration="0:0:0.3" FillMode="Forward">
+
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Canvas.Left" Value="10"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        
+        <Style Selector="^:checked /template/ Ellipse#PART_Toggle">
+            <Style.Animations>
+                <Animation Duration="0:0:0.3" FillMode="Forward"> 
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Canvas.Left" Value="60"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+    </Style>
+</Styles>

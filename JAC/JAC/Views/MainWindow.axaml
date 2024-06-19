@@ -15,6 +15,9 @@
                         <DataTemplate DataType="{x:Type vm:LoginViewModel}" x:Key="LoginView">
                                 <views:LoginView/>
                         </DataTemplate>
+                        <DataTemplate DataType="{x:Type vm:MainViewModel}" x:Key="MainView">
+                                <views:MainViewSciFi/>
+                        </DataTemplate>
                 </Grid.Resources>
 
                 <ContentControl Content="{Binding CurrentViewModel}" x:DataType="jac:Navigator"/>

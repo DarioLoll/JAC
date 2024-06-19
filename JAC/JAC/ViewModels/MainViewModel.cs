@@ -41,9 +41,9 @@ public partial class MainViewModel : ViewModelBase
     }
     
 
-    public MainViewModel(ClientDirectory directory)
+    public MainViewModel()
     {
-        Directory = directory;
+        return;
         Username = Directory.User.Nickname;
         foreach (BaseChannel channel in Directory.Channels)
         {

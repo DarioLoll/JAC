@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using System.Net.Sockets;
+using Avalonia;
 using Avalonia.Controls;
 
 namespace JAC.Views;
@@ -15,6 +16,7 @@ public class AutoScrollBehavior : AvaloniaObject
 
     public static void AutoScrollPropertyChanged(ScrollViewer scrollViewer, AvaloniaPropertyChangedEventArgs args)
     {
+        
         var autoScroll = (bool?)args.NewValue;
         if(autoScroll == true)
         {

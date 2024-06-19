@@ -59,7 +59,6 @@ public class PacketHandler
     public async Task HandleAsync(PacketBase packet)
     {
         var prefix = packet.GetPrefix();
-        Console.WriteLine($"------------------------\n\rPacket received: {prefix}\n\r------------------------\n\r");
         if (PacketHandlers.TryGetValue(prefix, out var handler))
             await handler(packet);
     }

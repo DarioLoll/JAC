@@ -1,114 +1,29 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.ThemeDictionaries>
-
+        
+        <!--ResourceInclude Source="AllColors.axaml"></ResourceInclude>-->
         <ResourceDictionary x:Key="Dark">
 
-            <SolidColorBrush x:Key="BackgroundBrush" Color="#17171a" />
-            <SolidColorBrush x:Key="ElementBrush" Color="#222529" />
-            <SolidColorBrush x:Key="InputFieldBrush" Color="#303035" />
-            <SolidColorBrush x:Key="ForegroundBrush" Color="#dddddd" />
-            <SolidColorBrush x:Key="DisabledBrush" Color="#aaaaac" />
-            <SolidColorBrush x:Key="GrayBrush" Color="#898c92" />
-
-            <SolidColorBrush x:Key="GreenBrush100" Color="#ecf8ed" />
-            <SolidColorBrush x:Key="GreenBrush200" Color="#c7eaca" />
-            <SolidColorBrush x:Key="GreenBrush300" Color="#a2dca6" />
-            <SolidColorBrush x:Key="GreenBrush400" Color="#7dce83" />
-            <SolidColorBrush x:Key="GreenBrush500" Color="#58c05f" />
-            <SolidColorBrush x:Key="GreenBrush600" Color="#3fa746" />
-            <SolidColorBrush x:Key="GreenBrush700" Color="#318236" />
-            <SolidColorBrush x:Key="GreenBrush800" Color="#235d27" />
-            <SolidColorBrush x:Key="GreenBrush900" Color="#153817" />
-            <SolidColorBrush x:Key="GreenBrush1000" Color="#071308" />
-
-            <SolidColorBrush x:Key="OrangeBrush100" Color="#fff4e5" />
-            <SolidColorBrush x:Key="OrangeBrush200" Color="#ffdfb3" />
-            <SolidColorBrush x:Key="OrangeBrush300" Color="#ffc980" />
-            <SolidColorBrush x:Key="OrangeBrush400" Color="#ffb34d" />
-            <SolidColorBrush x:Key="OrangeBrush500" Color="#ff9e1a" />
-            <SolidColorBrush x:Key="OrangeBrush600" Color="#e68400" />
-            <SolidColorBrush x:Key="OrangeBrush700" Color="#b36700" />
-            <SolidColorBrush x:Key="OrangeBrush800" Color="#804a00" />
-            <SolidColorBrush x:Key="OrangeBrush900" Color="#4d2c00" />
-            <SolidColorBrush x:Key="OrangeBrush1000" Color="#1a0f00" />
-
-            <SolidColorBrush x:Key="RedBrush100" Color="#ffeae6" />
-            <SolidColorBrush x:Key="RedBrush200" Color="#febfb3" />
-            <SolidColorBrush x:Key="RedBrush300" Color="#fd9481" />
-            <SolidColorBrush x:Key="RedBrush400" Color="#fd694f" />
-            <SolidColorBrush x:Key="RedBrush500" Color="#fc3f1c" />
-            <SolidColorBrush x:Key="RedBrush600" Color="#e32503" />
-            <SolidColorBrush x:Key="RedBrush700" Color="#b01d02" />
-            <SolidColorBrush x:Key="RedBrush800" Color="#7e1502" />
-            <SolidColorBrush x:Key="RedBrush900" Color="#4c0c01" />
-            <SolidColorBrush x:Key="RedBrush1000" Color="#190400" />
-
-            <SolidColorBrush x:Key="BlueBrush100" Color="#e5f2ff" />
-            <SolidColorBrush x:Key="BlueBrush200" Color="#b3d8ff" />
-            <SolidColorBrush x:Key="BlueBrush300" Color="#80beff" />
-            <SolidColorBrush x:Key="BlueBrush400" Color="#4da4ff" />
-            <SolidColorBrush x:Key="BlueBrush500" Color="#1a8aff" />
-            <SolidColorBrush x:Key="BlueBrush600" Color="#0070e6" />
-            <SolidColorBrush x:Key="BlueBrush700" Color="#0057b3" />
-            <SolidColorBrush x:Key="BlueBrush800" Color="#003e80" />
-            <SolidColorBrush x:Key="BlueBrush900" Color="#00254d" />
-            <SolidColorBrush x:Key="BlueBrush1000" Color="#000c1a" />
+            <SolidColorBrush x:Key="BackgroundBrush" Color="{DynamicResource Background100}" />
+            <SolidColorBrush x:Key="ElementBrush" Color="{DynamicResource Background200}" />
+            <SolidColorBrush x:Key="InputFieldBrush" Color="{DynamicResource Background400}" />
+            <SolidColorBrush x:Key="ForegroundBrush" Color="{DynamicResource Foreground800}" />
+            <SolidColorBrush x:Key="DisabledFgBrush" Color="{DynamicResource Foreground400}" />
+            <SolidColorBrush x:Key="DisabledBgBrush" Color="{DynamicResource Background500}" />
+            <SolidColorBrush x:Key="PlaceholderBrush" Color="{DynamicResource Foreground500}" />
 
         </ResourceDictionary>
         
         <ResourceDictionary x:Key="Light">
-
-            <SolidColorBrush x:Key="BackgroundBrush" Color="#17171a" />
-            <SolidColorBrush x:Key="ElementBrush" Color="#222529" />
-            <SolidColorBrush x:Key="InputFieldBrush" Color="#303035" />
-            <SolidColorBrush x:Key="ForegroundBrush" Color="#eeeeee" />
-            <SolidColorBrush x:Key="DisabledBrush" Color="#aaaaac" />
-            <SolidColorBrush x:Key="GrayBrush" Color="#898c92" />
-
-            <SolidColorBrush x:Key="GreenBrush100" Color="#ecf8ed" />
-            <SolidColorBrush x:Key="GreenBrush200" Color="#c7eaca" />
-            <SolidColorBrush x:Key="GreenBrush300" Color="#a2dca6" />
-            <SolidColorBrush x:Key="GreenBrush400" Color="#7dce83" />
-            <SolidColorBrush x:Key="GreenBrush500" Color="#58c05f" />
-            <SolidColorBrush x:Key="GreenBrush600" Color="#3fa746" />
-            <SolidColorBrush x:Key="GreenBrush700" Color="#318236" />
-            <SolidColorBrush x:Key="GreenBrush800" Color="#235d27" />
-            <SolidColorBrush x:Key="GreenBrush900" Color="#153817" />
-            <SolidColorBrush x:Key="GreenBrush1000" Color="#071308" />
-
-            <SolidColorBrush x:Key="OrangeBrush100" Color="#fff4e5" />
-            <SolidColorBrush x:Key="OrangeBrush200" Color="#ffdfb3" />
-            <SolidColorBrush x:Key="OrangeBrush300" Color="#ffc980" />
-            <SolidColorBrush x:Key="OrangeBrush400" Color="#ffb34d" />
-            <SolidColorBrush x:Key="OrangeBrush500" Color="#ff9e1a" />
-            <SolidColorBrush x:Key="OrangeBrush600" Color="#e68400" />
-            <SolidColorBrush x:Key="OrangeBrush700" Color="#b36700" />
-            <SolidColorBrush x:Key="OrangeBrush800" Color="#804a00" />
-            <SolidColorBrush x:Key="OrangeBrush900" Color="#4d2c00" />
-            <SolidColorBrush x:Key="OrangeBrush1000" Color="#1a0f00" />
-
-            <SolidColorBrush x:Key="RedBrush100" Color="#ffeae6" />
-            <SolidColorBrush x:Key="RedBrush200" Color="#febfb3" />
-            <SolidColorBrush x:Key="RedBrush300" Color="#fd9481" />
-            <SolidColorBrush x:Key="RedBrush400" Color="#fd694f" />
-            <SolidColorBrush x:Key="RedBrush500" Color="#fc3f1c" />
-            <SolidColorBrush x:Key="RedBrush600" Color="#e32503" />
-            <SolidColorBrush x:Key="RedBrush700" Color="#b01d02" />
-            <SolidColorBrush x:Key="RedBrush800" Color="#7e1502" />
-            <SolidColorBrush x:Key="RedBrush900" Color="#4c0c01" />
-            <SolidColorBrush x:Key="RedBrush1000" Color="#190400" />
-
-            <SolidColorBrush x:Key="BlueBrush100" Color="#e5f2ff" />
-            <SolidColorBrush x:Key="BlueBrush200" Color="#b3d8ff" />
-            <SolidColorBrush x:Key="BlueBrush300" Color="#80beff" />
-            <SolidColorBrush x:Key="BlueBrush400" Color="#4da4ff" />
-            <SolidColorBrush x:Key="BlueBrush500" Color="#1a8aff" />
-            <SolidColorBrush x:Key="BlueBrush600" Color="#0070e6" />
-            <SolidColorBrush x:Key="BlueBrush700" Color="#0057b3" />
-            <SolidColorBrush x:Key="BlueBrush800" Color="#003e80" />
-            <SolidColorBrush x:Key="BlueBrush900" Color="#00254d" />
-            <SolidColorBrush x:Key="BlueBrush1000" Color="#000c1a" />
+            
+            <SolidColorBrush x:Key="BackgroundBrush" Color="{DynamicResource ForegroundTinted800}" />
+            <SolidColorBrush x:Key="ElementBrush" Color="{DynamicResource ForegroundTinted600}" />
+            <SolidColorBrush x:Key="InputFieldBrush" Color="{DynamicResource ForegroundTinted400}" />
+            <SolidColorBrush x:Key="ForegroundBrush" Color="{DynamicResource Background100}" />
+            <SolidColorBrush x:Key="DisabledFgBrush" Color="{DynamicResource Background400}" />
+            <SolidColorBrush x:Key="DisabledBgBrush" Color="{DynamicResource ForegroundTinted300}" />
+            <SolidColorBrush x:Key="PlaceholderBrush" Color="{DynamicResource Background500}" />
 
         </ResourceDictionary>
 

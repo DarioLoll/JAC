@@ -136,7 +136,7 @@ public class ChatClient
 
     private Task OnChannelsReceived(GetChannelsResponsePacket packet)
     {
-        Navigator.Instance.SwitchToViewModel(new MainViewModel(Directory!));
+        Navigator.Instance.SwitchToViewModel(new MainViewModel());
         return Task.CompletedTask;
     }
 

@@ -1,6 +1,6 @@
 ﻿using System.Net.Sockets;
 using JAC.Shared;
-using JACService.Core.Contracts;
+using JACService.Core.Logging;
 
 namespace JACService.Core;
 
@@ -17,7 +17,7 @@ public class ClientManager
     /// <summary>
     /// The logger service used to log messages
     /// </summary>
-    public IServiceLogger? Logger { get; }
+    public IServiceLogger Logger { get; }
     
     /// <summary>
     /// Finds the session associated with a user
@@ -44,7 +44,7 @@ public class ClientManager
         if (task != null) await task;
     }
     
-    public ClientManager(Socket serverSocket, IServiceLogger? logger)
+    public ClientManager(Socket serverSocket, IServiceLogger logger)
     {
         _serverSocket = serverSocket;
         Logger = logger;
@@ -56,7 +56,8 @@ public class ClientManager
     /// </summary>
     private async Task OnServerStopping()
     {
-        Logger?.LogServiceInfoAsync($"Disconnecting all {_sessions.Count} clients...");
+        Server.Instance.Stopping -= OnServerStopping;
+        await Logger.LogAsync(LogType.Info, $"Disconnecting all {_sessions.Count} clients...", true);
         List<Session> connections = new(_connections);
         foreach (var connection in connections)
            await connection.Close();
@@ -68,12 +69,13 @@ public class ClientManager
     /// <param name="cancellationToken">The cancellation token that will be used to cancel the accepting task</param>
     public async Task AcceptClients(CancellationToken cancellationToken)
     {
+        await Logger.LogAsync(LogType.Info, "Waiting for clients to connect.", true);
         while (!cancellationToken.IsCancellationRequested)
         {
             try
             {
                 var clientSocket = await _serverSocket.AcceptAsync(cancellationToken);
-                OnClientAccepted(clientSocket);
+                await OnClientAccepted(clientSocket);
             }
             catch(OperationCanceledException)
             {
@@ -81,7 +83,8 @@ public class ClientManager
             }
             catch (Exception e)
             {
-                Logger?.LogServiceErrorAsync(e.Message);
+                await Logger.LogAsync(LogType.Error, "Exception occurred while accepting a client.");
+                await Logger.LogAsync(LogType.Error, e.Message, true);
                 break;
             }
         }
@@ -91,21 +94,20 @@ public class ClientManager
     /// Creates a session for the given client socket and starts listening for incoming packets
     /// </summary>
     /// <param name="clientSocket">The socket of the client that connected</param>
-    private void OnClientAccepted(Socket clientSocket)
+    private async Task OnClientAccepted(Socket clientSocket)
     {
-        Logger?.LogServiceInfoAsync($"Client connected from {clientSocket.RemoteEndPoint}");
+        await Logger.LogAsync(LogType.Info, $"Client connected from {clientSocket.RemoteEndPoint}.");
         var session = new Session(clientSocket, Logger);
         _connections.Add(session);
         session.UserLoggedIn += OnUserLoggedIn;
         session.SessionClosed += OnSessionClosed;
-        session.StartListeningAsync();
+        session.StartListening();
     }
     
     private void OnUserLoggedIn(Session session, ChatUser user)
     {
         _sessions.Add(user, session);
         user.IsOnline = true;
-        Logger?.LogRequestInfoAsync($"User logged in {user}");
     }
     
     private void OnSessionClosed(Session session)
@@ -115,7 +117,6 @@ public class ClientManager
         _sessions.Remove(session.User!);
         session.User!.IsOnline = false;
         session.User.LastSeen = DateTime.Now;
-        Logger?.LogServiceInfoAsync($"Client disconnected, user: {session.User}");
     }
 
 }

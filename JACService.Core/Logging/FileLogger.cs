@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using JACService.Core.Contracts;
+using JACService.Core.Logging;
 
 namespace JACService.Core;
 
@@ -8,6 +8,11 @@ namespace JACService.Core;
 /// </summary>
 public class FileLogger : IServiceLogger
 {
+    public List<LogEntry> Entries { get; } = new();
+    public event Action<LogEntry>? LogEntryAdded;
+    
+    public bool DetailedLogging { get; set; } = true;
+    
     private bool _overwriteOnRestart;
 
     /// <summary>
@@ -19,21 +24,6 @@ public class FileLogger : IServiceLogger
         set
         {
             _overwriteOnRestart = value;
-            _ = Task.Run(SaveConfigAsync);
-        }
-    }
-
-    private FileLoggerOption _option = FileLoggerOption.AllToOneFile;
-
-    /// <summary>
-    /// Which log information to write to which file.
-    /// </summary>
-    public FileLoggerOption Option
-    {
-        get => _option;
-        set
-        {
-            _option = value;
             _ = Task.Run(SaveConfigAsync);
         }
     }
@@ -55,32 +45,37 @@ public class FileLogger : IServiceLogger
         PathToLogFile = pathToLogFile;
     }
     
-    public Task LogServiceInfoAsync(string message) => LogToFileAsync(message, "ServiceLogs.txt");
-
-    public Task LogServiceErrorAsync(string message)
+    public async Task LogAsync(LogType type, string message, bool isDetail = false)
     {
-        if(Option is FileLoggerOption.SeparateErrorFile or FileLoggerOption.SeparateAllFiles)
-            return LogToFileAsync(message, ErrorLogFileName);
-        return LogToFileAsync(message, MainLogFileName);
-    }
+        string fileName = type switch
+        {
+            LogType.Info => MainLogFileName,
+            LogType.Warning => ErrorLogFileName,
+            LogType.Error => ErrorLogFileName,
+            LogType.Request => RequestLogFileName,
+            _ => MainLogFileName
+        };
 
-    public Task LogRequestInfoAsync(string message)
-    {
-        if(Option is FileLoggerOption.SeparateRequestFile or FileLoggerOption.SeparateAllFiles)
-            return LogToFileAsync(message, RequestLogFileName);
-        return LogToFileAsync(message, MainLogFileName);
+        var entry = new LogEntry
+        {
+            Content = message,
+            Type = type,
+            IsDetail = isDetail
+        };
+        OnLogEntryAdded(entry);
+        if (isDetail && !DetailedLogging)
+        {
+            return;
+        }
+        await LogToFileAsync(entry, fileName);
     }
     
-    private async Task LogToFileAsync(string message, string fileName)
+    private async Task LogToFileAsync(LogEntry entry, string fileName)
     {
         string logPath = Path.Combine(PathToLogFile, fileName);
-        string formattedMessage = FormatLogMessage(message);
-        await File.AppendAllTextAsync(logPath, formattedMessage);
-        Console.WriteLine(formattedMessage);
+        await File.AppendAllTextAsync(logPath, entry.Formatted + Environment.NewLine);
     }
     
-    private string FormatLogMessage(string message) => $"{DateTime.Now:G}: {message}\n";
-
     private async Task SaveConfigAsync()
     {
         string configPath = Path.Combine(PathToLogFile, ConfigFileName);
@@ -100,12 +95,10 @@ public class FileLogger : IServiceLogger
         string json = await File.ReadAllTextAsync(configPath);
         return JsonSerializer.Deserialize<FileLogger>(json) ?? new FileLogger(pathToLogFile);
     }
-}
 
-public enum FileLoggerOption
-{
-    AllToOneFile,
-    SeparateErrorFile,
-    SeparateRequestFile,
-    SeparateAllFiles
+    protected virtual void OnLogEntryAdded(LogEntry entry)
+    {
+        Entries.Add(entry);
+        LogEntryAdded?.Invoke(entry);
+    }
 }
