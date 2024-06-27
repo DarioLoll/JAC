@@ -41,3 +41,40 @@ Object name: 'System.Net.Sockets.Socket'.
 [23:56:06] ERROR Exception occurred while starting.
 [23:56:06] ERROR The process cannot access the file 'C:\Users\strom\Documents\GitHub\JAC\JACService\ServiceLogs.txt' because it is being used by another process.
 [23:56:41] WARNING Tried to stop the server while it was not running.
+[13:25:41] ERROR Exception occurred while starting.
+[13:25:41] ERROR The process cannot access the file 'C:\Users\strom\Documents\GitHub\JAC\JACService\ServiceLogs.txt' because it is being used by another process.
+[13:26:57] WARNING Tried to stop the server while it was not running.
+[13:34:54] WARNING Tried to stop the server while it was not running.
+[13:35:34] WARNING Tried to stop the server while it was not running.
+[13:36:13] WARNING Tried to stop the server while it was not running.
+[13:37:57] WARNING Tried to stop the server while it was not running.
+[13:39:21] WARNING Tried to stop the server while it was not running.
+[19:21:51] ERROR Exception occurred while starting.
+[19:21:51] ERROR The process cannot access the file 'C:\Users\strom\Documents\GitHub\JAC\JACService\ServiceLogs.txt' because it is being used by another process.
+[19:28:07] WARNING Tried to stop the server while it was not running.
+[19:59:42] WARNING Tried to stop the server while it was not running.
+[20:03:18] WARNING Tried to stop the server while it was not running.
+[18:44:00] WARNING Tried to stop the server while it was not running.
+[18:45:51] WARNING Tried to stop the server while it was not running.
+[18:48:06] WARNING Tried to stop the server while it was not running.
+[18:49:15] WARNING Tried to stop the server while it was not running.
+[18:49:42] WARNING Tried to stop the server while it was not running.
+[18:50:02] WARNING Tried to stop the server while it was not running.
+[18:50:16] WARNING Tried to stop the server while it was not running.
+[18:50:44] WARNING Tried to stop the server while it was not running.
+[18:58:52] WARNING Tried to stop the server while it was not running.
+[19:10:25] WARNING Tried to stop the server while it was not running.
+[19:11:16] WARNING Tried to stop the server while it was not running.
+[19:23:49] WARNING Tried to stop the server while it was not running.
+[19:38:46] WARNING Tried to stop the server while it was not running.
+[19:39:16] WARNING Tried to stop the server while it was not running.
+[19:40:00] WARNING Tried to stop the server while it was not running.
+[19:40:23] WARNING Tried to stop the server while it was not running.
+[19:41:00] WARNING Tried to stop the server while it was not running.
+[19:46:30] WARNING Tried to stop the server while it was not running.
+[19:46:53] WARNING Tried to stop the server while it was not running.
+[19:47:24] WARNING Tried to stop the server while it was not running.
+[23:07:55] WARNING Tried to stop the server while it was not running.
+[23:15:40] WARNING Tried to stop the server while it was not running.
+[23:16:12] WARNING Tried to stop the server while it was not running.
+[23:17:31] WARNING Tried to stop the server while it was not running.

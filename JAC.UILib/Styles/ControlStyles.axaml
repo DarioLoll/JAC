@@ -67,6 +67,15 @@
         <Setter Property="Padding" Value="15"/>
     </Style>
     
-    
+    <Style Selector=":is(Control).hoverEffect">
+        <Setter Property="Transitions">
+            <Transitions>
+                <TransformOperationsTransition Duration="0:0:0.15" Property="RenderTransform"/>
+            </Transitions>
+        </Setter>
+        <Style Selector="^:pointerover">
+            <Setter Property="RenderTransform" Value="scale(1.02)"/>
+        </Style>
+    </Style>
     
 </Styles>

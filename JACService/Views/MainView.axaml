@@ -25,10 +25,13 @@
 
             <TextBlock
                 Text="Server."
+                Margin="20 0 0 0"
+                x:Name="TbTitle"
                 Classes="centered margin20 LexendBold"
                 FontSize="50" />
 
             <Button Grid.Row="0"
+                    x:Name="ButtonOptions"
                     HorizontalAlignment="Right"
                     Classes="withTransitions margin20 smallIcon transparent"
                     avalonia:Attached.Icon="mdi-tune"
@@ -37,7 +40,8 @@
 
             <StackPanel Grid.Row="1"
                         Orientation="Horizontal"
-                        Classes="centered margin20">
+                        Classes="centered margin20"
+                        x:Name="PanelOffOn">
                 <TextBlock Classes="centered margin20 Lexend"
                            Text="Off"
                            FontSize="20" />
@@ -54,6 +58,7 @@
             </StackPanel>
             
             <Button Grid.Row="1"
+                    x:Name="ButtonClearLogs"
                     HorizontalAlignment="Right"
                     Classes="withTransitions margin20 smallIcon transparent"
                     avalonia:Attached.Icon="mdi-trash-can-outline"
@@ -62,7 +67,8 @@
 
             <Border Grid.Row="2"
                     CornerRadius="30"
-                    Background="{DynamicResource BgLayer2}">
+                    Background="{DynamicResource BgLayer2}"
+                    x:Name="BorderLogs">
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                               VerticalScrollBarVisibility="Hidden"
                               ScrollChanged="ScrollViewer_OnScrollChanged">
@@ -82,7 +88,7 @@
                                                Foreground="{Binding Type,
                                        Converter={StaticResource LogTypeToColorConverter}}" />
 
-                                    <TextBlock Text="{Binding Content}"
+                                    <SelectableTextBlock Text="{Binding Content}"
                                                Classes="Lexend"
                                                TextWrapping="Wrap"
                                                Grid.Column="2" />
@@ -103,7 +109,9 @@
 
             <Border Background="{DynamicResource BgLayer1}"
                     Width="450"
+                    x:Name="BorderOptions"
                     Height="600"
+                    Classes="hoverEffect"
                     CornerRadius="40">
                 <Grid RowDefinitions="Auto,*,Auto">
                     <TextBlock Classes="marginTop centered LexendBold"
