@@ -78,3 +78,4 @@ Object name: 'System.Net.Sockets.Socket'.
 [23:15:40] WARNING Tried to stop the server while it was not running.
 [23:16:12] WARNING Tried to stop the server while it was not running.
 [23:17:31] WARNING Tried to stop the server while it was not running.
+[23:53:50] WARNING No chat data file found, starting with an empty chat service...

@@ -34,8 +34,7 @@
                     x:Name="ButtonOptions"
                     HorizontalAlignment="Right"
                     Classes="withTransitions margin20 smallIcon transparent"
-                    avalonia:Attached.Icon="mdi-tune"
-                    Click="OnOptionsClick">
+                    avalonia:Attached.Icon="mdi-tune">
             </Button>
 
             <StackPanel Grid.Row="1"
@@ -120,8 +119,7 @@
                     <Button Grid.Row="0"
                             Grid.Column="0"
                             Classes="withTransitions centeredLeft margin20 smallIcon transparent"
-                            avalonia:Attached.Icon="mdi-arrow-left"
-                            Click="OnOptionsClick">
+                            avalonia:Attached.Icon="mdi-arrow-left">
                     </Button>
 
                     <ScrollViewer Grid.Row="1"
