@@ -12,7 +12,9 @@ using Avalonia.Media;
 using Avalonia.Media.Transformation;
 using Avalonia.Rendering.Composition;
 using Avalonia.Styling;
+using FluentAvalonia.UI.Controls;
 using JACService.Core;
+using JACService.ViewModels;
 
 namespace JACService.Views;
 
@@ -30,17 +32,15 @@ public partial class MainView : UserControl
             ((ScrollViewer)sender!).ScrollToEnd();
     }
 
-    private void OnPortTextBoxLostFocus(object? sender, RoutedEventArgs e)
-    {
-        var textBox = (TextBox)sender!;
-        textBox.Text = Server.Instance.Port.ToString();
-    }
-    
-    private void OnIpTextBoxLostFocus(object? sender, RoutedEventArgs e)
-    {
-        var textBox = (TextBox)sender!;
-        textBox.Text = Server.Instance.IpAddress.ToString();
-    }
 
-   
+    private void ShowOptionMenu(object? sender, RoutedEventArgs e)
+    {
+        var dialog = new ContentDialog();
+        
+        dialog.Title = "Options.";
+        dialog.Content = SettingsViewModel.Instance;
+        dialog.CloseButtonText = "OK";
+
+        dialog.ShowAsync();
+    }
 }

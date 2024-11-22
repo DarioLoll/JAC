@@ -135,7 +135,7 @@ public class ServerPacketHandler : PacketHandler
         
         private async Task OnClientDisconnect(PacketBase packetBase)
         {
-            await Session.Close();
+            await Session.Close(true);
         }
 
         private async Task GetChannels(PacketBase packetBase)
@@ -211,14 +211,23 @@ public class ServerPacketHandler : PacketHandler
                     IsOnline = true
                 };
                 ChatServiceDirectory.Instance.AddUser(Session.User);
+                await Session.Send(new LoginSuccessPacket
+                {
+                    User = Session.User.ToUserModel(),
+                    Channels = ChatServiceDirectory.GetChannels(Session.User).ToCorrespondingChannelModels()
+                });
             }
             //The user is logged back in.
             else
             {
                 Session.User = user;
                 user.IsOnline = true;
+                await Session.Send(new LoginSuccessPacket
+                {
+                    User = Session.User.ToUserModel(),
+                    Channels = ChatServiceDirectory.GetChannels(Session.User).ToCorrespondingChannelModels()
+                });
             }
-            await Session.Send(new LoginSuccessPacket{ User = Session.User.ToUserModel() });
         }
         
         private async Task AddUserToGroup(PacketBase packetBase)

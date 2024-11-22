@@ -98,6 +98,7 @@ public class EventNotifier
         var usersToUpdate = channel.OnlineUsers.Where(u => u != user);
         Server.Instance.ClientManager?.BroadCastAsync(usersToUpdate, groupUpdatePacket);
 
+        if (channel.Id == 0) return;
         var userUpdatePacket = new ChannelAddedPacket
         {
             NewChannel = channel.ToCorrespondingChannelModel()

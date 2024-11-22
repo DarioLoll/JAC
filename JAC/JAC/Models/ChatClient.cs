@@ -7,6 +7,7 @@ using Avalonia.Threading;
 using JAC.Shared;
 using JAC.Shared.Packets;
 using JAC.ViewModels;
+using JAC.Views;
 
 namespace JAC.Models;
 
@@ -90,11 +91,11 @@ public class ChatClient
         _ = Task.Run(() => _socketReader.ListenAsync(_listeningCanceller.Token));
     }
     
-    private async Task HandlePacket(PacketBase packet)
+    private void HandlePacket(PacketBase packet)
     {
-        await Dispatcher.UIThread.InvokeAsync(async () =>
+        Dispatcher.UIThread.Invoke(() =>
         {
-            await PacketHandler.HandleAsync(packet);
+            PacketHandler.Handle(packet);
         });
     }
     
@@ -130,14 +131,6 @@ public class ChatClient
     {
         Directory = new ClientDirectory(new User(packet.User));
         await Directory.LoadDataAsync();
-        PacketHandler.ChannelsReceived += OnChannelsReceived;
-        await Send(new PacketBase(ParameterlessPacket.GetChannels));
-    }
-
-    private Task OnChannelsReceived(GetChannelsResponsePacket packet)
-    {
-        Navigator.Instance.SwitchToViewModel(new MainViewModel());
-        return Task.CompletedTask;
     }
 
     protected virtual void OnDisconnected()

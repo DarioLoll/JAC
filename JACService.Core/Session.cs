@@ -69,18 +69,17 @@ public class Session
     /// </summary>
     public void StartListening()
     {
-        _socketReader.PacketReceived += HandlePacketAsync;
+        _socketReader.PacketReceived += HandlePacket;
         _socketReader.Error += OnSocketReaderError;
         // _ means that the task is not awaited (runs on another thread)
         _ = Task.Run(() => _socketReader.ListenAsync(_listeningCanceller.Token));
     }
 
-    private Task HandlePacketAsync(PacketBase packet)
+    private void HandlePacket(PacketBase packet)
     {
-        return Task.WhenAll([
-            Logger.LogAsync(LogType.Request, $"Received a {packet.GetPrefix()} packet from {User?.Nickname ?? $"{_socket.RemoteEndPoint}"}."),
-            _packetHandler.HandleAsync(packet)
-        ]);
+        Logger.LogAsync(LogType.Request,
+            $"Received a {packet.GetPrefix()} packet from {User?.Nickname ?? $"{_socket.RemoteEndPoint}"}.");
+        _packetHandler.Handle(packet);
     }
 
     private async Task OnSocketReaderError(Exception exception)
@@ -113,22 +112,24 @@ public class Session
     /// <summary>
     /// Closes the session by sending a disconnect packet and shutting down the socket
     /// </summary>
-    public async Task Close()
+    public async Task Close(bool clientAlreadyDisconnected)
     {
         if(!_socket.Connected) return;
         if(_isShuttingDown) return;
         
         _isShuttingDown = true;
         await Logger.LogAsync(LogType.Info, $"Closing the session {_socket.RemoteEndPoint} ({User?.Nickname ?? "No User"}).", true);
-        await Send(new PacketBase(ParameterlessPacket.Disconnect));
+        if(!clientAlreadyDisconnected)
+            await Send(new PacketBase(ParameterlessPacket.Disconnect));
         await Logger.LogAsync(LogType.Info, $"Stopping the listening.", true);
         await _listeningCanceller.CancelAsync();
         await Logger.LogAsync(LogType.Info, $"Stopped listening.", true);
-        _socketReader.PacketReceived -= _packetHandler.HandleAsync;
+        _socketReader.PacketReceived -= HandlePacket;
         _socketReader.Error -= OnSocketReaderError;
-        _socket.Shutdown(SocketShutdown.Both);
+        if (_socket.Connected)
+            _socket.Shutdown(SocketShutdown.Both);
         _socket.Close();
-        await Logger.LogAsync(LogType.Info,$"Client disconnected from {_socket.RemoteEndPoint} ({User?.Nickname ?? "No User"}).");
+        await Logger.LogAsync(LogType.Info,$"Client disconnected from ({User?.Nickname ?? "No User"}).");
         OnSessionClosed();
     }
 

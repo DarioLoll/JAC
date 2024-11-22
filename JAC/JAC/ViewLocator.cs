@@ -1,11 +1,12 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using FluentAvalonia.UI.Controls;
 using JAC.ViewModels;
 
 namespace JAC;
 
-public class ViewLocator : IDataTemplate
+public class ViewLocator : IDataTemplate, INavigationPageFactory
 {
     public Control? Build(object? data)
     {
@@ -17,7 +18,9 @@ public class ViewLocator : IDataTemplate
 
         if (type != null)
         {
-            return (Control)Activator.CreateInstance(type)!;
+            var control = (Control)Activator.CreateInstance(type)!;
+            control.DataContext = data;
+            return control;
         }
 
         return new TextBlock { Text = "Not Found: " + name };
@@ -26,5 +29,15 @@ public class ViewLocator : IDataTemplate
     public bool Match(object? data)
     {
         return data is ViewModelBase;
+    }
+
+    public Control GetPage(Type srcType)
+    {
+        return null;
+    }
+
+    public Control GetPageFromObject(object target)
+    {
+        return Build(target)!;
     }
 }

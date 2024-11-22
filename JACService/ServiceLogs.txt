@@ -841,3 +841,525 @@
 [23:54:26]  Chat data file found, loading data...
 [23:54:26]  Service data loaded.
 [23:54:26]  Service started on 127.0.0.1:8080.
+[23:56:19]  Waiting for clients to connect.
+[23:56:19]  Service started on 127.0.0.1:8080.
+[23:56:25]  Stopping service...
+[23:56:25]  Disconnecting all 0 clients...
+[23:56:25]  Service stopped, saving the data...
+[23:56:25]  Service data saved to chatdata.json.
+[23:56:35]  Chat data file found, loading data...
+[23:56:35]  Service data loaded.
+[23:56:35]  Service started on 127.0.0.1:8080.
+[23:56:37]  Stopping service...
+[23:56:37]  Disconnecting all 0 clients...
+[23:56:37]  Service stopped, saving the data...
+[23:56:37]  Service data saved to chatdata.json.
+[09:10:40]  Chat data file found, loading data...
+[09:10:40]  Service data loaded.
+[09:10:40]  Waiting for clients to connect.
+[09:10:40]  Service started on 127.0.0.1:8080.
+[09:10:41]  Stopping service...
+[09:10:42]  Disconnecting all 0 clients...
+[09:10:42]  Service stopped, saving the data...
+[09:10:42]  Service data saved to chatdata.json.
+[09:10:46]  Chat data file found, loading data...
+[09:10:46]  Service data loaded.
+[09:10:46]  Waiting for clients to connect.
+0.
+[09:10:57]  Stopping service...
+[09:10:57]  Disconnecting all 0 clients...
+[09:10:57]  Service stopped, saving the data...
+[09:10:57]  Service data saved to chatdata.json.
+[16:51:59]  Chat data file found, loading data...
+[16:51:59]  Service data loaded.
+[16:51:59]  Service started on 127.0.0.1:8080.
+[16:52:02]  Stopping service...
+[16:54:28]  Chat data file found, loading data...
+[16:54:28]  Service data loaded.
+[16:54:28]  Waiting for clients to connect.
+[16:54:28]  Service started on 127.0.0.1:8080.
+[16:54:34]  Stopping service...
+[16:54:34]  Disconnecting all 0 clients...
+[16:54:34]  Service stopped, saving the data...
+[16:54:34]  Service data saved to chatdata.json.
+[16:54:37]  Chat data file found, loading data...
+[16:54:37]  Service data loaded.
+[16:54:37]  Waiting for clients to connect.
+[16:54:37]  Service started on 127.0.0.1:8080.
+[16:54:45]  Stopping service...
+[16:55:29]  Chat data file found, loading data...
+[16:55:29]  Service data loaded.
+[16:55:29]  Waiting for clients to connect.
+[16:55:29]  Service started on 127.0.0.1:8080.
+[16:55:31]  Stopping service...
+[16:55:31]  Disconnecting all 0 clients...
+[16:55:31]  Service stopped, saving the data...
+[16:55:31]  Service data saved to chatdata.json.
+[16:55:45]  Chat data file found, loading data...
+[16:55:45]  Service data loaded.
+[16:55:45]  Service started on 127.0.0.1:8080.
+[16:55:49]  Stopping service...
+[16:56:26]  Chat data file found, loading data...
+[16:56:26]  Service data loaded.
+[16:56:26]  Waiting for clients to connect.
+0.
+[16:56:28]  Stopping service...
+[16:56:28]  Disconnecting all 0 clients...
+[16:56:28]  Service stopped, saving the data...
+[16:56:28]  Service data saved to chatdata.json.
+[17:27:37]  Chat data file found, loading data...
+[17:27:37]  Service data loaded.
+[17:27:37]  Waiting for clients to connect.
+[17:27:37]  Service started on 127.0.0.1:8080.
+[17:27:39]  Stopping service...
+[17:27:39]  Disconnecting all 0 clients...
+[17:27:39]  Service stopped, saving the data...
+[17:27:39]  Service data saved to chatdata.json.
+[17:27:48]  Chat data file found, loading data...
+[17:27:48]  Service data loaded.
+[17:27:48]  Waiting for clients to connect.
+0.
+[17:27:48]  Stopping service...
+[17:27:48]  Disconnecting all 0 clients...
+[17:27:48]  Service stopped, saving the data...
+[17:27:48]  Service data saved to chatdata.json.
+[21:21:55]  Chat data file found, loading data...
+[21:21:55]  Service data loaded.
+[21:21:55]  Waiting for clients to connect.
+[21:21:55]  Service started on 127.0.0.1:8080.
+[21:22:47]  Chat data file found, loading data...
+[21:22:47]  Service data loaded.
+[21:22:47]  Waiting for clients to connect.
+[21:22:47]  Service started on 127.0.0.1:8080.
+[21:27:50]  Chat data file found, loading data...
+[21:27:50]  Service data loaded.
+[21:27:50]  Waiting for clients to connect.
+[21:27:50]  Service started on 127.0.0.1:8080.
+[21:28:01]  Client connected from 127.0.0.1:54043.
+[21:28:01]  Client connected from 127.0.0.1:54044.
+[21:28:01]  Client connected from 127.0.0.1:54045.
+[21:28:02]  Client connected from 127.0.0.1:54046.
+[21:28:19]  Closing the session 127.0.0.1:54046 (No User).
+[21:28:19]  Stopping the listening.
+[21:28:19]  Stopped listening.
+[21:28:40]  Client connected from 127.0.0.1:54064.
+[21:28:40]  Client connected from 127.0.0.1:54065.
+[21:28:41]  Client connected from 127.0.0.1:54066.
+[21:28:41]  Client connected from 127.0.0.1:54067.
+[21:28:49]  Sending a /channeladded packet to dario
+[21:28:49]  Sending a /loginsuccess packet to dario
+[21:28:49]  Sending a /getchannelsresponse packet to dario
+[21:28:49]  Sending a /getnewmessagesresponse packet to dario
+[21:29:17]  Closing the session 127.0.0.1:54067 (dario).
+[21:29:17]  Sending a /disconnect packet to dario
+[21:29:17]  Stopping the listening.
+[21:29:17]  Stopped listening.
+[21:29:23]  Stopping service...
+[21:29:23]  Disconnecting all 1 clients...
+[21:29:23]  Closing the session 127.0.0.1:54043 (No User).
+[21:29:23]  Stopping the listening.
+[21:29:23]  Stopped listening.
+[21:29:28]  Stopping service...
+[21:31:02]  Chat data file found, loading data...
+[21:31:02]  Service data loaded.
+[21:31:02]  Waiting for clients to connect.
+[21:31:02]  Service started on 127.0.0.1:8080.
+[21:31:08]  Client connected from 127.0.0.1:54111.
+[21:31:08]  Client connected from 127.0.0.1:54112.
+[21:31:08]  Client connected from 127.0.0.1:54113.
+[21:31:08]  Client connected from 127.0.0.1:54114.
+[21:31:27]  Sending a /channeladded packet to dario
+[21:31:27]  Sending a /loginsuccess packet to dario
+[21:31:42]  Sending a /error packet to dario
+[21:31:47]  Closing the session 127.0.0.1:54114 (dario).
+[21:31:47]  Sending a /disconnect packet to dario
+[21:31:47]  Stopping the listening.
+[21:31:47]  Stopped listening.
+[21:31:52]  Client connected from 127.0.0.1:54132.
+[21:31:52]  Client connected from 127.0.0.1:54133.
+[21:31:52]  Client connected from 127.0.0.1:54134.
+[21:31:52]  Client connected from 127.0.0.1:54135.
+[21:31:59]  Sending a /channelmemberschanged packet to dario
+[21:31:59]  Sending a /channeladded packet to tester
+[21:31:59]  Sending a /getchannelsresponse packet to tester
+[21:31:59]  Sending a /getnewmessagesresponse packet to tester
+[21:32:48]  Closing the session 127.0.0.1:54135 (tester).
+[21:32:48]  Sending a /disconnect packet to tester
+[21:32:48]  Stopping the listening.
+[21:32:48]  Stopped listening.
+[21:32:53]  Stopping service...
+[21:32:53]  Disconnecting all 2 clients...
+[21:32:53]  Closing the session 127.0.0.1:54132 (No User).
+[21:32:53]  Stopping the listening.
+[21:32:53]  Stopped listening.
+[21:32:56]  Stopping service...
+[21:42:44]  Chat data file found, loading data...
+[21:42:44]  Service data loaded.
+[21:42:44]  Service started on 127.0.0.1:8080.
+[21:42:49]  Client connected from 127.0.0.1:54231.
+[21:42:49]  Client connected from 127.0.0.1:54232.
+[21:42:49]  Client connected from 127.0.0.1:54233.
+[21:42:52]  Client connected from 127.0.0.1:54239.
+[21:42:57]  Sending a /channeladded packet to tester2
+[21:42:57]  Sending a /loginsuccess packet to tester2
+[21:43:58]  Closing the session 127.0.0.1:54239 (tester2).
+[21:43:58]  Sending a /disconnect packet to tester2
+[21:43:58]  Stopping the listening.
+[21:43:58]  Stopped listening.
+[21:44:53]  Client connected from 127.0.0.1:54269.
+[21:44:53]  Client connected from 127.0.0.1:54270.
+[21:44:53]  Client connected from 127.0.0.1:54271.
+[21:45:00]  Client connected from 127.0.0.1:54277.
+[21:45:21]  Sending a /channeladded packet to tester3
+ tester2
+[21:45:21]  Sending a /loginsuccess packet to tester3
+[21:45:51]  Closing the session 127.0.0.1:54277 (tester3).
+[21:45:51]  Sending a /disconnect packet to tester3
+[21:45:51]  Stopping the listening.
+[21:45:51]  Stopped listening.
+[21:46:06]  Stopping service...
+[21:46:06]  Disconnecting all 2 clients...
+[21:46:06]  Closing the session 127.0.0.1:54269 (No User).
+[21:46:06]  Stopping the listening.
+[21:46:06]  Stopped listening.
+[21:46:08]  Stopping service...
+[21:46:08]  Service stopped, saving the data...
+[21:46:08]  Service data saved to chatdata.json.
+[21:46:12]  Chat data file found, loading data...
+[21:46:12]  Service data loaded.
+[21:46:12]  Service started on 127.0.0.1:8080.
+[21:46:12]  Waiting for clients to connect.
+[21:48:29]  Client connected from 127.0.0.1:54299.
+[21:48:29]  Client connected from 127.0.0.1:54300.
+[21:48:29]  Client connected from 127.0.0.1:54301.
+[21:48:34]  Client connected from 127.0.0.1:54307.
+[21:48:52]  Sending a /channeladded packet to tester4
+[21:51:21]  Stopping service...
+[21:51:21]  Disconnecting all 1 clients...
+[21:51:21]  Closing the session 127.0.0.1:54299 (No User).
+[21:51:21]  Stopping the listening.
+[21:51:21]  Stopped listening.
+[21:51:23]  Stopping service...
+[21:54:17]  Chat data file found, loading data...
+[21:54:17]  Service data loaded.
+[21:54:17]  Waiting for clients to connect.
+[21:54:17]  Service started on 127.0.0.1:8080.
+[21:54:22]  Client connected from 127.0.0.1:54352.
+[21:54:22]  Client connected from 127.0.0.1:54353.
+[21:54:22]  Client connected from 127.0.0.1:54354.
+[21:54:25]  Client connected from 127.0.0.1:54360.
+[21:54:30]  Sending a /loginsuccess packet to tester6
+[21:54:30]  Sending a /channeladded packet to tester6
+[21:55:52]  Sending a /getchannelsresponse packet to tester6
+[22:05:47]  Chat data file found, loading data...
+[22:05:47]  Service data loaded.
+[22:05:47]  Waiting for clients to connect.
+[22:05:47]  Service started on 127.0.0.1:8080.
+[22:05:52]  Client connected from 127.0.0.1:54450.
+[22:05:52]  Client connected from 127.0.0.1:54451.
+[22:05:52]  Client connected from 127.0.0.1:54452.
+[22:05:53]  Client connected from 127.0.0.1:54453.
+[22:06:00]  Sending a /loginsuccess packet to tester6
+[22:06:00]  Sending a /channeladded packet to tester6
+[22:06:00]  Sending a /getchannelsresponse packet to tester6
+[22:06:00]  Sending a /getnewmessagesresponse packet to tester6
+[22:06:20]  Closing the session 127.0.0.1:54453 (tester6).
+[22:06:20]  Sending a /disconnect packet to tester6
+[22:06:20]  Stopping the listening.
+[22:06:20]  Stopped listening.
+[22:06:22]  Stopping service...
+[22:06:22]  Disconnecting all 1 clients...
+[22:06:22]  Closing the session 127.0.0.1:54450 (No User).
+[22:06:22]  Stopping the listening.
+[22:06:22]  Stopped listening.
+[22:06:29]  Stopping service...
+[22:06:29]  Service stopped, saving the data...
+[22:06:29]  Service data saved to chatdata.json.
+[10:12:08]  Chat data file found, loading data...
+[10:12:08]  Service data loaded.
+[10:12:08]  Service started on 127.0.0.1:8080.
+[10:12:17]  Client connected from 127.0.0.1:55900.
+[10:12:17]  Client connected from 127.0.0.1:55901.
+[10:12:17]  Client connected from 127.0.0.1:55902.
+[10:12:18]  Client connected from 127.0.0.1:55903.
+[10:12:25]  Sending a /loginsuccess packet to tester10
+[10:12:25]  Sending a /channeladded packet to tester10
+[10:12:25]  Sending a /getnewmessagesresponse packet to tester10
+[10:12:50]  Closing the session 127.0.0.1:55903 (tester10).
+[10:12:50]  Sending a /disconnect packet to tester10
+[10:12:50]  Stopping the listening.
+[10:12:50]  Stopped listening.
+[10:12:53]  Stopping service...
+[10:12:53]  Disconnecting all 1 clients...
+[10:12:53]  Closing the session 127.0.0.1:55900 (No User).
+[10:12:53]  Stopping the listening.
+[10:12:53]  Stopped listening.
+[10:12:56]  Stopping service...
+[10:12:56]  Service stopped, saving the data...
+[10:12:56]  Service data saved to chatdata.json.
+[10:12:57]  Chat data file found, loading data...
+[10:12:57]  Service data loaded.
+[10:12:57]  Waiting for clients to connect.
+0.
+[10:12:58]  Stopping service...
+[10:12:58]  Disconnecting all 0 clients...
+[10:12:58]  Service stopped, saving the data...
+[10:12:58]  Service data saved to chatdata.json.
+[10:12:59]  Chat data file found, loading data...
+[10:12:59]  Service data loaded.
+[10:12:59]  Waiting for clients to connect.
+0.
+[10:12:59]  Stopping service...
+[10:12:59]  Disconnecting all 0 clients...
+[10:12:59]  Service stopped, saving the data...
+[10:12:59]  Service data saved to chatdata.json.
+[10:13:00]  Chat data file found, loading data...
+[10:13:00]  Service data loaded.
+[10:13:00]  Service started on 127.0.0.1:8080.
+[10:13:00]  Waiting for clients to connect.
+[10:13:00]  Stopping service...
+[10:13:00]  Disconnecting all 0 clients...
+[10:13:00]  Service stopped, saving the data...
+[10:13:00]  Service data saved to chatdata.json.
+[10:13:39]  Chat data file found, loading data...
+[10:13:39]  Service data loaded.
+[10:13:39]  Waiting for clients to connect.
+[10:13:39]  Service started on 127.0.0.1:8080.
+[10:13:43]  Client connected from 127.0.0.1:55942.
+[10:13:43]  Client connected from 127.0.0.1:55943.
+[10:13:43]  Client connected from 127.0.0.1:55944.
+[10:13:46]  Client connected from 127.0.0.1:55950.
+[10:13:51]  Sending a /loginsuccess packet to tester11
+[10:13:51]  Sending a /channeladded packet to tester11
+[10:15:50]  Chat data file found, loading data...
+[10:15:50]  Service data loaded.
+[10:15:50]  Waiting for clients to connect.
+[10:15:50]  Service started on 127.0.0.1:8080.
+[10:15:53]  Client connected from 127.0.0.1:55993.
+[10:15:53]  Client connected from 127.0.0.1:55994.
+[10:15:53]  Client connected from 127.0.0.1:55995.
+[10:15:54]  Client connected from 127.0.0.1:55996.
+[10:20:58]  Chat data file found, loading data...
+[10:20:58]  Service data loaded.
+[10:20:58]  Waiting for clients to connect.
+[10:20:58]  Service started on 127.0.0.1:8080.
+[10:21:02]  Client connected from 127.0.0.1:56084.
+[10:21:02]  Client connected from 127.0.0.1:56085.
+[10:21:02]  Client connected from 127.0.0.1:56086.
+[10:21:04]  Client connected from 127.0.0.1:56092.
+[10:21:12]  Sending a /loginsuccess packet to tester13
+[10:21:58]  Sending a /getnewmessagesresponse packet to tester13
+[10:22:34]  Closing the session 127.0.0.1:56092 (tester13).
+[10:22:34]  Sending a /disconnect packet to tester13
+[10:22:34]  Stopping the listening.
+[10:22:34]  Stopped listening.
+[10:23:22]  Client connected from 127.0.0.1:56116.
+[10:23:22]  Client connected from 127.0.0.1:56117.
+[10:23:22]  Client connected from 127.0.0.1:56118.
+[10:23:25]  Client connected from 127.0.0.1:56122.
+[10:23:30]  Sending a /channelmemberschanged packet to tester13
+[10:24:50]  Client connected from 127.0.0.1:56141.
+[10:24:50]  Client connected from 127.0.0.1:56142.
+[10:24:50]  Client connected from 127.0.0.1:56143.
+[10:24:53]  Client connected from 127.0.0.1:56149.
+[10:24:57]  Sending a /channelmemberschanged packet to tester13
+[10:27:37]  Sending a /getnewmessagesresponse packet to tester15
+[10:30:35]  Chat data file found, loading data...
+[10:30:35]  Service data loaded.
+[10:30:35]  Waiting for clients to connect.
+0.
+[10:30:39]  Client connected from 127.0.0.1:56202.
+[10:30:39]  Client connected from 127.0.0.1:56203.
+[10:30:39]  Client connected from 127.0.0.1:56204.
+[10:30:40]  Client connected from 127.0.0.1:56205.
+[10:30:44]  Sending a /loginsuccess packet to tester16
+[10:30:44]  Sending a /getnewmessagesresponse packet to tester16
+[10:30:53]  Closing the session 127.0.0.1:56205 (tester16).
+[10:30:53]  Sending a /disconnect packet to tester16
+[10:30:53]  Stopping the listening.
+[10:30:53]  Stopped listening.
+[10:31:08]  Client connected from 127.0.0.1:56224.
+[10:31:08]  Client connected from 127.0.0.1:56226.
+[10:31:08]  Client connected from 127.0.0.1:56227.
+[10:31:11]  Client connected from 127.0.0.1:56231.
+[10:31:17]  Sending a /channelmemberschanged packet to tester16
+[10:31:17]  Sending a /loginsuccess packet to tester17
+[10:31:22]  Sending a /getnewmessagesresponse packet to tester17
+[10:33:42]  Chat data file found, loading data...
+[10:33:42]  Service data loaded.
+[10:33:42]  Waiting for clients to connect.
+[10:33:42]  Service started on 127.0.0.1:8080.
+[10:33:45]  Client connected from 127.0.0.1:56306.
+[10:33:45]  Client connected from 127.0.0.1:56307.
+[10:33:45]  Client connected from 127.0.0.1:56308.
+[10:33:47]  Client connected from 127.0.0.1:56314.
+[10:33:53]  Sending a /loginsuccess packet to tester21
+[10:33:56]  Sending a /getnewmessagesresponse packet to tester21
+[10:34:25]  Closing the session 127.0.0.1:56314 (tester21).
+[10:34:25]  Sending a /disconnect packet to tester21
+[10:34:25]  Stopping the listening.
+[10:34:25]  Stopped listening.
+[10:35:33]  Chat data file found, loading data...
+[10:35:33]  Service data loaded.
+[10:35:33]  Service started on 127.0.0.1:8080.
+[10:35:37]  Client connected from 127.0.0.1:56370.
+[10:35:37]  Client connected from 127.0.0.1:56371.
+[10:35:37]  Client connected from 127.0.0.1:56372.
+[10:35:39]  Client connected from 127.0.0.1:56378.
+[10:35:43]  Sending a /loginsuccess packet to tester22
+[10:35:45]  Sending a /getnewmessagesresponse packet to tester22
+[10:36:31]  Closing the session 127.0.0.1:56378 (tester22).
+[10:36:31]  Sending a /disconnect packet to tester22
+[10:36:31]  Stopping the listening.
+[10:36:31]  Stopped listening.
+[10:36:58]  Client connected from 127.0.0.1:56407.
+[10:36:58]  Client connected from 127.0.0.1:56408.
+[10:36:58]  Client connected from 127.0.0.1:56410.
+[10:37:00]  Client connected from 127.0.0.1:56415.
+[10:37:29]  Sending a /channelmemberschanged packet to tester22
+[10:37:29]  Sending a /getnewmessagesresponse packet to tester23
+[10:38:56]  Closing the session 127.0.0.1:56415 (tester23).
+[10:38:56]  Sending a /disconnect packet to tester23
+[10:38:56]  Stopping the listening.
+[10:38:56]  Stopped listening.
+[10:40:48]  Chat data file found, loading data...
+[10:40:48]  Service data loaded.
+[10:40:48]  Waiting for clients to connect.
+[10:40:48]  Service started on 127.0.0.1:8080.
+[10:40:53]  Client connected from 127.0.0.1:56472.
+[10:40:53]  Client connected from 127.0.0.1:56473.
+[10:40:53]  Client connected from 127.0.0.1:56474.
+[10:40:53]  Client connected from 127.0.0.1:56475.
+[10:40:58]  Sending a /loginsuccess packet to tester25
+[10:40:58]  Sending a /getnewmessagesresponse packet to tester25
+[10:41:05]  Sending a /messagereceived packet to tester25
+[10:41:26]  Client connected from 127.0.0.1:56495.
+[10:41:26]  Client connected from 127.0.0.1:56496.
+[10:41:26]  Client connected from 127.0.0.1:56497.
+[10:41:26]  Client connected from 127.0.0.1:56498.
+[10:41:39]  Sending a /channelmemberschanged packet to tester25
+[10:41:39]  Sending a /getnewmessagesresponse packet to dario10
+[10:41:45]  Sending a /messagereceived packet to tester25
+[10:41:45]  Sending a /messagereceived packet to dario10
+[10:42:02]  Sending a /messagereceived packet to tester25
+[10:42:02]  Sending a /messagereceived packet to dario10
+[10:42:09]  Closing the session 127.0.0.1:56475 (tester25).
+[10:42:09]  Sending a /disconnect packet to tester25
+[10:42:09]  Stopping the listening.
+[10:42:09]  Stopped listening.
+[10:42:13]  Client connected from 127.0.0.1:56514.
+[10:42:13]  Client connected from 127.0.0.1:56515.
+[10:42:13]  Client connected from 127.0.0.1:56516.
+[10:42:14]  Client connected from 127.0.0.1:56517.
+[10:42:22]  Sending a /messagereceived packet to tester25
+[10:42:25]  Sending a /messagereceived packet to tester25
+[10:44:11]  Stopping service...
+[10:44:11]  Disconnecting all 2 clients...
+[10:44:11]  Closing the session 127.0.0.1:56498 (dario10).
+[10:44:11]  Sending a /disconnect packet to dario10
+[10:44:11]  Stopping the listening.
+[10:44:11]  Stopped listening.
+[10:44:14]  Stopping service...
+[10:44:14]  Service stopped, saving the data...
+[10:44:14]  Service data saved to chatdata.json.
+[10:44:17]  Closing the session 127.0.0.1:56517 (No User).
+[10:44:17]  Stopping the listening.
+[10:44:17]  Stopped listening.
+[10:48:33]  Chat data file found, loading data...
+[10:48:33]  Service data loaded.
+[10:48:33]  Waiting for clients to connect.
+[10:48:33]  Service started on 127.0.0.1:8080.
+[10:48:52]  Client connected from 127.0.0.1:56601.
+[10:48:52]  Client connected from 127.0.0.1:56602.
+[10:48:52]  Client connected from 127.0.0.1:56603.
+[10:48:52]  Client connected from 127.0.0.1:56604.
+[10:48:58]  Sending a /loginsuccess packet to lol
+[10:48:58]  Sending a /getnewmessagesresponse packet to lol
+[10:49:05]  Client connected from 127.0.0.1:56619.
+[10:49:06]  Client connected from 127.0.0.1:56620.
+[10:49:06]  Client connected from 127.0.0.1:56621.
+[10:49:06]  Client connected from 127.0.0.1:56622.
+[10:49:19]  Sending a /channelmemberschanged packet to lol
+[10:49:19]  Sending a /loginsuccess packet to lol10
+[10:49:19]  Sending a /getnewmessagesresponse packet to lol10
+[10:49:25]  Sending a /messagereceived packet to lol
+[10:49:25]  Sending a /messagereceived packet to lol10
+[10:49:32]  Sending a /messagereceived packet to lol
+[10:49:33]  Sending a /messagereceived packet to lol10
+[10:49:57]  Closing the session 127.0.0.1:56622 (lol10).
+[10:49:57]  Stopping the listening.
+[10:49:57]  Stopped listening.
+[10:50:03]  Sending a /messagereceived packet to lol
+[10:50:03]  Sending a /messagereceived packet to lol10
+[10:50:14]  Closing the session 127.0.0.1:56604 (lol).
+[10:50:14]  Stopping the listening.
+[10:50:14]  Stopped listening.
+[10:50:16]  Stopping service...
+[10:50:16]  Disconnecting all 2 clients...
+[10:50:16]  Closing the session 127.0.0.1:56619 (No User).
+[10:50:16]  Stopping the listening.
+[10:50:16]  Stopped listening.
+[10:50:19]  Stopping service...
+[10:51:04]  Chat data file found, loading data...
+[10:51:04]  Service data loaded.
+[10:51:04]  Waiting for clients to connect.
+[10:51:04]  Service started on 127.0.0.1:8080.
+[10:51:08]  Client connected from 127.0.0.1:56670.
+[10:51:08]  Client connected from 127.0.0.1:56671.
+[10:51:08]  Client connected from 127.0.0.1:56672.
+[10:51:09]  Client connected from 127.0.0.1:56673.
+[10:51:14]  Sending a /loginsuccess packet to dario111
+[10:51:14]  Sending a /getnewmessagesresponse packet to dario111
+[10:51:20]  Sending a /messagereceived packet to dario111
+[10:51:23]  Closing the session 127.0.0.1:56673 (dario111).
+[10:51:23]  Stopping the listening.
+[10:51:23]  Stopped listening.
+[10:57:12]  Chat data file found, loading data...
+[10:57:12]  Service data loaded.
+[10:57:12]  Waiting for clients to connect.
+[10:57:12]  Service started on 127.0.0.1:8080.
+[10:57:17]  Client connected from 127.0.0.1:56716.
+[10:57:17]  Client connected from 127.0.0.1:56717.
+[10:57:21]  Sending a /loginsuccess packet to TEST11
+[10:57:21]  Sending a /getnewmessagesresponse packet to TEST11
+[10:57:29]  Sending a /messagereceived packet to TEST11
+[10:57:33]  Client connected from 127.0.0.1:56726.
+[10:57:33]  Client connected from 127.0.0.1:56727.
+[10:57:44]  Sending a /channelmemberschanged packet to TEST11
+[10:57:44]  Sending a /loginsuccess packet to loler12
+[10:57:44]  Sending a /getnewmessagesresponse packet to loler12
+[10:57:51]  Sending a /messagereceived packet to TEST11
+[10:57:51]  Sending a /messagereceived packet to loler12
+[10:58:11]  Closing the session 127.0.0.1:56717 (TEST11).
+[10:58:11]  Stopping the listening.
+[10:58:11]  Stopped listening.
+[10:58:11]  Client disconnected from (TEST11).
+[10:58:15]  Sending a /messagereceived packet to loler12
+[10:58:18]  Client connected from 127.0.0.1:56737.
+[10:58:19]  Client connected from 127.0.0.1:56738.
+[10:58:25]  Sending a /loginsuccess packet to TEST11
+[10:58:25]  Sending a /getnewmessagesresponse packet to TEST11
+[10:58:42]  Sending a /messagereceived packet to TEST11
+[10:58:42]  Sending a /messagereceived packet to loler12
+[10:59:08]  Sending a /messagereceived packet to TEST11
+[10:59:08]  Sending a /messagereceived packet to loler12
+[10:59:19]  Closing the session 127.0.0.1:56727 (loler12).
+[10:59:19]  Stopping the listening.
+[10:59:19]  Stopped listening.
+[10:59:19]  Client disconnected from (loler12).
+[10:59:25]  Client connected from 127.0.0.1:56748.
+[10:59:25]  Client connected from 127.0.0.1:56749.
+[10:59:33]  Sending a /channelmemberschanged packet to TEST11
+[10:59:33]  Sending a /getnewmessagesresponse packet to lol123
+[10:59:43]  Closing the session 127.0.0.1:56738 (TEST11).
+[10:59:43]  Stopping the listening.
+[10:59:43]  Stopped listening.
+[10:59:43]  Client disconnected from (TEST11).
+[10:59:47]  Client connected from 127.0.0.1:56758.
+[10:59:47]  Client connected from 127.0.0.1:56759.
+[10:59:55]  Sending a /loginsuccess packet to dario10
+[10:59:55]  Sending a /getnewmessagesresponse packet to dario10
+[11:00:02]  Closing the session 127.0.0.1:56759 (dario10).
+[11:00:02]  Stopping the listening.
+[11:00:02]  Stopped listening.
+[11:00:02]  Client disconnected from (dario10).

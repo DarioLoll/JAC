@@ -18,7 +18,7 @@ public class Message : IComparable<Message>
     /// <summary>
     /// The time the message was sent.
     /// </summary>
-    public DateTime TimeSent { get; }
+    public DateTime TimeSent { get; set; }
     
     public Message(string senderName, string content, DateTime timeSent = default)
     {

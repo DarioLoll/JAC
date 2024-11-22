@@ -18,7 +18,7 @@ public class SocketReader
     /// <summary>
     /// Occurs when a whole packet could be constructed from the incoming messages
     /// </summary>
-    public event Func<PacketBase, Task>? PacketReceived;
+    public event Action<PacketBase>? PacketReceived;
     
     /// <summary>
     /// Fires when an error occurs during the reading process
@@ -44,8 +44,7 @@ public class SocketReader
                 var message = await Read(cancellationToken);
                 if (string.IsNullOrEmpty(message)) continue;
                 //extract packets from the message
-                //this is not awaited because we want to continue listening for messages
-                _ = Task.Run(() => ExtractPacketsAsync(message), CancellationToken.None);
+                ExtractPackets(message);
             }
             catch (OperationCanceledException)
             {
@@ -61,7 +60,7 @@ public class SocketReader
     /// <summary>
     /// Attempts to extract packets from the message, if a packet is not complete, it is added to the cache
     /// </summary>
-    private async Task ExtractPacketsAsync(string message)
+    private void ExtractPackets(string message)
     {
         while (true)
         {
@@ -71,7 +70,7 @@ public class SocketReader
             //it is added to the cache because it is not a complete packet
             if (splitMessage.Length < 3)
             {
-                await AddToCacheAsync(message);
+                AddToCache(message);
                 return;
             }
             
@@ -82,12 +81,12 @@ public class SocketReader
             //was received, the packet is not complete and is added to the cache
             if (data.Length < length)
             {
-                await AddToCacheAsync(message);
+                AddToCache(message);
                 return;
             }
             
             //The packet is complete, deserialize it and raise the PacketReceived event
-            await DeserializePacketAsync(data, prefix);
+            DeserializePacket(data, prefix);
             //After the complete packet, there may be additional packets in the message, so
             //the packet that was just extracted is removed from the message and the loop continues
             message = data.Substring(length);
@@ -99,7 +98,7 @@ public class SocketReader
     /// </summary>
     /// <param name="text">The message to add to the cache</param>
     /// <exception cref="InvalidOperationException">Thrown when the cache is not empty and a new packet is being added to it</exception>
-    private async Task AddToCacheAsync(string text)
+    private void AddToCache(string text)
     {
         if(string.IsNullOrEmpty(text)) return;
         if(text.StartsWith('/') && _cache.Length > 0)
@@ -120,7 +119,7 @@ public class SocketReader
             return;
         
         //The packet is complete, deserialize it and raise the PacketReceived event
-        await DeserializePacketAsync(data, prefix);
+        DeserializePacket(data, prefix);
         //Now that the packet is complete, the cache is cleared
         _cache = string.Empty;
     }
@@ -131,10 +130,10 @@ public class SocketReader
     /// <param name="json">The json string to deserialize</param>
     /// <param name="prefix">The prefix of the packet in the form /{prefix}</param>
     /// <exception cref="InvalidOperationException">Thrown when the deserialized packet is null</exception>
-    private async Task DeserializePacketAsync(string json, string prefix)
+    private void DeserializePacket(string json, string prefix)
     {
         var packet = JsonSerializer.Deserialize(json, PacketBase.GetType(prefix));
-        await OnPacketReceivedAsync(packet as PacketBase ?? throw new InvalidOperationException("Packet is null"));
+        OnPacketReceived(packet as PacketBase ?? throw new InvalidOperationException("Packet is null"));
     }
 
     /// <summary>
@@ -150,11 +149,9 @@ public class SocketReader
         return message;
     }
 
-    protected virtual async Task OnPacketReceivedAsync(PacketBase receivedPacket)
+    protected virtual void OnPacketReceived(PacketBase receivedPacket)
     {
-        var task = PacketReceived?.Invoke(receivedPacket);
-        if (task != null)
-            await task;
+        PacketReceived?.Invoke(receivedPacket);
     }
 
     protected virtual void OnError(Exception exception)

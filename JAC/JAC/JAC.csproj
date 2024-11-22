@@ -24,21 +24,21 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.0.10" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.10" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.10" />
-        <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.10" />
+        <PackageReference Include="Avalonia" Version="11.2.1" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.1" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.1" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="11.2.1" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.10" />
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-        <PackageReference Include="Projektanker.Icons.Avalonia" Version="9.3.0" />
-        <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="9.3.0" />
-        <PackageReference Include="Projektanker.Icons.Avalonia.MaterialDesign" Version="9.3.0" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.2.1" />
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0-preview2" />
+        <PackageReference Include="FluentAvaloniaUI" Version="2.1.0" />
+        <PackageReference Include="Projektanker.Icons.Avalonia" Version="9.4.3" />
+        <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="9.4.3" />
+        <PackageReference Include="Projektanker.Icons.Avalonia.MaterialDesign" Version="9.4.3" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\JAC.Shared\JAC.Shared.csproj" />
-      <ProjectReference Include="..\..\JAC.UILib\JAC.UILib.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -8,8 +8,7 @@
              xmlns:avalonia="https://github.com/projektanker/icons.avalonia"
              mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="700"
              x:Class="JACService.Views.MainView"
-             x:DataType="viewModels:MainViewModel"
-             Background="{DynamicResource BgLayer1}">
+             x:DataType="viewModels:MainViewModel">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -26,61 +25,55 @@
             <TextBlock
                 Text="Server."
                 Margin="20 0 0 0"
+                HorizontalAlignment="Center"
                 x:Name="TbTitle"
-                Classes="centered margin20 LexendBold"
                 FontSize="50" />
 
             <Button Grid.Row="0"
                     x:Name="ButtonOptions"
                     HorizontalAlignment="Right"
-                    Classes="withTransitions margin20 smallIcon transparent"
-                    avalonia:Attached.Icon="mdi-tune">
+                    Theme="{StaticResource TransparentButton}"
+                    FontSize="30"
+                    Click="ShowOptionMenu"
+                    avalonia:Attached.Icon="mdi-cog">
             </Button>
 
-            <StackPanel Grid.Row="1"
-                        Orientation="Horizontal"
-                        Classes="centered margin20"
-                        x:Name="PanelOffOn">
-                <TextBlock Classes="centered margin20 Lexend"
-                           Text="Off"
-                           FontSize="20" />
-                <ToggleButton IsChecked="{Binding IsServerRunning}"
-                              Command="{Binding RequestServerStatusChangeCommand}"
-                              HorizontalAlignment="Center"
-                              Classes="withTransitions"
-                              Width="100"
-                              Height="50">
-                </ToggleButton>
-                <TextBlock Classes="centered margin20 Lexend"
-                           Text="On"
-                           FontSize="20" />
-            </StackPanel>
+            <ToggleSwitch IsChecked="{Binding IsServerRunning}"
+                          Grid.Row="1"
+                          Margin="20"
+                          Command="{Binding RequestServerStatusChangeCommand}"
+                          HorizontalAlignment="Left"/>
             
             <Button Grid.Row="1"
                     x:Name="ButtonClearLogs"
                     HorizontalAlignment="Right"
-                    Classes="withTransitions margin20 smallIcon transparent"
+                    FontSize="30"
+                    Theme="{StaticResource TransparentButton}"
                     avalonia:Attached.Icon="mdi-trash-can-outline"
                     Command="{Binding ClearLogsCommand}">
             </Button>
 
             <Border Grid.Row="2"
                     CornerRadius="30"
-                    Background="{DynamicResource BgLayer2}"
+                    Background="{DynamicResource ButtonBackground}"
                     x:Name="BorderLogs">
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                               VerticalScrollBarVisibility="Hidden"
                               ScrollChanged="ScrollViewer_OnScrollChanged">
                     <ItemsControl ItemsSource="{Binding VisibleLogs}"
-                                  Classes="margin20">
+                                  Margin="20">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Spacing="5"></StackPanel>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid ColumnDefinitions="Auto,Auto,*">
-                                    <TextBlock Text="{Binding TimeStamp, StringFormat=[HH:mm:ss]}"
-                                               Classes="Lexend" />
+                                    <TextBlock 
+                                        Text="{Binding TimeStamp, StringFormat=[HH:mm:ss]}"/>
                                     <TextBlock Grid.Column="1"
                                                Margin="5 0"
-                                               Classes="Lexend"
                                                Text="{Binding Type, 
                                        Converter={StaticResource CaseConverter},
                                        ConverterParameter=2}"
@@ -88,7 +81,6 @@
                                        Converter={StaticResource LogTypeToColorConverter}}" />
 
                                     <SelectableTextBlock Text="{Binding Content}"
-                                               Classes="Lexend"
                                                TextWrapping="Wrap"
                                                Grid.Column="2" />
                                 </Grid>
@@ -100,89 +92,7 @@
 
         </Grid>
 
-        <Grid x:Name="GridOptions"
-              IsVisible="False">
-
-            <Grid Background="Black"
-                  Opacity="0.5" />
-
-            <Border Background="{DynamicResource BgLayer1}"
-                    Width="450"
-                    x:Name="BorderOptions"
-                    Height="600"
-                    Classes="hoverEffect"
-                    CornerRadius="40">
-                <Grid RowDefinitions="Auto,*,Auto">
-                    <TextBlock Classes="marginTop centered LexendBold"
-                               FontSize="40"
-                               Text="Options."/>
-                    <Button Grid.Row="0"
-                            Grid.Column="0"
-                            Classes="withTransitions centeredLeft margin20 smallIcon transparent"
-                            avalonia:Attached.Icon="mdi-arrow-left">
-                    </Button>
-
-                    <ScrollViewer Grid.Row="1"
-                                  VerticalScrollBarVisibility="Hidden"
-                                  HorizontalScrollBarVisibility="Hidden">
-                        <Grid ColumnDefinitions="*,Auto"
-                              RowDefinitions="Auto,Auto,Auto,Auto">
-                            <TextBlock Classes="centeredLeft marginLeft"
-                                       Grid.Column="0"
-                                       Grid.Row="0"
-                                       Text="Server Port:"
-                                       FontSize="20" />
-                            <TextBox Classes="withTransitions small marginRight"
-                                     Grid.Row="0"
-                                     Grid.Column="1"
-                                     Watermark="1024-65535"
-                                     LostFocus="OnPortTextBoxLostFocus"
-                                     Text="{Binding ServerPortString, Mode=TwoWay}" />
-
-                            <TextBlock Classes="centeredLeft marginLeft"
-                                       Grid.Column="0"
-                                       Grid.Row="1"
-                                       Text="Server IP:"
-                                       FontSize="20" />
-                            <TextBox Classes="withTransitions small marginRight"
-                                     Grid.Row="1"
-                                     Grid.Column="1"
-                                     Watermark="e.g. 127.0.0.1"
-                                     LostFocus="OnIpTextBoxLostFocus"
-                                     Text="{Binding ServerIpString, Mode=TwoWay}" />
-
-                            <TextBlock Classes="centeredLeft marginLeft"
-                                       Grid.Column="0"
-                                       Grid.Row="2"
-                                       Text="Log Details:"
-                                       FontSize="20" />
-                            <ToggleButton Grid.Row="2"
-                                          Grid.Column="1"
-                                          Classes="centeredRight marginRight withTransitions"
-                                          IsChecked="{Binding LogDetails, Mode=TwoWay}" />
-
-                            <TextBlock Classes="centeredLeft marginLeft"
-                                       Grid.Column="0"
-                                       Grid.Row="3"
-                                       Text="Log Requests:"
-                                       FontSize="20" />
-                            <ToggleButton Grid.Row="3"
-                                          Grid.Column="1"
-                                          Classes="centeredRight marginRight withTransitions"
-                                          IsChecked="{Binding LogClientRequests, Mode=TwoWay}" />
-                        </Grid>
-                    </ScrollViewer>
-                    
-                    <TextBlock Classes="centered marginBottom"
-                               Foreground="{DynamicResource RedBrush300}"
-                               IsVisible="{Binding PendingChanges}"
-                               Grid.Row="2"
-                               Text="Restart the server to apply changes."
-                               FontSize="15" />
-                </Grid>
-            </Border>
-
-        </Grid>
+        
     </Grid>
     
 </UserControl>

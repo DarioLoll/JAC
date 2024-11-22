@@ -11,8 +11,10 @@ public partial class LoginViewModel : ViewModelBase
 {
     private const string NotConnectedToServer = "Not connected to server";
     [ObservableProperty] private string _username = string.Empty;
-    
+
     [ObservableProperty] private string _errorField = string.Empty;
+    
+    [ObservableProperty] private bool _isLoggingIn;
 
     [RelayCommand]
     private async Task Login()
@@ -22,6 +24,7 @@ public partial class LoginViewModel : ViewModelBase
         if (client.IsConnected)
         {
             await client.Send(new LoginPacket{Username = Username});
+            IsLoggingIn = true;
         }
         else ErrorField = NotConnectedToServer;
     }
@@ -29,5 +32,6 @@ public partial class LoginViewModel : ViewModelBase
     public override void DisplayError(ErrorType error)
     {
         ErrorField = error.GetErrorMessage();
+        IsLoggingIn = false;
     }
 }

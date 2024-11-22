@@ -47,7 +47,8 @@ public class PacketHandler
         if (!AllFragmentsReceived(packet.Id)) return Task.CompletedTask;
         var fragments = PacketFragmentCache[packet.Id];
         var fullPacket = fragments.AssemblePacket();
-        return HandleAsync(fullPacket);
+        Handle(fullPacket);
+        return Task.CompletedTask;
     }
 
     public JsonSerializerOptions JsonSerializerOptions { get; init; } = new();
@@ -56,10 +57,10 @@ public class PacketHandler
     /// Handles an incoming packet by calling the appropriate method based on the packet prefix.
     /// </summary>
     /// <param name="packet">The packet to handle</param>
-    public async Task HandleAsync(PacketBase packet)
+    public void Handle(PacketBase packet)
     {
         var prefix = packet.GetPrefix();
         if (PacketHandlers.TryGetValue(prefix, out var handler))
-            await handler(packet);
+             Task.Run(async () => await handler(packet));
     }
 }

@@ -3,6 +3,7 @@
              xmlns:local="using:JAC"
              
              xmlns:services="clr-namespace:JAC.Services"
+             xmlns:styling="clr-namespace:FluentAvalonia.Styling;assembly=FluentAvalonia"
              x:Class="JAC.App"
              RequestedThemeVariant="Dark">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
@@ -12,12 +13,7 @@
     </Application.DataTemplates>
 
     <Application.Styles>
-        <SimpleTheme />
-        <StyleInclude Source="avares://JAC.UILib/Styles/ControlStyles.axaml"/>
-        <StyleInclude Source="avares://JAC.UILib/Styles/ButtonStyles.axaml"/>
-        <StyleInclude Source="avares://JAC.UILib/Styles/TextBoxStyles.axaml"/>
-        <StyleInclude Source="avares://JAC.UILib/Styles/TextBlockStyles.axaml"/>
-        <StyleInclude Source="avares://JAC.UILib/Styles/ToggleButtonStyles.axaml"/>
+        <styling:FluentAvaloniaTheme />
     </Application.Styles>
              
     <Application.Resources>
@@ -26,8 +22,6 @@
                 <ResourceDictionary>
                     <services:InverseBooleanConverter x:Key="InverseBooleanConverter" />
                 </ResourceDictionary>
-                <ResourceInclude Source="avares://JAC.UILib/Colors/AllColors.axaml"/>
-                <ResourceInclude Source="avares://JAC.UILib/Colors/DefaultColors.axaml"/>
             </ResourceDictionary.MergedDictionaries>
             
         </ResourceDictionary>

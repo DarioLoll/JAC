@@ -43,8 +43,7 @@ public partial class MainViewModel : ViewModelBase
 
     public MainViewModel()
     {
-        return;
-        Username = Directory.User.Nickname;
+        Directory = ChatClient.Instance.Directory!;
         foreach (BaseChannel channel in Directory.Channels)
         {
             AddChannel(channel);

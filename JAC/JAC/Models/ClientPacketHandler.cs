@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using JAC.Shared;
 using JAC.Shared.Channels;
 using JAC.Shared.Packets;
+using JAC.ViewModels;
+using JAC.Views;
 
 namespace JAC.Models;
 
@@ -12,10 +14,6 @@ namespace JAC.Models;
 /// </summary>
 public class ClientPacketHandler : PacketHandler
 {
-    /// <summary>
-    /// Occurs when the server responds to the client's request for channels
-    /// </summary>
-    public event Func<GetChannelsResponsePacket, Task>? ChannelsReceived;
     /// <summary>
     /// Occurs when this client logs in successfully
     /// </summary>
@@ -79,17 +77,17 @@ public class ClientPacketHandler : PacketHandler
         return Task.CompletedTask;
     }
 
-    private Task OnLoginSucceeded(PacketBase packetBase)
+    private async Task OnLoginSucceeded(PacketBase packetBase)
     {
         var packet = packetBase as LoginSuccessPacket;
-        if (packet == null) return Task.CompletedTask;
+        if (packet == null) return;
         LoginSucceeded?.Invoke(packet);
-        return Task.CompletedTask;
+        await OnChannelsReceived(packet);
     }
 
     private async Task OnChannelsReceived(PacketBase packetBase)
     {
-        var packet = packetBase as GetChannelsResponsePacket;
+        var packet = (LoginSuccessPacket?)packetBase;
         if (packet == null) return;
         var directory = ChatClient.Instance.Directory;
         foreach (var savedChannel in directory!.Channels)
@@ -119,14 +117,14 @@ public class ClientPacketHandler : PacketHandler
         {
             ChannelIds = directory.Channels.Select(channel => channel.Id).ToList()
         });
-        ChannelsReceived?.Invoke(packet);
+        MainWindow.Instance.SwitchToViewModel(new MainViewModel());
     }
 
     private Task OnError(PacketBase packetBase)
     {
         ErrorPacket? packet = packetBase as ErrorPacket;
         if (packet == null) return Task.CompletedTask;
-        Navigator.Instance.CurrentViewModel.DisplayError(packet.ErrorType);
+        MainWindow.Instance.CurrentViewModel.DisplayError(packet.ErrorType);
         return Task.CompletedTask;
     }
 

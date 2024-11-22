@@ -23,16 +23,13 @@ public class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.ShutdownRequested += OnShutdownRequested;
-            desktop.MainWindow = new MainWindow
-            {
-                DataContext = new Navigator()
-            };
+            desktop.MainWindow = new MainWindow();
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
-            singleViewPlatform.MainView = new LoginView
+            singleViewPlatform.MainView = new MainView()
             {
-                DataContext = new LoginViewModel()
+                DataContext = new MainViewModel()
             };
         }
         bool connected = await ChatClient.Instance.Connect();

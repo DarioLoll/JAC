@@ -79,3 +79,97 @@ Object name: 'System.Net.Sockets.Socket'.
 [23:16:12] WARNING Tried to stop the server while it was not running.
 [23:17:31] WARNING Tried to stop the server while it was not running.
 [23:53:50] WARNING No chat data file found, starting with an empty chat service...
+[23:56:19] WARNING No chat data file found, starting with an empty chat service...
+[23:56:45] WARNING Tried to stop the server while it was not running.
+[09:12:17] WARNING Tried to stop the server while it was not running.
+[16:55:36] WARNING Tried to stop the server while it was not running.
+[16:56:38] WARNING Tried to stop the server while it was not running.
+[17:27:03] WARNING Tried to stop the server while it was not running.
+[17:27:53] WARNING Tried to stop the server while it was not running.
+[21:22:34] WARNING Tried to stop the server while it was not running.
+[21:28:19] WARNING Attempted to send a (/disconnect) packet to a null user.
+[21:29:23] WARNING Attempted to send a (/disconnect) packet to a null user.
+[21:29:23] ERROR Exception occurred while stopping.
+[21:29:23] ERROR Cannot access a disposed object.
+Object name: 'System.Net.Sockets.Socket'.
+[21:32:50] ERROR An error occurred while reading from the socket.
+[21:32:50] ERROR Connection reset by peer
+[21:32:50] ERROR Connection reset by peer
+[21:32:50] ERROR Connection reset by peer
+[21:32:53] WARNING Attempted to send a (/disconnect) packet to a null user.
+[21:32:53] ERROR Exception occurred while stopping.
+[21:32:53] ERROR Cannot access a disposed object.
+Object name: 'System.Net.Sockets.Socket'.
+[21:45:51] ERROR An error occurred while reading from the socket.
+[21:45:51] ERROR Connection reset by peer
+[21:45:51] ERROR An error occurred while reading from the socket.
+[21:45:51] ERROR Connection reset by peer
+[21:45:51] ERROR An error occurred while reading from the socket.
+[21:45:51] ERROR Connection reset by peer
+[21:46:06] WARNING Attempted to send a (/disconnect) packet to a null user.
+[21:46:06] ERROR Exception occurred while stopping.
+[21:46:06] ERROR Cannot access a disposed object.
+Object name: 'System.Net.Sockets.Socket'.
+[21:49:28] ERROR An error occurred while reading from the socket.
+[21:49:28] ERROR Connection reset by peer
+[21:49:28] ERROR Connection reset by peer
+[21:51:21] WARNING Attempted to send a (/disconnect) packet to a null user.
+[21:51:21] ERROR Exception occurred while stopping.
+[21:51:21] ERROR Cannot access a disposed object.
+Object name: 'System.Net.Sockets.Socket'.
+[21:57:31] ERROR An error occurred while reading from the socket.
+[21:57:31] ERROR Connection reset by peer
+[22:06:22] WARNING Attempted to send a (/disconnect) packet to a null user.
+[22:06:22] ERROR Exception occurred while stopping.
+[22:06:22] ERROR Cannot access a disposed object.
+Object name: 'System.Net.Sockets.Socket'.
+[22:06:42] WARNING Tried to stop the server while it was not running.
+[10:12:53] WARNING Attempted to send a (/disconnect) packet to a null user.
+[10:12:53] ERROR Exception occurred while stopping.
+[10:12:53] ERROR Cannot access a disposed object.
+Object name: 'System.Net.Sockets.Socket'.
+[10:24:21] ERROR An error occurred while reading from the socket.
+[10:24:21] ERROR Connection reset by peer
+[10:24:21] ERROR Connection reset by peer
+[10:24:21] ERROR An error occurred while reading from the socket.
+[10:24:21] ERROR Connection reset by peer
+[10:25:04] ERROR An error occurred while reading from the socket.
+[10:25:04] ERROR Connection reset by peer
+[10:25:49] ERROR An error occurred while reading from the socket.
+[10:25:49] ERROR Connection reset by peer
+[10:25:49] ERROR Connection reset by peer
+[10:25:49] ERROR Connection reset by peer
+[10:37:57] ERROR An error occurred while reading from the socket.
+[10:37:57] ERROR Connection reset by peer
+[10:42:24] ERROR An error occurred while reading from the socket.
+[10:42:24] ERROR An error occurred while reading from the socket.
+[10:42:24] ERROR Connection reset by peer
+[10:42:24] ERROR Connection reset by peer
+[10:43:12] ERROR An error occurred while reading from the socket.
+[10:43:12] ERROR Connection reset by peer
+[10:43:12] ERROR An error occurred while reading from the socket.
+[10:43:12] ERROR Connection reset by peer
+[10:43:12] ERROR An error occurred while reading from the socket.
+[10:43:12] ERROR Connection reset by peer
+[10:44:11] ERROR Exception occurred while stopping.
+[10:44:11] ERROR Cannot access a disposed object.
+Object name: 'System.Net.Sockets.Socket'.
+[10:44:17] WARNING Attempted to send a (/disconnect) packet to a null user.
+[10:44:30] WARNING Tried to stop the server while it was not running.
+[10:50:04] ERROR An error occurred while reading from the socket.
+[10:50:04] ERROR An error occurred while reading from the socket.
+[10:50:04] ERROR Connection reset by peer
+[10:50:04] ERROR Connection reset by peer
+[10:50:04] ERROR Connection reset by peer
+[10:50:16] WARNING Attempted to send a (/disconnect) packet to a null user.
+[10:50:17] ERROR Exception occurred while stopping.
+[10:50:17] ERROR Cannot access a disposed object.
+Object name: 'System.Net.Sockets.Socket'.
+[10:58:32] ERROR An error occurred while reading from the socket.
+[10:58:32] ERROR Connection reset by peer
+[10:59:17] ERROR An error occurred while reading from the socket.
+[10:59:17] ERROR Connection reset by peer
+[11:00:23] ERROR An error occurred while reading from the socket.
+[11:00:23] ERROR Connection reset by peer
+[11:00:45] ERROR An error occurred while reading from the socket.
+[11:00:45] ERROR Connection reset by peer

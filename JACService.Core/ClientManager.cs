@@ -60,7 +60,7 @@ public class ClientManager
         await Logger.LogAsync(LogType.Info, $"Disconnecting all {_sessions.Count} clients...", true);
         List<Session> connections = new(_connections);
         foreach (var connection in connections)
-           await connection.Close();
+           await connection.Close(false);
     }
 
     /// <summary>

@@ -17,10 +17,10 @@ public class LogTypeToColorConverter : IValueConverter
     
     public LogTypeToColorConverter()
     {
-        Application.Current!.TryGetResource("AccentBlueContrast900", ThemeVariant.Dark, out var infoColor);
-        Application.Current!.TryGetResource("OrangeBrush400", ThemeVariant.Dark, out var warningColor);
-        Application.Current!.TryGetResource("RedBrush400", ThemeVariant.Dark, out var errorColor);
-        Application.Current!.TryGetResource("GreenBrush400", ThemeVariant.Dark, out var requestColor);
+        Application.Current!.TryGetResource("InfoColor", ThemeVariant.Dark, out var infoColor);
+        Application.Current!.TryGetResource("WarningColor", ThemeVariant.Dark, out var warningColor);
+        Application.Current!.TryGetResource("ErrorColor", ThemeVariant.Dark, out var errorColor);
+        Application.Current!.TryGetResource("SuccessColor", ThemeVariant.Dark, out var requestColor);
         
         InfoColor = (Color)infoColor!;
         WarningColor = ((SolidColorBrush)warningColor!).Color;
